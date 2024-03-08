@@ -24,7 +24,7 @@ class AddUser extends FormRequest
         return [
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
-            'email' => 'required|email',
+            'email' => 'required|email|unique:users',
             'phone' => 'required|',
             'password' => 'required|min:6|confirmed',
         ];

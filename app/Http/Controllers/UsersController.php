@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\AddUser;
 use App\Models\User;
+use App\Notifications\CommonEmailNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -51,6 +52,22 @@ class UsersController extends Controller
              'updated_at' => now(),
          ]);
          if($user){
+            $messages = [
+                'subject' => 'Welcome to '. config('app.name'). '! Your Account Details Inside',
+                'greeting-text' => 'Dear ' .ucfirst($user->first_name). ',',
+                'url-title' => 'Click Here To Login',
+                'url' => '/login',
+                'lines_array' => [
+                    'body-text' => 'Your Account Is Created On '.config('app.name'). '. Below are your login credentials:',
+                    'special_Email' => $user->email,
+                    'special_Password' => $validatedData['password'],
+                ],
+                'thanks-message' => 'Once again, welcome aboard, and thank you for choosing MasterCatalog!',
+            ];
+                   // Send Credentails To User 
+                   $user->notify(new CommonEmailNotification($messages));
+
+
             return response()->json(['success' => true, 'message' => 'User created successfully']);
          }
     }

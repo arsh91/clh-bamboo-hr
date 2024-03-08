@@ -1,11 +1,11 @@
 @extends('layouts.app')
 @section('title', 'Users')
 @section('content')
-            <!--begin::Toolbar-->
-            <div class="toolbar py-5 py-lg-15" id="kt_toolbar">
-                <!--begin::Container-->
-                <div id="kt_toolbar_container" class="container-xxl d-flex flex-stack flex-wrap">
-                    {{--
+<!--begin::Toolbar-->
+<div class="toolbar py-5 py-lg-15" id="kt_toolbar">
+    <!--begin::Container-->
+    <div id="kt_toolbar_container" class="container-xxl d-flex flex-stack flex-wrap">
+        {{--
                     <!--begin::Page title-->
                     <div class="page-title d-flex flex-column me-3">
                         <!--begin::Title-->
@@ -55,7 +55,7 @@
                     </div>
                     <!--end::Page title-->
                     --}}
-                    {{--
+        {{--
                     <!--begin::Actions-->
                     <div class="d-flex align-items-center py-3 py-md-1">
                         <!--begin::Wrapper-->
@@ -155,40 +155,40 @@
                     </div>
                     <!--end::Actions-->
                     --}}
+    </div>
+    <!--end::Container-->
+</div>
+<!--end::Toolbar-->
+<!--begin::Container-->
+<div id="kt_content_container" class="d-flex flex-column-fluid align-items-start container-xxl">
+    <!--begin::Post-->
+    <div class="content flex-row-fluid" id="kt_content">
+        <!--begin::Card-->
+        <div class="card">
+            <!--begin::Card header-->
+            <div class="card-header border-0 pt-6">
+                <!--begin::Card title-->
+                <div class="card-title">
+                    <!--begin::Search-->
+                    <div class="d-flex align-items-center position-relative my-1">
+                        <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
+                        <span class="svg-icon svg-icon-1 position-absolute ms-6">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                <rect opacity="0.5" x="17.0365" y="15.1223" width="8.15546" height="2" rx="1" transform="rotate(45 17.0365 15.1223)" fill="black" />
+                                <path d="M11 19C6.55556 19 3 15.4444 3 11C3 6.55556 6.55556 3 11 3C15.4444 3 19 6.55556 19 11C19 15.4444 15.4444 19 11 19ZM11 5C7.53333 5 5 7.53333 5 11C5 14.4667 7.53333 17 11 17C14.4667 17 17 14.4667 17 11C17 7.53333 14.4667 5 11 5Z" fill="black" />
+                            </svg>
+                        </span>
+                        <!--end::Svg Icon-->
+                        <input type="text" data-kt-user-table-filter="search" class="form-control form-control-solid w-250px ps-14" placeholder="Search user" />
+                    </div>
+                    <!--end::Search-->
                 </div>
-                <!--end::Container-->
-            </div>
-            <!--end::Toolbar-->
-            <!--begin::Container-->
-            <div id="kt_content_container" class="d-flex flex-column-fluid align-items-start container-xxl">
-                <!--begin::Post-->
-                <div class="content flex-row-fluid" id="kt_content">
-                    <!--begin::Card-->
-                    <div class="card">
-                        <!--begin::Card header-->
-                        <div class="card-header border-0 pt-6">
-                            <!--begin::Card title-->
-                            <div class="card-title">
-                                <!--begin::Search-->
-                                <div class="d-flex align-items-center position-relative my-1">
-                                    <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
-                                    <span class="svg-icon svg-icon-1 position-absolute ms-6">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                            <rect opacity="0.5" x="17.0365" y="15.1223" width="8.15546" height="2" rx="1" transform="rotate(45 17.0365 15.1223)" fill="black" />
-                                            <path d="M11 19C6.55556 19 3 15.4444 3 11C3 6.55556 6.55556 3 11 3C15.4444 3 19 6.55556 19 11C19 15.4444 15.4444 19 11 19ZM11 5C7.53333 5 5 7.53333 5 11C5 14.4667 7.53333 17 11 17C14.4667 17 17 14.4667 17 11C17 7.53333 14.4667 5 11 5Z" fill="black" />
-                                        </svg>
-                                    </span>
-                                    <!--end::Svg Icon-->
-                                    <input type="text" data-kt-user-table-filter="search" class="form-control form-control-solid w-250px ps-14" placeholder="Search user" />
-                                </div>
-                                <!--end::Search-->
-                            </div>
-                            <!--begin::Card title-->
-                            <!--begin::Card toolbar-->
-                            <div class="card-toolbar">
-                                <!--begin::Toolbar-->
-                                <div class="d-flex justify-content-end" data-kt-user-table-toolbar="base">
-                                    {{--
+                <!--begin::Card title-->
+                <!--begin::Card toolbar-->
+                <div class="card-toolbar">
+                    <!--begin::Toolbar-->
+                    <div class="d-flex justify-content-end" data-kt-user-table-toolbar="base">
+                        {{--
                                     <!--begin::Filter-->
                                     <button type="button" class="btn btn-light-primary me-3" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
                                         <!--begin::Svg Icon | path: icons/duotune/general/gen031.svg-->
@@ -256,361 +256,361 @@
                                         <!--end::Svg Icon-->Export</button>
                                     <!--end::Export-->
                                     --}}
-                                    <!--begin::Add user-->
-                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_add_user">
-                                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr075.svg-->
-                                        <span class="svg-icon svg-icon-2">
+                        <!--begin::Add user-->
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_add_user">
+                            <!--begin::Svg Icon | path: icons/duotune/arrows/arr075.svg-->
+                            <span class="svg-icon svg-icon-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                    <rect opacity="0.5" x="11.364" y="20.364" width="16" height="2" rx="1" transform="rotate(-90 11.364 20.364)" fill="black" />
+                                    <rect x="4.36396" y="11.364" width="16" height="2" rx="1" fill="black" />
+                                </svg>
+                            </span>
+                            <!--end::Svg Icon-->Add User</button>
+                        <!--end::Add user-->
+                    </div>
+                    <!--end::Toolbar-->
+                    <!--begin::Group actions-->
+                    <div class="d-flex justify-content-end align-items-center d-none" data-kt-user-table-toolbar="selected">
+                        <div class="fw-bolder me-5">
+                            <span class="me-2" data-kt-user-table-select="selected_count"></span>Selected
+                        </div>
+                        <button type="button" class="btn btn-danger" data-kt-user-table-select="delete_selected">Delete Selected</button>
+                    </div>
+                    <!--end::Group actions-->
+                    <!--begin::Modal - Adjust Balance-->
+                    <div class="modal fade" id="kt_modal_export_users" tabindex="-1" aria-hidden="true">
+                        <!--begin::Modal dialog-->
+                        <div class="modal-dialog modal-dialog-centered mw-650px">
+                            <!--begin::Modal content-->
+                            <div class="modal-content">
+                                <!--begin::Modal header-->
+                                <div class="modal-header">
+                                    <!--begin::Modal title-->
+                                    <h2 class="fw-bolder">Export Users</h2>
+                                    <!--end::Modal title-->
+                                    <!--begin::Close-->
+                                    <div class="btn btn-icon btn-sm btn-active-icon-primary" data-kt-users-modal-action="close">
+                                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                                        <span class="svg-icon svg-icon-1">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                                <rect opacity="0.5" x="11.364" y="20.364" width="16" height="2" rx="1" transform="rotate(-90 11.364 20.364)" fill="black" />
-                                                <rect x="4.36396" y="11.364" width="16" height="2" rx="1" fill="black" />
+                                                <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1" transform="rotate(-45 6 17.3137)" fill="black" />
+                                                <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)" fill="black" />
                                             </svg>
                                         </span>
-                                        <!--end::Svg Icon-->Add User</button>
-                                    <!--end::Add user-->
-                                </div>
-                                <!--end::Toolbar-->
-                                <!--begin::Group actions-->
-                                <div class="d-flex justify-content-end align-items-center d-none" data-kt-user-table-toolbar="selected">
-                                    <div class="fw-bolder me-5">
-                                        <span class="me-2" data-kt-user-table-select="selected_count"></span>Selected
+                                        <!--end::Svg Icon-->
                                     </div>
-                                    <button type="button" class="btn btn-danger" data-kt-user-table-select="delete_selected">Delete Selected</button>
+                                    <!--end::Close-->
                                 </div>
-                                <!--end::Group actions-->
-                                <!--begin::Modal - Adjust Balance-->
-                                <div class="modal fade" id="kt_modal_export_users" tabindex="-1" aria-hidden="true">
-                                    <!--begin::Modal dialog-->
-                                    <div class="modal-dialog modal-dialog-centered mw-650px">
-                                        <!--begin::Modal content-->
-                                        <div class="modal-content">
-                                            <!--begin::Modal header-->
-                                            <div class="modal-header">
-                                                <!--begin::Modal title-->
-                                                <h2 class="fw-bolder">Export Users</h2>
-                                                <!--end::Modal title-->
-                                                <!--begin::Close-->
-                                                <div class="btn btn-icon btn-sm btn-active-icon-primary" data-kt-users-modal-action="close">
-                                                    <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
-                                                    <span class="svg-icon svg-icon-1">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                                            <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1" transform="rotate(-45 6 17.3137)" fill="black" />
-                                                            <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)" fill="black" />
-                                                        </svg>
-                                                    </span>
-                                                    <!--end::Svg Icon-->
-                                                </div>
-                                                <!--end::Close-->
-                                            </div>
-                                            <!--end::Modal header-->
-                                            <!--begin::Modal body-->
-                                            <div class="modal-body scroll-y mx-5 mx-xl-15 my-7">
-                                                <!--begin::Form-->
-                                                <form id="kt_modal_export_users_form" class="form" action="#">
-                                                    <!--begin::Input group-->
-                                                    <div class="fv-row mb-10">
-                                                        <!--begin::Label-->
-                                                        <label class="fs-6 fw-bold form-label mb-2">Select Roles:</label>
-                                                        <!--end::Label-->
-                                                        <!--begin::Input-->
-                                                        <select name="role" data-control="select2" data-placeholder="Select a role" data-hide-search="true" class="form-select form-select-solid fw-bolder">
-                                                            <option></option>
-                                                            <option value="Administrator">Administrator</option>
-                                                            <option value="Analyst">Analyst</option>
-                                                            <option value="Developer">Developer</option>
-                                                            <option value="Support">Support</option>
-                                                            <option value="Trial">Trial</option>
-                                                        </select>
-                                                        <!--end::Input-->
-                                                    </div>
-                                                    <!--end::Input group-->
-                                                    <!--begin::Input group-->
-                                                    <div class="fv-row mb-10">
-                                                        <!--begin::Label-->
-                                                        <label class="required fs-6 fw-bold form-label mb-2">Select Export Format:</label>
-                                                        <!--end::Label-->
-                                                        <!--begin::Input-->
-                                                        <select name="format" data-control="select2" data-placeholder="Select a format" data-hide-search="true" class="form-select form-select-solid fw-bolder">
-                                                            <option></option>
-                                                            <option value="excel">Excel</option>
-                                                            <option value="pdf">PDF</option>
-                                                            <option value="cvs">CVS</option>
-                                                            <option value="zip">ZIP</option>
-                                                        </select>
-                                                        <!--end::Input-->
-                                                    </div>
-                                                    <!--end::Input group-->
-                                                    <!--begin::Actions-->
-                                                    <div class="text-center">
-                                                        <button type="reset" class="btn btn-light me-3" data-kt-users-modal-action="cancel">Discard</button>
-                                                        <button type="submit" class="btn btn-primary" data-kt-users-modal-action="submit">
-                                                            <span class="indicator-label">Submit</span>
-                                                            <span class="indicator-progress">Please wait...
-                                                                <span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
-                                                        </button>
-                                                    </div>
-                                                    <!--end::Actions-->
-                                                </form>
-                                                <!--end::Form-->
-                                            </div>
-                                            <!--end::Modal body-->
+                                <!--end::Modal header-->
+                                <!--begin::Modal body-->
+                                <div class="modal-body scroll-y mx-5 mx-xl-15 my-7">
+                                    <!--begin::Form-->
+                                    <form id="kt_modal_export_users_form" class="form" action="#">
+                                        <!--begin::Input group-->
+                                        <div class="fv-row mb-10">
+                                            <!--begin::Label-->
+                                            <label class="fs-6 fw-bold form-label mb-2">Select Roles:</label>
+                                            <!--end::Label-->
+                                            <!--begin::Input-->
+                                            <select name="role" data-control="select2" data-placeholder="Select a role" data-hide-search="true" class="form-select form-select-solid fw-bolder">
+                                                <option></option>
+                                                <option value="Administrator">Administrator</option>
+                                                <option value="Analyst">Analyst</option>
+                                                <option value="Developer">Developer</option>
+                                                <option value="Support">Support</option>
+                                                <option value="Trial">Trial</option>
+                                            </select>
+                                            <!--end::Input-->
                                         </div>
-                                        <!--end::Modal content-->
-                                    </div>
-                                    <!--end::Modal dialog-->
-                                </div>
-                                <!--end::Modal - New Card-->
-                                <!--begin::Modal - Add task-->
-                                <div class="modal fade" id="kt_modal_add_user" tabindex="-1" aria-hidden="true">
-                                    <!--begin::Modal dialog-->
-                                    <div class="modal-dialog modal-dialog-centered mw-650px">
-                                        <!--begin::Modal content-->
-                                        <div class="modal-content">
-                                            <!--begin::Modal header-->
-                                            <div class="modal-header" id="kt_modal_add_user_header">
-                                                <!--begin::Modal title-->
-                                                <h2 class="fw-bolder">Add User</h2>
-                                                <!--end::Modal title-->
-                                                <!--begin::Close-->
-                                                <div class="btn btn-icon btn-sm btn-active-icon-primary" data-kt-users-modal-action="close">
-                                                    <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
-                                                    <span class="svg-icon svg-icon-1">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                                            <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1" transform="rotate(-45 6 17.3137)" fill="black" />
-                                                            <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)" fill="black" />
-                                                        </svg>
-                                                    </span>
-                                                    <!--end::Svg Icon-->
-                                                </div>
-                                                <!--end::Close-->
-                                            </div>
-                                            <!--end::Modal header-->
-                                            <!--begin::Modal body-->
-                                            <div class="modal-body scroll-y mx-5 mx-xl-15 my-7">
-                                                <!--begin::Form-->
-                                                <form id="kt_modal_add_user_form" class="form" action="#">
-                                                    @csrf
-                                                    <!--begin::Scroll-->
-                                                    <div class="d-flex flex-column scroll-y me-n7 pe-7" id="kt_modal_add_user_scroll" data-kt-scroll="true" data-kt-scroll-activate="{default: false, lg: true}" data-kt-scroll-max-height="auto" data-kt-scroll-dependencies="#kt_modal_add_user_header" data-kt-scroll-wrappers="#kt_modal_add_user_scroll" data-kt-scroll-offset="300px">
-                                                        <!--begin::Input group-->
-                                                        <div class="fv-row mb-7">
-                                                            <!--begin::Label-->
-                                                            <label class="required fw-bold fs-6 mb-2">First Name</label>
-                                                            <!--end::Label-->
-                                                            <!--begin::Input-->
-                                                            <input type="text" name="first_name" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="First name" value="" />
-                                                            <!--end::Input-->
-                                                        </div>
-                                                        <!--end::Input group-->
-
-                                                          <!--begin::Input group-->
-                                                          <div class="fv-row mb-7">
-                                                            <!--begin::Label-->
-                                                            <label class="required fw-bold fs-6 mb-2">Last Name</label>
-                                                            <!--end::Label-->
-                                                            <!--begin::Input-->
-                                                            <input type="text" name="last_name" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="Last name" value="" />
-                                                            <!--end::Input-->
-                                                        </div>
-                                                        <!--end::Input group-->
-
-                                                        <!--begin::Input group-->
-                                                        <div class="fv-row mb-7">
-                                                            <!--begin::Label-->
-                                                            <label class="required fw-bold fs-6 mb-2">Email</label>
-                                                            <!--end::Label-->
-                                                            <!--begin::Input-->
-                                                            <input type="email" name="email" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="example@domain.com" value="" />
-                                                            <!--end::Input-->
-                                                        </div>
-                                                        <!--end::Input group-->
-
-                                                             <!--begin::Input group-->
-                                                             <div class="fv-row mb-7">
-                                                            <!--begin::Label-->
-                                                            <label class="required fw-bold fs-6 mb-2">Phone</label>
-                                                            <!--end::Label-->
-                                                            <!--begin::Input-->
-                                                            <input type="text" name="phone" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="0987654321" value="" />
-                                                            <!--end::Input-->
-                                                        </div>
-                                                        <!--end::Input group-->
-                                                         
-                                                            <!--begin::Input group-->
-                                                              <div class="fv-row mb-7">
-                                                            <!--begin::Label-->
-                                                            <label for="password" class="required fw-bold fs-6 mb-2">Password</label>
-                                                            <!--end::Label-->
-                                                            <!--begin::Input-->
-                                                            <input type="password"  id="password" name="password" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="Enter your password" />
-                                                            <!--end::Input-->
-                                                        </div>
-                                                        <!--end::Input group-->
-
-                                                              <!--begin::Input group-->
-                                                              <div class="fv-row mb-7">
-                                                            <!--begin::Label-->
-                                                            <label for="password_confirmation" class="required fw-bold fs-6 mb-2">Confirm Password</label>
-                                                            <!--end::Label-->
-                                                            <!--begin::Input-->
-                                                            <input type="password" name="password_confirmation" id="password_confirmation" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="Confirm your password" />
-                                                            <!--end::Input-->
-                                                        </div>
-                                                        <!--end::Input group-->
-
-
-                                                    </div>
-                                                    <!--end::Scroll-->
-                                                    <!--begin::Actions-->
-                                                    <div class="text-center pt-15">
-                                                        <button type="reset" class="btn btn-light me-3" data-kt-users-modal-action="cancel">Discard</button>
-                                                        <button type="submit" class="btn btn-primary" data-kt-users-modal-action="submit">
-                                                            <span class="indicator-label">Submit</span>
-                                                            <span class="indicator-progress">Please wait...
-                                                                <span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
-                                                        </button>
-                                                    </div>
-                                                    <!--end::Actions-->
-                                                </form>
-                                                <!--end::Form-->
-                                            </div>
-                                            <!--end::Modal body-->
+                                        <!--end::Input group-->
+                                        <!--begin::Input group-->
+                                        <div class="fv-row mb-10">
+                                            <!--begin::Label-->
+                                            <label class="required fs-6 fw-bold form-label mb-2">Select Export Format:</label>
+                                            <!--end::Label-->
+                                            <!--begin::Input-->
+                                            <select name="format" data-control="select2" data-placeholder="Select a format" data-hide-search="true" class="form-select form-select-solid fw-bolder">
+                                                <option></option>
+                                                <option value="excel">Excel</option>
+                                                <option value="pdf">PDF</option>
+                                                <option value="cvs">CVS</option>
+                                                <option value="zip">ZIP</option>
+                                            </select>
+                                            <!--end::Input-->
                                         </div>
-                                        <!--end::Modal content-->
-                                    </div>
-                                    <!--end::Modal dialog-->
+                                        <!--end::Input group-->
+                                        <!--begin::Actions-->
+                                        <div class="text-center">
+                                            <button type="reset" class="btn btn-light me-3" data-kt-users-modal-action="cancel">Discard</button>
+                                            <button type="submit" class="btn btn-primary" data-kt-users-modal-action="submit">
+                                                <span class="indicator-label">Submit</span>
+                                                <span class="indicator-progress">Please wait...
+                                                    <span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
+                                            </button>
+                                        </div>
+                                        <!--end::Actions-->
+                                    </form>
+                                    <!--end::Form-->
                                 </div>
-                                <!--end::Modal - Add task-->
+                                <!--end::Modal body-->
                             </div>
-                            <!--end::Card toolbar-->
+                            <!--end::Modal content-->
                         </div>
-                        <!--end::Card header-->
-                        <!--begin::Card body-->
-                        <div class="card-body pt-0">
-                            <!--begin::Table-->
-                            <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_table_users">
-                                <!--begin::Table head-->
-                                <thead>
-                                    <!--begin::Table row-->
-                                    <tr class="text-start text-muted fw-bolder fs-7 text-uppercase gs-0">
-                                        <th class="w-10px pe-2">
-                                            <div class="form-check form-check-sm form-check-custom form-check-solid me-3">
-                                                <input class="form-check-input" type="checkbox" data-kt-check="true" data-kt-check-target="#kt_table_users .form-check-input" value="1" />
+                        <!--end::Modal dialog-->
+                    </div>
+                    <!--end::Modal - New Card-->
+                    <!--begin::Modal - Add task-->
+                    <div class="modal fade" id="kt_modal_add_user" tabindex="-1" aria-hidden="true">
+                        <!--begin::Modal dialog-->
+                        <div class="modal-dialog modal-dialog-centered mw-650px">
+                            <!--begin::Modal content-->
+                            <div class="modal-content">
+                                <!--begin::Modal header-->
+                                <div class="modal-header" id="kt_modal_add_user_header">
+                                    <!--begin::Modal title-->
+                                    <h2 class="fw-bolder">Add User</h2>
+                                    <!--end::Modal title-->
+                                    <!--begin::Close-->
+                                    <div class="btn btn-icon btn-sm btn-active-icon-primary" data-kt-users-modal-action="close">
+                                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                                        <span class="svg-icon svg-icon-1">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                                <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1" transform="rotate(-45 6 17.3137)" fill="black" />
+                                                <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)" fill="black" />
+                                            </svg>
+                                        </span>
+                                        <!--end::Svg Icon-->
+                                    </div>
+                                    <!--end::Close-->
+                                </div>
+                                <!--end::Modal header-->
+                                <!--begin::Modal body-->
+                                <div class="modal-body scroll-y mx-5 mx-xl-15 my-7">
+                                    <!--begin::Form-->
+                                    <form id="kt_modal_add_user_form" class="form" action="#">
+                                        @csrf
+                                        <!--begin::Scroll-->
+                                        <div class="d-flex flex-column scroll-y me-n7 pe-7" id="kt_modal_add_user_scroll" data-kt-scroll="true" data-kt-scroll-activate="{default: false, lg: true}" data-kt-scroll-max-height="auto" data-kt-scroll-dependencies="#kt_modal_add_user_header" data-kt-scroll-wrappers="#kt_modal_add_user_scroll" data-kt-scroll-offset="300px">
+                                            <!--begin::Input group-->
+                                            <div class="fv-row mb-7">
+                                                <!--begin::Label-->
+                                                <label class="required fw-bold fs-6 mb-2">First Name</label>
+                                                <!--end::Label-->
+                                                <!--begin::Input-->
+                                                <input type="text" name="first_name" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="First name" value="" />
+                                                <!--end::Input-->
                                             </div>
-                                        </th>
-                                        <th class="min-w-125px">User</th>
-                                        <th class="min-w-125px">Email</th>
-                                        <th class="min-w-125px">Phone</th>
-                                        <!-- <th class="min-w-125px">Company Name</th> -->
-                                        <th class="min-w-125px">Status</th>
-                                        <th class="text-end min-w-100px">Actions</th>
-                                    </tr>
-                                    <!--end::Table row-->
-                                </thead>
-                                <!--end::Table head-->
-                                <!--begin::Table body-->
-                                <tbody class="text-gray-600 fw-bold">
-                                    @foreach ($users as $user )
-                                     <!--begin::Table row-->
-                                     <tr>
-                                        <!--begin::Checkbox-->
-                                        <td>
-                                            <div class="form-check form-check-sm form-check-custom form-check-solid">
-                                                <input class="form-check-input" type="checkbox" value="1" />
+                                            <!--end::Input group-->
+
+                                            <!--begin::Input group-->
+                                            <div class="fv-row mb-7">
+                                                <!--begin::Label-->
+                                                <label class="required fw-bold fs-6 mb-2">Last Name</label>
+                                                <!--end::Label-->
+                                                <!--begin::Input-->
+                                                <input type="text" name="last_name" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="Last name" value="" />
+                                                <!--end::Input-->
                                             </div>
-                                        </td>
-                                        <!--end::Checkbox-->
-                                        <!--begin::User=-->
-                                        <td class="d-flex align-items-center">
-                                            <!--begin:: Avatar -->
+                                            <!--end::Input group-->
+
+                                            <!--begin::Input group-->
+                                            <div class="fv-row mb-7">
+                                                <!--begin::Label-->
+                                                <label class="required fw-bold fs-6 mb-2">Email</label>
+                                                <!--end::Label-->
+                                                <!--begin::Input-->
+                                                <input type="email" name="email" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="example@domain.com" value="" />
+                                                <!--end::Input-->
+                                            </div>
+                                            <!--end::Input group-->
+
+                                            <!--begin::Input group-->
+                                            <div class="fv-row mb-7">
+                                                <!--begin::Label-->
+                                                <label class="required fw-bold fs-6 mb-2">Phone</label>
+                                                <!--end::Label-->
+                                                <!--begin::Input-->
+                                                <input type="text" name="phone" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="0987654321" value="" />
+                                                <!--end::Input-->
+                                            </div>
+                                            <!--end::Input group-->
+
+                                            <!--begin::Input group-->
+                                            <div class="fv-row mb-7">
+                                                <!--begin::Label-->
+                                                <label for="password" class="required fw-bold fs-6 mb-2">Password</label>
+                                                <!--end::Label-->
+                                                <!--begin::Input-->
+                                                <input type="password" id="password" name="password" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="Enter your password" />
+                                                <!--end::Input-->
+                                            </div>
+                                            <!--end::Input group-->
+
+                                            <!--begin::Input group-->
+                                            <div class="fv-row mb-7">
+                                                <!--begin::Label-->
+                                                <label for="password_confirmation" class="required fw-bold fs-6 mb-2">Confirm Password</label>
+                                                <!--end::Label-->
+                                                <!--begin::Input-->
+                                                <input type="password" name="password_confirmation" id="password_confirmation" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="Confirm your password" />
+                                                <!--end::Input-->
+                                            </div>
+                                            <!--end::Input group-->
+
+
+                                        </div>
+                                        <!--end::Scroll-->
+                                        <!--begin::Actions-->
+                                        <div class="text-center pt-15">
+                                            <button type="reset" class="btn btn-light me-3" data-kt-users-modal-action="cancel">Discard</button>
+                                            <button type="submit" class="btn btn-primary" data-kt-users-modal-action="submit">
+                                                <span class="indicator-label">Submit</span>
+                                                <span class="indicator-progress">Please wait...
+                                                    <span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
+                                            </button>
+                                        </div>
+                                        <!--end::Actions-->
+                                    </form>
+                                    <!--end::Form-->
+                                </div>
+                                <!--end::Modal body-->
+                            </div>
+                            <!--end::Modal content-->
+                        </div>
+                        <!--end::Modal dialog-->
+                    </div>
+                    <!--end::Modal - Add task-->
+                </div>
+                <!--end::Card toolbar-->
+            </div>
+            <!--end::Card header-->
+            <!--begin::Card body-->
+            <div class="card-body pt-0">
+                <!--begin::Table-->
+                <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_table_users">
+                    <!--begin::Table head-->
+                    <thead>
+                        <!--begin::Table row-->
+                        <tr class="text-start text-muted fw-bolder fs-7 text-uppercase gs-0">
+                            <th class="w-10px pe-2">
+                                <div class="form-check form-check-sm form-check-custom form-check-solid me-3">
+                                    <input class="form-check-input" type="checkbox" data-kt-check="true" data-kt-check-target="#kt_table_users .form-check-input" value="1" />
+                                </div>
+                            </th>
+                            <th class="min-w-125px">User</th>
+                            <th class="min-w-125px">Email</th>
+                            <th class="min-w-125px">Phone</th>
+                            <!-- <th class="min-w-125px">Company Name</th> -->
+                            <th class="min-w-125px">Status</th>
+                            <th class="text-end min-w-100px">Actions</th>
+                        </tr>
+                        <!--end::Table row-->
+                    </thead>
+                    <!--end::Table head-->
+                    <!--begin::Table body-->
+                    <tbody class="text-gray-600 fw-bold">
+                        @foreach ($users as $user )
+                        <!--begin::Table row-->
+                        <tr>
+                            <!--begin::Checkbox-->
+                            <td>
+                                <div class="form-check form-check-sm form-check-custom form-check-solid">
+                                    <input class="form-check-input" type="checkbox" value="1" />
+                                </div>
+                            </td>
+                            <!--end::Checkbox-->
+                            <!--begin::User=-->
+                            <td class="d-flex align-items-center">
+                                <!--begin:: Avatar -->
+                                <div class="symbol symbol-circle symbol-50px overflow-hidden me-3">
+                                    <a href="#">
+                                        <div class="symbol-label">
+                                            {{-- @if ($user->user->profile_picture)
+                                                        <img src="{{ asset('storage/' . $user->user->profile_picture) }}" alt="Profile Picture" class="w-100" />
+                                            @else
+                                            @endif
+                                            --}}
                                             <div class="symbol symbol-circle symbol-50px overflow-hidden me-3">
                                                 <a href="#">
-                                                    <div class="symbol-label">
-                                                   {{-- @if ($user->user->profile_picture)
-                                                        <img src="{{ asset('storage/' . $user->user->profile_picture) }}" alt="Profile Picture" class="w-100" />
-                                                    @else
-                                                    @endif
-                                                    --}}
-                                                        <div class="symbol symbol-circle symbol-50px overflow-hidden me-3">
-                                                            <a href="#">
-                                                                <div class="symbol-label fs-3 bg-light-danger text-danger">{{ ucfirst(substr($user->first_name, 0, 1)) }}</div>
-                                                            </a>
-                                                        </div>
-                                                   
-                                                    </div>
+                                                    <div class="symbol-label fs-3 bg-light-danger text-danger">{{ ucfirst(substr($user->first_name, 0, 1)) }}</div>
                                                 </a>
                                             </div>
-                                            <!--end::Avatar-->
-                                            <!--begin::User details-->
-                                            <div class="d-flex flex-column">
-                                                <a href="#" class="text-gray-800 text-hover-primary mb-1">{{ $user->first_name ?? ''}} {{ $user->last_name ?? ''}}</a>
-                                                <!-- <span>span text</span> -->
-                                            </div>
-                                            <!--begin::User details-->
-                                        </td>
-                                        <!--end::User=-->
-                                        <!--begin::Email-->
-                                        <td>{{ $user->email ?? ''}}</td>
-                                        <!--end::Email-->
 
-                                        <!--begin::Phone-->
-                                            <td>{{ $user->phone ?? ''}}</td>
-                                        <!--end::Phone-->
+                                        </div>
+                                    </a>
+                                </div>
+                                <!--end::Avatar-->
+                                <!--begin::User details-->
+                                <div class="d-flex flex-column">
+                                    <a href="#" class="text-gray-800 text-hover-primary mb-1">{{ $user->first_name ?? ''}} {{ $user->last_name ?? ''}}</a>
+                                    <!-- <span>span text</span> -->
+                                </div>
+                                <!--begin::User details-->
+                            </td>
+                            <!--end::User=-->
+                            <!--begin::Email-->
+                            <td>{{ $user->email ?? ''}}</td>
+                            <!--end::Email-->
 
-                                        <!--begin::Two step=-->
-                                        {{-- <td>{{ $user->user_name ?? ''}}</td> --}}
-                                        <!--end::Two step=-->
-                                      
-                                           <!--begin::Last login=-->
-                                           <td>
-                                           @if ($user->status == 'active')
-                                                <div class="badge badge-light-success fw-bolder">{{ $user->status ?? '' }}</div>
-                                            @else
-                                                <div class="badge badge-light fw-bolder">{{ $user->status ?? '' }}</div>
-                                            @endif
-                                        </td>
-                                        <!--end::Last login=-->
-                                        <!--begin::Action=-->
-                                        <td class="text-end">
-                                            <a href="#" class="btn btn-light btn-active-light-primary btn-sm" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">Actions
-                                                <!--begin::Svg Icon | path: icons/duotune/arrows/arr072.svg-->
-                                                <span class="svg-icon svg-icon-5 m-0">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                                        <path d="M11.4343 12.7344L7.25 8.55005C6.83579 8.13583 6.16421 8.13584 5.75 8.55005C5.33579 8.96426 5.33579 9.63583 5.75 10.05L11.2929 15.5929C11.6834 15.9835 12.3166 15.9835 12.7071 15.5929L18.25 10.05C18.6642 9.63584 18.6642 8.96426 18.25 8.55005C17.8358 8.13584 17.1642 8.13584 16.75 8.55005L12.5657 12.7344C12.2533 13.0468 11.7467 13.0468 11.4343 12.7344Z" fill="black" />
-                                                    </svg>
-                                                </span>
-                                                <!--end::Svg Icon--></a>
+                            <!--begin::Phone-->
+                            <td>{{ $user->phone ?? ''}}</td>
+                            <!--end::Phone-->
 
-                                            <!--begin::Menu-->
-                                            <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-bold fs-7 w-125px py-4" data-kt-menu="true">
-                                                <!--begin::Menu item-->
-                                                <div class="menu-item px-3">
-                                                    <a href="../../demo2/dist/apps/user-management/users/view.html" class="menu-link px-3">Edit</a>
-                                                </div>
-                                                <!--end::Menu item-->
-                                                <!--begin::Menu item-->
-                                                <div class="menu-item px-3">
-                                                <a href="javascript:void(0)" onclick="deleteUser('{{ $user->id }}')" class="menu-link px-3" data-kt-users-table-filter="delete_row">Delete</a>
-                                                </div>
-                                                <!--end::Menu item-->
-                                            </div>
-                                            <!--end::Menu-->
-                                        </td>
-                                        <!--end::Action=-->
-                                    </tr>
-                                    <!--end::Table row-->
-                                    @endforeach
-                                </tbody>
-                                <!--end::Table body-->
-                            </table>
-                            <!--end::Table-->
-                        </div>
-                        <!--end::Card body-->
-                    </div>
-                    <!--end::Card-->
-                </div>
-                <!--end::Post-->
+                            <!--begin::Two step=-->
+                            {{-- <td>{{ $user->user_name ?? ''}}</td> --}}
+                            <!--end::Two step=-->
+
+                            <!--begin::Last login=-->
+                            <td>
+                                @if ($user->status == 'active')
+                                <div class="badge badge-light-success fw-bolder">{{ $user->status ?? '' }}</div>
+                                @else
+                                <div class="badge badge-light fw-bolder">{{ $user->status ?? '' }}</div>
+                                @endif
+                            </td>
+                            <!--end::Last login=-->
+                            <!--begin::Action=-->
+                            <td class="text-end">
+                                <a href="#" class="btn btn-light btn-active-light-primary btn-sm" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">Actions
+                                    <!--begin::Svg Icon | path: icons/duotune/arrows/arr072.svg-->
+                                    <span class="svg-icon svg-icon-5 m-0">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                            <path d="M11.4343 12.7344L7.25 8.55005C6.83579 8.13583 6.16421 8.13584 5.75 8.55005C5.33579 8.96426 5.33579 9.63583 5.75 10.05L11.2929 15.5929C11.6834 15.9835 12.3166 15.9835 12.7071 15.5929L18.25 10.05C18.6642 9.63584 18.6642 8.96426 18.25 8.55005C17.8358 8.13584 17.1642 8.13584 16.75 8.55005L12.5657 12.7344C12.2533 13.0468 11.7467 13.0468 11.4343 12.7344Z" fill="black" />
+                                        </svg>
+                                    </span>
+                                    <!--end::Svg Icon--></a>
+
+                                <!--begin::Menu-->
+                                <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-bold fs-7 w-125px py-4" data-kt-menu="true">
+                                    <!--begin::Menu item-->
+                                    <div class="menu-item px-3">
+                                        <a href="../../demo2/dist/apps/user-management/users/view.html" class="menu-link px-3">Edit</a>
+                                    </div>
+                                    <!--end::Menu item-->
+                                    <!--begin::Menu item-->
+                                    <div class="menu-item px-3">
+                                        <a href="javascript:void(0)" onclick="deleteUser('{{ $user->id }}')" class="menu-link px-3" data-kt-users-table-filter="delete_row">Delete</a>
+                                    </div>
+                                    <!--end::Menu item-->
+                                </div>
+                                <!--end::Menu-->
+                            </td>
+                            <!--end::Action=-->
+                        </tr>
+                        <!--end::Table row-->
+                        @endforeach
+                    </tbody>
+                    <!--end::Table body-->
+                </table>
+                <!--end::Table-->
             </div>
-            <!--end::Container-->
+            <!--end::Card body-->
+        </div>
+        <!--end::Card-->
+    </div>
+    <!--end::Post-->
+</div>
+<!--end::Container-->
 
 <!--begin::Drawers-->
 <!--begin::Activities drawer-->
@@ -3784,250 +3784,250 @@
 @endsection
 @section('custom_js')
 <script>
-"use strict";
+    "use strict";
 
-var KTUsersAddUser = function () {
-    const t = document.getElementById("kt_modal_add_user"),
-        e = t.querySelector("#kt_modal_add_user_form"),
-        n = new bootstrap.Modal(t);
+    var KTUsersAddUser = function() {
+        const t = document.getElementById("kt_modal_add_user"),
+            e = t.querySelector("#kt_modal_add_user_form"),
+            n = new bootstrap.Modal(t);
 
-    return {
-        init: function () {
-            (() => {
-                var o = FormValidation.formValidation(e, {
-                    fields: {
-                        first_name: {
-                            validators: {
-                                notEmpty: {
-                                    message: "First name is required"
+        return {
+            init: function() {
+                (() => {
+                    var o = FormValidation.formValidation(e, {
+                        fields: {
+                            first_name: {
+                                validators: {
+                                    notEmpty: {
+                                        message: "First name is required"
+                                    }
                                 }
-                            }
-                        },
-                        last_name: {
-                            validators: {
-                                notEmpty: {
-                                    message: "Last name is required"
-                                }
-                            }
-                        },
-                        email: {
-                            validators: {
-                                notEmpty: {
-                                    message: "Valid email address is required"
-                                }
-                            }
-                        },
-                        phone: {
-                            validators: {
-                                notEmpty: {
-                                    message: "Phone is required"
-                                }
-                            }
-                        },
-                        password: {
-                        validators: {
-                            notEmpty: {
-                                message: 'Password is required'
                             },
-                            stringLength: {
-                                min: 6,
-                                message: 'Password must be at least 6 characters long'
-                            }
-                        }
-                    },
-                    password_confirmation: {
-                        validators: {
-                            notEmpty: {
-                                message: 'Password confirmation is required'
+                            last_name: {
+                                validators: {
+                                    notEmpty: {
+                                        message: "Last name is required"
+                                    }
+                                }
                             },
-                            identical: {
-                                compare: function () {
-                                    return form.querySelector('[name="password"]').value;
-                                },
-                                message: 'The password and its confirmation do not match'
-                            }
+                            email: {
+                                validators: {
+                                    notEmpty: {
+                                        message: "Valid email address is required"
+                                    }
+                                }
+                            },
+                            phone: {
+                                validators: {
+                                    notEmpty: {
+                                        message: "Phone is required"
+                                    }
+                                }
+                            },
+                            password: {
+                                validators: {
+                                    notEmpty: {
+                                        message: 'Password is required'
+                                    },
+                                    stringLength: {
+                                        min: 6,
+                                        message: 'Password must be at least 6 characters long'
+                                    }
+                                }
+                            },
+                            password_confirmation: {
+                                validators: {
+                                    notEmpty: {
+                                        message: 'Password confirmation is required'
+                                    },
+                                    identical: {
+                                        compare: function() {
+                                            return form.querySelector('[name="password"]').value;
+                                        },
+                                        message: 'The password and its confirmation do not match'
+                                    }
+                                }
+                            },
+                        },
+                        plugins: {
+                            trigger: new FormValidation.plugins.Trigger,
+                            bootstrap: new FormValidation.plugins.Bootstrap5({
+                                rowSelector: ".fv-row",
+                                eleInvalidClass: "",
+                                eleValidClass: ""
+                            })
                         }
-                    },
-                    },
-                    plugins: {
-                        trigger: new FormValidation.plugins.Trigger,
-                        bootstrap: new FormValidation.plugins.Bootstrap5({
-                            rowSelector: ".fv-row",
-                            eleInvalidClass: "",
-                            eleValidClass: ""
-                        })
-                    }
-                });
+                    });
 
-                const i = t.querySelector('[data-kt-users-modal-action="submit"]');
-                i.addEventListener("click", (event) => {
-                    event.preventDefault();
+                    const i = t.querySelector('[data-kt-users-modal-action="submit"]');
+                    i.addEventListener("click", (event) => {
+                        event.preventDefault();
 
-                    if (o) {
-                        o.validate().then((status) => {
+                        if (o) {
+                            o.validate().then((status) => {
 
-                            if (status === "Valid") {
-                            // Retrieve CSRF token from the meta tag
-                            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+                                if (status === "Valid") {
+                                    // Retrieve CSRF token from the meta tag
+                                    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
-                                // Include the CSRF token in the headers
-                                const headers = {
-                                    'Content-Type': 'application/json',
-                                    'X-CSRF-TOKEN': csrfToken
-                                };
-                                // Serialize form data
-                                const formData = new FormData(e);
+                                    // Include the CSRF token in the headers
+                                    const headers = {
+                                        'Content-Type': 'application/json',
+                                        'X-CSRF-TOKEN': csrfToken
+                                    };
+                                    // Serialize form data
+                                    const formData = new FormData(e);
 
-                                // Perform AJAX request
-                                fetch('/users/add', {
-                                    method: 'POST',
-                                    body: formData
-                                })
-                                    .then(response => response.json())
-                                    .then(data => {
-                                        // Handle server response
-                                        console.log(data);
+                                    // Perform AJAX request
+                                    fetch('/users/add', {
+                                            method: 'POST',
+                                            body: formData
+                                        })
+                                        .then(response => response.json())
+                                        .then(data => {
+                                            // Handle server response
+                                            console.log(data);
 
-                                        if (data.success) {
-                                            i.setAttribute("data-kt-indicator", "on");
-                                            i.disabled = true;
+                                            if (data.success) {
+                                                i.setAttribute("data-kt-indicator", "on");
+                                                i.disabled = true;
 
-                                            setTimeout(() => {
-                                                i.removeAttribute("data-kt-indicator");
-                                                i.disabled = false;
+                                                setTimeout(() => {
+                                                    i.removeAttribute("data-kt-indicator");
+                                                    i.disabled = false;
 
+                                                    Swal.fire({
+                                                        text: "Form has been successfully submitted!",
+                                                        icon: "success",
+                                                        buttonsStyling: false,
+                                                        confirmButtonText: "Ok, got it!",
+                                                        customClass: {
+                                                            confirmButton: "btn btn-primary"
+                                                        }
+                                                    }).then((result) => {
+                                                        if (result.isConfirmed) {
+                                                            n.hide();
+                                                        }
+                                                    });
+                                                }, 2000);
+                                            } else {
+                                                // Handle server errors
                                                 Swal.fire({
-                                                    text: "Form has been successfully submitted!",
-                                                    icon: "success",
+                                                    text: "Server error. Please try again later.",
+                                                    icon: "error",
                                                     buttonsStyling: false,
                                                     confirmButtonText: "Ok, got it!",
                                                     customClass: {
                                                         confirmButton: "btn btn-primary"
                                                     }
-                                                }).then((result) => {
-                                                    if (result.isConfirmed) {
-                                                        n.hide();
-                                                    }
                                                 });
-                                            }, 2000);
-                                        } else {
-                                            // Handle server errors
-                                            Swal.fire({
-                                                text: "Server error. Please try again later.",
-                                                icon: "error",
-                                                buttonsStyling: false,
-                                                confirmButtonText: "Ok, got it!",
-                                                customClass: {
-                                                    confirmButton: "btn btn-primary"
-                                                }
-                                            });
+                                            }
+                                        })
+                                        .catch(error => {
+                                            console.error('Error:', error);
+                                        });
+                                } else {
+                                    Swal.fire({
+                                        text: "Sorry, looks like there are some errors detected, please try again.",
+                                        icon: "error",
+                                        buttonsStyling: false,
+                                        confirmButtonText: "Ok, got it!",
+                                        customClass: {
+                                            confirmButton: "btn btn-primary"
                                         }
-                                    })
-                                    .catch(error => {
-                                        console.error('Error:', error);
                                     });
-                            } else {
-                                Swal.fire({
-                                    text: "Sorry, looks like there are some errors detected, please try again.",
-                                    icon: "error",
-                                    buttonsStyling: false,
-                                    confirmButtonText: "Ok, got it!",
-                                    customClass: {
-                                        confirmButton: "btn btn-primary"
-                                    }
-                                });
-                            }
-                        });
-                    }
+                                }
+                            });
+                        }
+                    });
+                })();
+
+                t.querySelector('[data-kt-users-modal-action="cancel"]').addEventListener("click", (event) => {
+                    event.preventDefault();
+                    Swal.fire({
+                        text: "Are you sure you would like to cancel?",
+                        icon: "warning",
+                        showCancelButton: true,
+                        buttonsStyling: false,
+                        confirmButtonText: "Yes, cancel it!",
+                        cancelButtonText: "No, return",
+                        customClass: {
+                            confirmButton: "btn btn-primary",
+                            cancelButton: "btn btn-active-light"
+                        }
+                    }).then((result) => {
+                        if (result.value) {
+                            e.reset();
+                            n.hide();
+                        } else if (result.dismiss === "cancel") {
+                            Swal.fire({
+                                text: "Your form has not been cancelled!.",
+                                icon: "error",
+                                buttonsStyling: false,
+                                confirmButtonText: "Ok, got it!",
+                                customClass: {
+                                    confirmButton: "btn btn-primary"
+                                }
+                            });
+                        }
+                    });
                 });
-            })();
 
-            t.querySelector('[data-kt-users-modal-action="cancel"]').addEventListener("click", (event) => {
-                event.preventDefault();
-                Swal.fire({
-                    text: "Are you sure you would like to cancel?",
-                    icon: "warning",
-                    showCancelButton: true,
-                    buttonsStyling: false,
-                    confirmButtonText: "Yes, cancel it!",
-                    cancelButtonText: "No, return",
-                    customClass: {
-                        confirmButton: "btn btn-primary",
-                        cancelButton: "btn btn-active-light"
-                    }
-                }).then((result) => {
-                    if (result.value) {
-                        e.reset();
-                        n.hide();
-                    } else if (result.dismiss === "cancel") {
-                        Swal.fire({
-                            text: "Your form has not been cancelled!.",
-                            icon: "error",
-                            buttonsStyling: false,
-                            confirmButtonText: "Ok, got it!",
-                            customClass: {
-                                confirmButton: "btn btn-primary"
-                            }
-                        });
-                    }
+                t.querySelector('[data-kt-users-modal-action="close"]').addEventListener("click", (event) => {
+                    event.preventDefault();
+                    Swal.fire({
+                        text: "Are you sure you would like to cancel?",
+                        icon: "warning",
+                        showCancelButton: true,
+                        buttonsStyling: false,
+                        confirmButtonText: "Yes, cancel it!",
+                        cancelButtonText: "No, return",
+                        customClass: {
+                            confirmButton: "btn btn-primary",
+                            cancelButton: "btn btn-active-light"
+                        }
+                    }).then((result) => {
+                        if (result.value) {
+                            e.reset();
+                            n.hide();
+                        } else if (result.dismiss === "cancel") {
+                            Swal.fire({
+                                text: "Your form has not been cancelled!.",
+                                icon: "error",
+                                buttonsStyling: false,
+                                confirmButtonText: "Ok, got it!",
+                                customClass: {
+                                    confirmButton: "btn btn-primary"
+                                }
+                            });
+                        }
+                    });
                 });
-            });
+            }
+        };
+    }();
 
-            t.querySelector('[data-kt-users-modal-action="close"]').addEventListener("click", (event) => {
-                event.preventDefault();
-                Swal.fire({
-                    text: "Are you sure you would like to cancel?",
-                    icon: "warning",
-                    showCancelButton: true,
-                    buttonsStyling: false,
-                    confirmButtonText: "Yes, cancel it!",
-                    cancelButtonText: "No, return",
-                    customClass: {
-                        confirmButton: "btn btn-primary",
-                        cancelButton: "btn btn-active-light"
-                    }
-                }).then((result) => {
-                    if (result.value) {
-                        e.reset();
-                        n.hide();
-                    } else if (result.dismiss === "cancel") {
-                        Swal.fire({
-                            text: "Your form has not been cancelled!.",
-                            icon: "error",
-                            buttonsStyling: false,
-                            confirmButtonText: "Ok, got it!",
-                            customClass: {
-                                confirmButton: "btn btn-primary"
-                            }
-                        });
-                    }
-                });
-            });
-        }
-    };
-}();
+    KTUtil.onDOMContentLoaded(() => {
+        KTUsersAddUser.init();
+    });
 
-KTUtil.onDOMContentLoaded(() => {
-    KTUsersAddUser.init();
-});
-
-$(document).ready(function() {
-    // Function to delete a resource by ID
-   
-
-    // Assuming you have a button or link with a class "delete-button" for triggering the deleteCompany function
-    // $('.delete-button').on('click', function() {
-    //     // Get the resource ID from the data attribute or any other way you have it
-    //     var resourceId = $(this).data('resource-id');
-
-    //     // Call the deleteCompany function with the resource ID
-    //     deleteCompany(resourceId);
-    // });
-});
+    $(document).ready(function() {
+        // Function to delete a resource by ID
 
 
- function deleteUser(resourceId) {
-    
+        // Assuming you have a button or link with a class "delete-button" for triggering the deleteCompany function
+        // $('.delete-button').on('click', function() {
+        //     // Get the resource ID from the data attribute or any other way you have it
+        //     var resourceId = $(this).data('resource-id');
+
+        //     // Call the deleteCompany function with the resource ID
+        //     deleteCompany(resourceId);
+        // });
+    });
+
+
+    function deleteUser(resourceId) {
+
         // Prevent the default action of the link (e.g., navigating to a new page)
         event.preventDefault();
 
@@ -4041,6 +4041,27 @@ $(document).ready(function() {
             success: function(response) {
                 // Handle the successful response
                 console.log(response);
+                if (response.success) {
+                    Swal.fire({
+                        text: "User is Deleted Successfully.",
+                        icon: "success",
+                        buttonsStyling: false,
+                        confirmButtonText: "Ok, got it!",
+                        customClass: {
+                            confirmButton: "btn btn-primary"
+                        }
+                    });
+                } else {
+                    Swal.fire({
+                        text: "Sorry, Unable To Delete User, please try again.",
+                        icon: "error",
+                        buttonsStyling: false,
+                        confirmButtonText: "Ok, got it!",
+                        customClass: {
+                            confirmButton: "btn btn-primary"
+                        }
+                    });
+                }
 
                 // Optionally, update the UI to reflect the deleted resource
                 // For example, remove the deleted resource from the list
@@ -4054,6 +4075,3 @@ $(document).ready(function() {
     }
 </script>
 @endsection
-
-
-
