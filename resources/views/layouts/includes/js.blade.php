@@ -1,11 +1,15 @@
-<script>
-        var hostUrl = "assets/";
-    </script>
-    <!--begin::Global Javascript Bundle(used by all pages)-->
-    <script src="assets/plugins/global/plugins.bundle.js"></script>
-    <script src="assets/js/scripts.bundle.js"></script>
-    <!--end::Global Javascript Bundle-->
-    <!--begin::Page Vendors Javascript(used by this page)-->
-    <script src="assets/plugins/custom/fullcalendar/fullcalendar.bundle.js"></script>
-    <!--end::Page Vendors Javascript-->
+<!-- Vendor JS Files -->
+  <script src="{{ asset('assets/js/jquery.min.js') }}"></script>
+  <script src="{{ asset('assets/vendor/apexcharts/apexcharts.min.js') }}"></script>
+  <script src="{{ asset('assets/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+  <!-- <script src="assets/vendor/chart.js/chart.umd.js"></script>
+  <script src="assets/vendor/echarts/echarts.min.js"></script> -->
+  <!-- <script src="assets/vendor/quill/quill.min.js"></script> -->
+  <!-- <script src="assets/vendor/simple-datatables/simple-datatables.js"></script> -->
+  <!-- <script src="assets/vendor/tinymce/tinymce.min.js"></script> -->
+  <script src="{{ asset('assets/vendor/php-email-form/validate.js') }}"></script>
 
+  <!-- Template Main JS File -->
+<script src="{{ asset('assets/js/datatables.js') }}"></script>
+<script src="{{ asset('assets/js/datatables.min.js') }}"></script>
+<script src="{{ asset('assets/js/main.js') }}"></script>

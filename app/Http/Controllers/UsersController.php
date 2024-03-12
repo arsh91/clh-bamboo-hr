@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\AddUser;
+use App\Http\Requests\UpdateUser;
 use App\Models\User;
 use App\Notifications\CommonEmailNotification;
 use Illuminate\Http\Request;
@@ -15,10 +16,16 @@ class UsersController extends Controller
      */
     public function index()
     {
+        $loginUser = auth()->user();
         //Get Users Without Super Admin
-        $users = User::whereHas('role', function($q) {
-            $q->where('name', '!=', 'SUPER_ADMIN');
-        })->get();
+        if($loginUser->role->name == 'SUPER_ADMIN'){
+            $users = User::whereHas('role', function($q) {
+                $q->where('name', '!=', 'SUPER_ADMIN');
+            })->get();
+        }else{
+            $users = [];
+        }
+        
 
         return view('users.index',compact('users'));
     }
@@ -66,9 +73,12 @@ class UsersController extends Controller
             ];
                    // Send Credentails To User 
                    $user->notify(new CommonEmailNotification($messages));
+                  
+                   $request->session()->flash('message','User created successfully.');
 
-
-            return response()->json(['success' => true, 'message' => 'User created successfully']);
+                   return Response()->json(['status'=>200, 'users'=>$user]);
+            
+            // return response()->json(['success' => true, 'message' => 'User created successfully']);
          }
     }
 
@@ -85,15 +95,38 @@ class UsersController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $users = User::whereHas('role', function($q) {
+            $q->where('name', '!=', 'SUPER_ADMIN');
+        })->find($id);
+
+
+        return Response()->json(['users' =>$users]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
-    {
-        //
+    public function update(UpdateUser $request,  $id)
+    {   
+
+         //Request Data validation
+         $validatedData = $request->validated();
+
+         $user = User::where('id', $id)->update([
+            'first_name' => $validatedData['first_name'],
+            'last_name' => $validatedData['last_name'],
+            'email' => $validatedData['email'],
+            'phone' => $validatedData['phone'],
+            'updated_at' => now(),
+        ]);
+        
+        if (isset($validatedData['password']) && $validatedData['password'] != null) {
+            User::where('id', $id)->update(['password' => Hash::make($validatedData['password'])]);
+        }
+        
+        $request->session()->flash('message','User updated successfully.');
+		return Response()->json(['status'=>200]);
+
     }
 
     /**
@@ -104,6 +137,7 @@ class UsersController extends Controller
         $user = User::findOrFail($id);
         $user->delete();
 
-        return response()->json(['success' => true, 'message' => 'User Deleted successfully']);
+        session()->flash('message','User Deleted successfully.');
+        return response()->json(['success' => true]);
     }
 }
