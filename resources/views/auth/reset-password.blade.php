@@ -17,7 +17,7 @@
 
                   <div class="pt-4 pb-2">
                     <h5 class="login-title text-center pb-0 fs-4">Reset Password</h5>
-                    <p class="text-center small">Enter your username & password to login</p>
+                    <p class="text-center small">Enter New password to Reset Password</p>
 
                     @if(session()->has('message'))
                         <div class="alert alert-success fade show" role="alert">
