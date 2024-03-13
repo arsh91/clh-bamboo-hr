@@ -21,8 +21,8 @@ Route::match(['get', 'post'], '/', [AuthController::class, 'index']);
 Route::match(['get', 'post'], '/login', [AuthController::class, 'login'])->name('login');
 Route::get('/forgot-password', [AuthController::class, 'forgotPasswordView'])->name('forgot-password');
 Route::post('/forgot-password', [AuthController::class, 'forgotPassword'])->name('forgot.password');
-// Route::get('reset-password/{token}', [AuthController::class, 'resetPassword'])->name('reset.password');
-Route::get('/reset/password', [AuthController::class, 'resetPassword']);
+Route::get('/reset/password/{token}', [AuthController::class, 'resetPassword']);
+Route::post('/reset/password', [AuthController::class, 'submitResetPasswordForm'])->name('submit.reset.password');
 
 //Authenticated Group Routes Starts
 Route::group(['middleware' => ['auth']], function() {

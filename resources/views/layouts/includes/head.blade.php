@@ -7,8 +7,8 @@
   <meta content="" name="keywords">
   <meta name="csrf-token" content="{{ csrf_token() }}">
   <!-- Favicons -->
-  <link href="{{ asset('assets/img/') }}" rel="icon">
-  <link href="{{ asset('assets/img/') }}" rel="apple-touch-icon">
+  <link href="{{ asset('assets/img/logo/modern-hill-small.png') }}" rel="icon">
+  <link href="{{ asset('assets/img/logo/modern-hill-small.png') }}" rel="apple-touch-icon">
 
   <!-- Google Fonts -->
   <link href="https://fonts.gstatic.com" rel="preconnect">
