@@ -26,7 +26,6 @@ class UsersController extends Controller
             $users = [];
         }
         
-
         return view('users.index',compact('users'));
     }
 

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CatalogController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\UsersController;
 use Illuminate\Support\Facades\Route;
@@ -40,9 +41,12 @@ Route::group(['middleware' => ['auth']], function() {
         });
         //Ends Protected Routes For Admin
 
-    Route::get('/catalogs', function () {
-        return view('catalog.index'); 
-    });
+        Route::get('/catalogs', [CatalogController::class,'index'])->name('catalogs.index');
+        Route::post('/catalogs/add/',[CatalogController::class,'store']);
+        Route::get('/catalogs/edit/{id}',[CatalogController::class,'edit'])->name('catalogs.edit');
+        Route::post('/catalogs/{catalog}',[CatalogController::class,'update'])->name('catalogs.update');
+        Route::delete('/catalogs/delete/{catalog}',[CatalogController::class,'destroy'])->name('catalogs.destroy');
+
 
 
     Route::get('logout', [AuthController::class, 'logOut'])->name('logout');
