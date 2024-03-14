@@ -26,7 +26,9 @@ class UpdateUser extends FormRequest
             'last_name' => 'required|string|max:255',
             'email' => 'required|email',
             'phone' => 'required|',
-            'password' => 'nullable|min:6|confirmed',
+            // 'password' => 'nullable|min:6|confirmed',
+            'status' => 'required',
+
         ];
     }
 }

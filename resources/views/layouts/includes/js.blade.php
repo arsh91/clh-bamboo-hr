@@ -9,6 +9,7 @@
   <!-- <script src="assets/vendor/tinymce/tinymce.min.js"></script> -->
   <script src="{{ asset('assets/vendor/php-email-form/validate.js') }}"></script>
   <script src="//cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <!-- Template Main JS File -->
 <script src="{{ asset('assets/js/datatables.js') }}"></script>
 <script src="{{ asset('assets/js/datatables.min.js') }}"></script>

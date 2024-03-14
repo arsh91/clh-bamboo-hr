@@ -116,12 +116,13 @@ class UsersController extends Controller
             'last_name' => $validatedData['last_name'],
             'email' => $validatedData['email'],
             'phone' => $validatedData['phone'],
+            'status' => $validatedData['status'],
             'updated_at' => now(),
         ]);
         
-        if (isset($validatedData['password']) && $validatedData['password'] != null) {
-            User::where('id', $id)->update(['password' => Hash::make($validatedData['password'])]);
-        }
+        // if (isset($validatedData['password']) && $validatedData['password'] != null) {
+        //     User::where('id', $id)->update(['password' => Hash::make($validatedData['password'])]);
+        // }
         
         $request->session()->flash('message','User updated successfully.');
 		return Response()->json(['status'=>200]);

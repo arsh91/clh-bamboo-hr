@@ -47,6 +47,7 @@ Route::group(['middleware' => ['auth']], function() {
         Route::post('/catalogs/{catalog}',[CatalogController::class,'update'])->name('catalogs.update');
         Route::delete('/catalogs/delete/{catalog}',[CatalogController::class,'destroy'])->name('catalogs.destroy');
 
+        Route::get('/fetch-catalog-categories', [CatalogController::class,'fetchCategories']);
 
 
     Route::get('logout', [AuthController::class, 'logOut'])->name('logout');

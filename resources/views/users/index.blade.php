@@ -34,9 +34,9 @@
                                         <td>{{$data->phone}}</td>
                                         <td>
                                              @if($data->status == 'inactive')
-                                            <span class="badge rounded-pill bg-danger">{{$data->status}}</span>
+                                            <span class="badge rounded-pill bg-danger">{{ucfirst($data->status)}}</span>
                                             @else
-                                            <span class="badge rounded-pill  bg-success">{{$data->status}}</span>
+                                            <span class="badge rounded-pill  bg-success">{{ucfirst($data->status)}}</span>
                                             @endif
                                         </td>
                                         <td> 
@@ -151,7 +151,7 @@
                                                 <input type="number" class="form-control" name="phone" id="edit_phone">
                                             </div>
                                         </div>   
-                                        <div class="row mb-3">
+                                        <!-- <div class="row mb-3">
                                             <label for="edit_password" class="col-sm-3 col-form-label required">Password</label>
                                             <div class="col-sm-9">
                                                 <input type="password" class="form-control" name="password" id="edit_password">
@@ -162,6 +162,15 @@
                                                 Password</label>
                                             <div class="col-sm-9">
                                                 <input type="password" class="form-control mb-6" name="password_confirmation" id="edit_password_confirmation">
+                                            </div>
+                                        </div> -->
+                                        <div class="row mb-3">
+                                            <label for="edit_status" class="col-sm-3 col-form-label required">Status</label>
+                                            <div class="col-sm-9">
+                                                <select name="status" class="form-select" id="edit_status">
+                                                    <option value="active">Active</option>
+                                                    <option value="inactive">Inactive</option>
+                                                </select>
                                             </div>
                                         </div>
                                         <input type="hidden" class="form-control" name="users_id" id="users_id" value="">

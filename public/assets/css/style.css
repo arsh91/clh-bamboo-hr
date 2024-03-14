@@ -1293,3 +1293,7 @@ header .header-alert{
 .select2{
   width: 100% !important;
   }
+
+  .pointer{
+    cursor: pointer;
+  }

@@ -146,4 +146,70 @@ class CatalogController extends Controller
         session()->flash('message','Catalog Deleted successfully.');
         return response()->json(['success' => true]);
     }
+
+    public function fetchCategories()
+    {
+        $url = 'https://recollection.com/wp-json/wc/v3/products/categories';
+        
+          // Get the selected category value from the request
+        //   $selectedCategory = request()->input('category');
+        //   if($selectedCategory){
+        //     dd($selectedCategory);
+        //     $url = 'https://recollection.com/wp-json/wc/v3/products/categories?search='.$selectedCategory;
+        //   }
+
+        $consumerKey = 'ck_db66350c57384308f7ffe8045cada46ee3e7d96e';
+        $consumerSecret = 'cs_7c01bf3a4f3fae66a8cd8c4f40890b91c36151d2';
+        
+        // Generate OAuth nonce and timestamp
+        $oauthNonce = md5(uniqid(rand(), true));
+        $oauthTimestamp = time();
+        
+        // Generate OAuth signature
+        $baseString = 'GET&' . urlencode($url) . '&'
+            . urlencode('oauth_consumer_key=' . $consumerKey
+            . '&oauth_nonce=' . $oauthNonce
+            . '&oauth_signature_method=HMAC-SHA1'
+            . '&oauth_timestamp=' . $oauthTimestamp
+            . '&oauth_version=1.0'
+        );
+        
+        $key = urlencode($consumerSecret) . '&';
+        $oauthSignature = base64_encode(hash_hmac('sha1', $baseString, $key, true));
+        
+        // Set CURL options
+        $curl = curl_init();
+        curl_setopt_array($curl, [
+            CURLOPT_URL => $url,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_SSL_VERIFYPEER => false, // Disable SSL certificate verification
+            CURLOPT_HTTPHEADER => [
+                'Authorization: OAuth oauth_consumer_key="' . $consumerKey . '", '
+                . 'oauth_nonce="' . $oauthNonce . '", '
+                . 'oauth_signature="' . urlencode($oauthSignature) . '", '
+                . 'oauth_signature_method="HMAC-SHA1", '
+                . 'oauth_timestamp="' . $oauthTimestamp . '", '
+                . 'oauth_version="1.0"'
+            ]
+        ]);
+        
+        // Execute the request
+        $response = curl_exec($curl);
+        // dd( $response );
+        // Check for errors
+        if ($response === false) {
+            $error = curl_error($curl);
+            // Handle error
+            return "CURL Error: $error";
+        }
+        // dd($response);
+        
+        // Close CURL
+        curl_close($curl);
+        
+        // Process the response as needed
+        return $response;
+        
+    }
 }

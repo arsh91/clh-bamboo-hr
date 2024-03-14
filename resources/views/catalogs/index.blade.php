@@ -18,7 +18,7 @@
                                 <thead>
                                     <tr>
                                         <th scope="col">#</th>
-                                        <th scope="col">Name</th>
+                                        <!-- <th scope="col">Name</th> -->
                                         <th scope="col">Title</th>
                                         <th scope="col">Base Price</th>
                                         <th scope="col">SKU</th>
@@ -31,10 +31,10 @@
                                 @foreach($catalogs as $index => $data)
                                     <tr>
                                         <th scope="row">{{ $index + 1 }}</th>
-                                        <td>{{ucfirst($data->name) ?? ''}} </td>
-                                        <td>{{$data->title ?? ''}}</td>
+                                        <!-- <td>{{ucfirst($data->name) ?? ''}} </td> -->
+                                        <td>{{ucfirst($data->title) ?? ''}}</td>
                                         <td>{{$data->base_price ?? ''}}</td>
-                                        <td>{{$data->sku ?? ''}}</td>
+                                        <td>{{$data->sku ?? 'NA'}}</td>
                                         <td>
                                             @if ($data->image)
                                             <img src="{{ asset('storage/' . $data->image) }}" height="40" width="70" alt="Catalog Image">
@@ -44,9 +44,9 @@
                                         </td>
                                         <td>
                                              @if($data->status == 'draft')
-                                            <span class="badge rounded-pill bg-warning">{{$data->status}}</span>
+                                            <span class="badge rounded-pill bg-warning">{{ucfirst($data->status)}}</span>
                                             @else
-                                            <span class="badge rounded-pill  bg-success">{{$data->status}}</span>
+                                            <span class="badge rounded-pill  bg-success">{{ucfirst($data->status)}}</span>
                                             @endif
                                         </td>
                                         <td> 
@@ -94,19 +94,17 @@
                                             </div>
                                         </div> -->
                                         <div class="row mb-3 mt-4">
-                                            <label for="category" class="col-sm-3 col-form-label required">Category</label>
+                                            <label for="category" class="col-sm-3 col-form-label required">Wp Category</label>
                                             <div class="col-sm-9">
 
                                             <select name="category" class="form-select" id="category">
                                                 <option value="">Select Category</option>
-                                                <option value="1">Category 1</option>
-                                                <option value="2">Category 2</option>
                                             </select>
                                                 <!-- <input type="text" class="form-control" name="category" id="category"> -->
                                             </div>
                                         </div>
                                         <div class="row mb-3 mt-4">
-                                            <label for="sku" class="col-sm-3 col-form-label required">SKU</label>
+                                            <label for="sku" class="col-sm-3 col-form-label">SKU</label>
                                             <div class="col-sm-9">
                                                 <input type="text" class="form-control" name="sku" id="sku">
                                             </div>
@@ -184,7 +182,17 @@
                                             </div>
                                         </div> -->
                                         <div class="row mb-3 mt-4">
-                                            <label for="edit_sku" class="col-sm-3 col-form-label required">SKU</label>
+                                            <label for="edit_category" class="col-sm-3 col-form-label required">Wp Category</label>
+                                            <div class="col-sm-9">
+
+                                            <select name="category" class="form-select" id="edit_category">
+                                                <option value="">Select Category</option>
+                                            </select>
+                                                <!-- <input type="text" class="form-control" name="category" id="category"> -->
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3 mt-4">
+                                            <label for="edit_sku" class="col-sm-3 col-form-label">SKU</label>
                                             <div class="col-sm-9">
                                                 <input type="text" class="form-control" name="sku" id="edit_sku">
                                             </div>
@@ -250,6 +258,9 @@
         });
 
         $( '#category' ).select2( {
+            dropdownParent: $('#addCatalog')
+        });
+        $( '#edit_category' ).select2( {
             dropdownParent: $('#addCatalog')
         });
     });
@@ -403,6 +414,71 @@
             });
         }
     }
+
+       // Function to fetch categories using Axios
+       function fetchCategories() {
+        axios.get('/fetch-catalog-categories')
+            .then(function (response) {
+                // Handle the response data
+                var categories = response.data;
+                console.log(categories)
+                // Populate the select element with the received categories
+                $('#category').empty(); // Clear existing options
+                $('#category').append($('<option>').text('Select Category').val('')); // Add default option
+                categories.forEach(function(category) {
+                    $('#category').append($('<option>').text(category.name).val(category.id));
+                });
+
+
+                $('#edit_category').empty(); // Clear existing options
+                $('#edit_category').append($('<option>').text('Select Category').val('')); // Add default option
+                categories.forEach(function(category) {
+                    $('#edit_category').append($('<option>').text(category.name).val(category.id));
+                });
+
+                // Refresh Select2 after updating options
+                // $('#category').select2();
+            })
+            .catch(function (error) {
+                console.error(error);
+            });
+    }
+
+    // Call fetchCategories function to populate options when the page loads
+    fetchCategories();
+        // Listen for change event on the input field within Select2 dropdown
+    $('.select2-search__field').on('change', function () {
+        handleSearch();
+    });
+        // Function to handle search event
+        function handleSearch() {
+            console.log("on change event")
+        // Get the selected category value
+        var selectedCategory = $('.select2-search__field').text();
+        console.log(selectedCategory)
+
+        // You can perform different actions based on the selected category
+        // For example, you can make an Axios request based on this value
+        axios.get('/fetch-catalog-categories?category=' + selectedCategory)
+            .then(function (response) {
+                // Handle the response data
+                console.log(response.data);
+            })
+            .catch(function (error) {
+                console.error(error);
+            });
+    }
+
+  
+
+    // If you want to perform an action on scroll, you can attach an event listener to the window scroll event
+    $(window).on('scroll', function () {
+        // Check if the user has scrolled to the bottom of the page
+        if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+            // handleSearch();
+            // fetchCategories();
+        }
+    });
     
 </script>
 @endsection
