@@ -290,7 +290,8 @@
                     $('#edit_last_name').val(res.users.last_name);
                     $('#edit_email').val(res.users.email);
                     $('#edit_phone').val(res.users.phone);  
-                    $('#edit_password').val('');
+                    $('#edit_status option[value="' + res.users.status + '"]').attr('selected',
+                    'selected');
                 }
             }
         });
