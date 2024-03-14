@@ -11,6 +11,7 @@ class Catalog extends Model
 
     protected $fillable = [
         'author_id',
+        'wp_category_id',
         'name',
         'title',
         'content',

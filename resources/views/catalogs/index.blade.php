@@ -39,7 +39,7 @@
                                             @if ($data->image)
                                             <img src="{{ asset('storage/' . $data->image) }}" height="40" width="70" alt="Catalog Image">
                                             @else
-                                                ---
+                                                NA
                                             @endif 
                                         </td>
                                         <td>
@@ -87,10 +87,22 @@
                                             <textarea class="form-control" name="content" style="height: 100px" id="content"></textarea>
                                             </div>
                                         </div>
-                                        <div class="row mb-3 mt-4">
+                                        <!-- <div class="row mb-3 mt-4">
                                             <label for="name" class="col-sm-3 col-form-label required">Name</label>
                                             <div class="col-sm-9">
                                                 <input type="text" class="form-control" name="name" id="name">
+                                            </div>
+                                        </div> -->
+                                        <div class="row mb-3 mt-4">
+                                            <label for="category" class="col-sm-3 col-form-label required">Category</label>
+                                            <div class="col-sm-9">
+
+                                            <select name="category" class="form-select" id="category">
+                                                <option value="">Select Category</option>
+                                                <option value="1">Category 1</option>
+                                                <option value="2">Category 2</option>
+                                            </select>
+                                                <!-- <input type="text" class="form-control" name="category" id="category"> -->
                                             </div>
                                         </div>
                                         <div class="row mb-3 mt-4">
@@ -106,7 +118,7 @@
                                             </div>
                                         </div>
                                         <div class="row mb-3 mt-4">
-                                            <label for="image" class="col-sm-3 col-form-label required">Image</label>
+                                            <label for="image" class="col-sm-3 col-form-label">Image</label>
                                             <div class="col-sm-9">
                                                 <input type="file" class="form-control" name="image" id="image">
                                             </div>
@@ -118,7 +130,7 @@
                                             </div>
                                         </div> -->
                                         <div class="row mb-3">
-                                            <label for="status" class="col-sm-3 col-form-label ">Status</label>
+                                            <label for="status" class="col-sm-3 col-form-label required">Status</label>
                                             <div class="col-sm-9">
                                                 <select name="status" class="form-select" id="status">
                                                     <option value="draft">Draft</option>
@@ -165,12 +177,12 @@
                                             <textarea class="form-control" name="content" style="height: 100px" id="edit_content"></textarea>
                                             </div>
                                         </div>
-                                        <div class="row mb-3 mt-4">
+                                        <!-- <div class="row mb-3 mt-4">
                                             <label for="edit_name" class="col-sm-3 col-form-label required">Name</label>
                                             <div class="col-sm-9">
                                                 <input type="text" class="form-control" name="name" id="edit_name">
                                             </div>
-                                        </div>
+                                        </div> -->
                                         <div class="row mb-3 mt-4">
                                             <label for="edit_sku" class="col-sm-3 col-form-label required">SKU</label>
                                             <div class="col-sm-9">
@@ -184,7 +196,7 @@
                                             </div>
                                         </div>
                                         <div class="row mb-3 mt-4">
-                                            <label for="edit_image" class="col-sm-3 col-form-label required">Image</label>
+                                            <label for="edit_image" class="col-sm-3 col-form-label">Image</label>
                                             <div class="col-sm-9">
                                                 <input type="file" class="form-control" name="image" id="edit_image">
                                             </div>
@@ -196,7 +208,7 @@
                                             </div>
                                         </div> -->
                                         <div class="row mb-3">
-                                            <label for="edit_status" class="col-sm-3 col-form-label ">Status</label>
+                                            <label for="edit_status" class="col-sm-3 col-form-label required">Status</label>
                                             <div class="col-sm-9">
                                                 <select name="status" class="form-select" id="edit_status">
                                                     <option value="draft">Draft</option>
@@ -232,6 +244,14 @@
             "order": []
 
         });
+        //hide error bag on modal close
+        $(".modal").on("hidden.bs.modal", function() {
+            $('.alert-danger').hide().html('');
+        });
+
+        $( '#category' ).select2( {
+            dropdownParent: $('#addCatalog')
+        });
     });
 
 
@@ -242,12 +262,12 @@
     }
 
     $('#addCatalogsForm').submit(function(event) {
-        var imageFile = $('#image')[0].files[0];
-
         event.preventDefault();
         var formData = new FormData(this);
-        formData.append('image',imageFile);
-        console.log(formData)
+        if ($('#image')[0].files.length > 0) {
+            var imageFile = $('#image')[0].files[0];
+            formData.append('image',imageFile);
+        }
         $.ajax({
             type: 'POST',
             url: "{{ url('/catalogs/add')}}",
@@ -255,24 +275,54 @@
             cache: false,
             processData: false,
             contentType: false,
-            success: (data) => {
+            success: function(data) {
+                // This function is called when the AJAX request is successful
                 if (data.errors) {
-                    $('.alert-danger').html('');
-                    $.each(data.errors, function(key, value) {
-                        $('.alert-danger').show();
-                        $('.alert-danger').append('<li>' + value + '</li>');
-                    })
+                    displayErrors(data.errors); // Call a function to display errors
                 } else {
-                    $('.alert-danger').html('');
+                    // No errors, clear the error container and do whatever you want on success
+                    $('.alert-danger').hide().html('');
                     $("#addCatalog").modal('hide');
                     location.reload();
                 }
             },
-            error: function(data) {}
+            error: function(xhr, textStatus, errorThrown) {
+                // This function is called when the AJAX request encounters an error
+                // console.error(xhr.status); 
+                // console.error(textStatus);
+                // console.error(errorThrown); 
+                
+                // Check if the status code is 422 (Unprocessable Entity)
+                if (xhr.status === 422) {
+                    // Parse the error response if available
+                    var errorResponse = xhr.responseJSON;
+                    if (errorResponse && errorResponse.errors) {
+                        displayErrors(errorResponse.errors);
+                        return; 
+                    }
+                }
+
+                // If the error response is not in the expected format or no errors are found, display a generic error message
+                displayError('An error occurred while processing your request. Please try again later.');
+            }
         });
 
     });
 
+    function displayErrors(errors) {
+            // Clear previous errors
+            $('.alert-danger').html('');     
+            // Display each error
+            $.each(errors, function(key, value) {
+                $('.alert-danger').append('<li>' + value + '</li>');
+            });
+            // Show the error container
+            $('.alert-danger').show();
+        }
+        function displayError(errorMessage) {
+            // Display a single error message
+            $('.alert-danger').html(errorMessage).show();
+        }
 
     function editCatalogs(id) {
         $('.alert-danger').html('');
@@ -300,9 +350,14 @@
     $('#editCatalogsForm').submit(function(event) {
         id =   $('#catalog_id').val();
         event.preventDefault();
-        var imageFile = $('#edit_image')[0].files[0];
+        // var imageFile = $('#edit_image')[0].files[0];
         var formData = new FormData(this);
-        formData.append('image',imageFile);
+         // Check if an image file is selected
+    if ($('#edit_image')[0].files.length > 0) {
+        var imageFile = $('#edit_image')[0].files[0];
+        formData.append('image', imageFile);
+    }
+        // formData.append('image',imageFile);
         $.ajax({
             type: "POST",
             url: `{{ route('catalogs.update', ['catalog' => ':id']) }}`.replace(':id', id),

@@ -1283,3 +1283,13 @@ header .header-alert{
   z-index: -1;
   font-weight: 500;
 }
+
+.required::after
+{
+  content:"*";
+  color:red;
+}
+
+.select2{
+  width: 100% !important;
+  }

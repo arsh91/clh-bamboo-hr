@@ -14,8 +14,7 @@ class CatalogController extends Controller
      * Display a listing of the resource.
      */
     public function index()
-    {
-        
+    {    
         $catalogs = Catalog::all();
 
         return view('catalogs.index',compact('catalogs'));
@@ -41,13 +40,14 @@ class CatalogController extends Controller
            //Create User
          $catalog = Catalog::create([
             'author_id' => auth()->user()->id,
-            'name' => $validatedData['name'],
+            // 'name' => $validatedData['title'],
             'title' => $validatedData['title'],
             'content' => $validatedData['content'],
+            'wp_category_id' => $validatedData['category'],
             'sku' => $validatedData['sku'],
             'base_price' => $validatedData['base_price'],
             'status' => $validatedData['status'],
-            'publish_date' => $validatedData['status'] == 'publish' ? now() : '',
+            'publish_date' => $validatedData['status'] == 'publish' ? now() : null,
             'created_at' => now(),
             'updated_at' => now(),
         ]);
@@ -96,8 +96,9 @@ class CatalogController extends Controller
           $validatedData = $request->validated();
            //Update User
            $catalogs = Catalog::where('id', $catalog->id)->update([
-            'name' => $validatedData['name'],
+            // 'name' => $validatedData['title'],
             'title' => $validatedData['title'],
+            'wp_category_id' => $validatedData['category'],
             'content' => $validatedData['content'],
             'sku' => $validatedData['sku'],
             'base_price' => $validatedData['base_price'],

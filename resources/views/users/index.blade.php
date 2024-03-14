@@ -192,11 +192,15 @@
             "order": []
 
         });
+        //hide error bag on modal close
+        $(".modal").on("hidden.bs.modal", function() {
+            $('.alert-danger').hide().html('');
+        });
     });
-
 
     function openusersModal() {
             $('.alert-danger').html('');
+            // $('.alert-danger').show();   
             $('#first_name').val('');
             $('#addUsers').modal('show');
     }
@@ -204,7 +208,6 @@
     $('#addUsersForm').submit(function(event) {
         event.preventDefault();
         var formData = new FormData(this);
-        console.log(formData)
         $.ajax({
             type: 'POST',
             url: "{{ url('/users/add')}}",
@@ -212,24 +215,57 @@
             cache: false,
             processData: false,
             contentType: false,
-            success: (data) => {
+            success: function(data) {
+                // This function is called when the AJAX request is successful
                 if (data.errors) {
-                    $('.alert-danger').html('');
-                    $.each(data.errors, function(key, value) {
-                        $('.alert-danger').show();
-                        $('.alert-danger').append('<li>' + value + '</li>');
-                    })
+                    displayErrors(data.errors); // Call a function to display errors
                 } else {
-                    $('.alert-danger').html('');
+                    // No errors, clear the error container and do whatever you want on success
+                    $('.alert-danger').hide().html('');
                     $("#addUsers").modal('hide');
                     location.reload();
                 }
             },
-            error: function(data) {}
+            error: function(xhr, textStatus, errorThrown) {
+                // This function is called when the AJAX request encounters an error
+                // console.error(xhr.status); 
+                // console.error(textStatus);
+                // console.error(errorThrown); 
+                
+                // Check if the status code is 422 (Unprocessable Entity)
+                if (xhr.status === 422) {
+                    // Parse the error response if available
+                    var errorResponse = xhr.responseJSON;
+                    if (errorResponse && errorResponse.errors) {
+                        displayErrors(errorResponse.errors);
+                        return; 
+                    }
+                }
+
+                // If the error response is not in the expected format or no errors are found, display a generic error message
+                displayError('An error occurred while processing your request. Please try again later.');
+            }
         });
 
     });
 
+    function displayErrors(errors) {
+            // Clear previous errors
+            $('.alert-danger').html('');
+            
+            // Display each error
+            $.each(errors, function(key, value) {
+                $('.alert-danger').append('<li>' + value + '</li>');
+            });
+
+            // Show the error container
+            $('.alert-danger').show();
+        }
+
+        function displayError(errorMessage) {
+            // Display a single error message
+            $('.alert-danger').html(errorMessage).show();
+        }
 
     function editUsers(id) {
         $('.alert-danger').html('');
@@ -256,6 +292,7 @@
         event.preventDefault();
         var formData = new FormData(this);
         id =   $('#users_id').val();
+        $('.alert-danger').hide().html('');
         $.ajax({
             type: "POST",
             url: `{{ route('users.update', ['user' => ':id']) }}`.replace(':id', id),
@@ -263,18 +300,36 @@
             dataType: 'json',
             processData: false,
             contentType: false,
-            success: function(res) {
-                if (res.errors) {
-                    $('.alert-danger').html('');
-                    $.each(res.errors, function(key, value) {
-                        $('.alert-danger').show();
-                        $('.alert-danger').append('<li>' + value + '</li>');
-                    })
+            success: function(data) {
+                // This function is called when the AJAX request is successful
+                console.log(data);
+                if (data.errors) {
+                    displayErrors(data.errors); // Call a function to display errors
                 } else {
-                    $('.alert-danger').html('');
-                    $("#editUsers").modal('hide');
+                    // No errors, clear the error container and do whatever you want on success
+                    $('.alert-danger').hide().html('');
+                    $("#addUsers").modal('hide');
                     location.reload();
                 }
+            },
+            error: function(xhr, textStatus, errorThrown) {
+                // This function is called when the AJAX request encounters an error
+                // console.error(xhr.status); 
+                // console.error(textStatus);
+                // console.error(errorThrown); 
+                
+                // Check if the status code is 422 (Unprocessable Entity)
+                if (xhr.status === 422) {
+                    // Parse the error response if available
+                    var errorResponse = xhr.responseJSON;
+                    if (errorResponse && errorResponse.errors) {
+                        displayErrors(errorResponse.errors);
+                        return; 
+                    }
+                }
+
+                // If the error response is not in the expected format or no errors are found, display a generic error message
+                displayError('An error occurred while processing your request. Please try again later.');
             }
         });
     });
@@ -300,6 +355,9 @@
             });
         }
     }
+
+
+
     
 </script>
 @endsection
