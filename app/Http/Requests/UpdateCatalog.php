@@ -24,7 +24,7 @@ class UpdateCatalog extends FormRequest
         return [
             'title' => 'required|string|max:255',
             'content' => 'required|string',
-            'category' => 'required',
+            'category' => 'nullable',
             // 'name' => 'required|string|max:255',
             'sku' => 'nullable|string',
             'base_price' => 'required',

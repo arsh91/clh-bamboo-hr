@@ -94,7 +94,7 @@
                                             </div>
                                         </div> -->
                                         <div class="row mb-3 mt-4">
-                                            <label for="category" class="col-sm-3 col-form-label required">Wp Category</label>
+                                            <label for="category" class="col-sm-3 col-form-label">Wp Category</label>
                                             <div class="col-sm-9">
 
                                             <select name="category" class="form-select" id="category">
@@ -182,7 +182,7 @@
                                             </div>
                                         </div> -->
                                         <div class="row mb-3 mt-4">
-                                            <label for="edit_category" class="col-sm-3 col-form-label required">Wp Category</label>
+                                            <label for="edit_category" class="col-sm-3 col-form-label">Wp Category</label>
                                             <div class="col-sm-9">
 
                                             <select name="category" class="form-select" id="edit_category">
