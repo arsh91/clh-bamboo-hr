@@ -261,12 +261,14 @@
             dropdownParent: $('#addCatalog')
         });
         $( '#edit_category' ).select2( {
-            dropdownParent: $('#addCatalog')
+            dropdownParent: $('#editCatalogs')
         });
     });
 
 
     function openusersModal() {
+        //fetch category on modal open
+        fetchCategories();
             $('.alert-danger').html('');
             $('#first_name').val('');
             $('#addCatalog').modal('show');
@@ -336,6 +338,8 @@
         }
 
     function editCatalogs(id) {
+        //fetch category on modal open
+        fetchCategoriesForEdit();
         $('.alert-danger').html('');
         $('#catalog_id').val(id);
         $.ajax({
@@ -429,13 +433,6 @@
                     $('#category').append($('<option>').text(category.name).val(category.id));
                 });
 
-
-                $('#edit_category').empty(); // Clear existing options
-                $('#edit_category').append($('<option>').text('Select Category').val('')); // Add default option
-                categories.forEach(function(category) {
-                    $('#edit_category').append($('<option>').text(category.name).val(category.id));
-                });
-
                 // Refresh Select2 after updating options
                 // $('#category').select2();
             })
@@ -444,8 +441,25 @@
             });
     }
 
-    // Call fetchCategories function to populate options when the page loads
-    fetchCategories();
+      // Function to fetch categories using Axios
+      function fetchCategoriesForEdit() {
+        axios.get('/fetch-catalog-categories')
+            .then(function (response) {
+                // Handle the response data
+                var categories = response.data;
+                console.log(categories)
+
+                $('#edit_category').empty(); // Clear existing options
+                $('#edit_category').append($('<option>').text('Select Category').val('')); // Add default option
+                categories.forEach(function(category) {
+                    $('#edit_category').append($('<option>').text(category.name).val(category.id));
+                });
+            })
+            .catch(function (error) {
+                console.error(error);
+            });
+    }
+   
         // Listen for change event on the input field within Select2 dropdown
     $('.select2-search__field').on('change', function () {
         handleSearch();
