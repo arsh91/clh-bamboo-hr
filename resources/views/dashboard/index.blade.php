@@ -64,7 +64,7 @@
 
                         <div class="card-body">
                             <!-- <h5 class="card-title">Sales <span>| Today</span></h5> -->
-                            <h5 class="card-title">Catlogs</h5>
+                            <h5 class="card-title">Catalogs</h5>
 
 
                             <div class="d-flex align-items-center">
