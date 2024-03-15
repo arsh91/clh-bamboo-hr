@@ -14,6 +14,8 @@ class AdminUserSeeder extends Seeder
      */
     public function run(): void
     {
+        // NOTE: USE THIS SEEDER AT STATRTING OTHERWISE IT WILL DELETE TABLE RECORDS
+        
            // Check if an admin user with id 1 exists
            $adminUser = User::where('id', 1)->first();
 

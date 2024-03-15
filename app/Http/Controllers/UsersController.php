@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\AddUser;
 use App\Http\Requests\UpdateUser;
+use App\Models\Role;
 use App\Models\User;
 use App\Notifications\CommonEmailNotification;
 use Illuminate\Http\Request;
@@ -17,16 +18,17 @@ class UsersController extends Controller
     public function index()
     {
         $loginUser = auth()->user();
+        $roles = Role::all();
         //Get Users Without Super Admin
         if($loginUser->role->name == 'SUPER_ADMIN'){
-            $users = User::whereHas('role', function($q) {
+            $users = User::with('role')->whereHas('role', function($q) {
                 $q->where('name', '!=', 'SUPER_ADMIN');
             })->get();
         }else{
             $users = [];
         }
         
-        return view('users.index',compact('users'));
+        return view('users.index',compact('users','roles'));
     }
 
     /**
@@ -51,7 +53,7 @@ class UsersController extends Controller
              'last_name' => $validatedData['last_name'],
              'email' => $validatedData['email'],
              'phone' => $validatedData['phone'],
-             'role_id' => 2,
+             'role_id' => $validatedData['role'],
              'password' =>  Hash::make($validatedData['password']),
              'status' => 'active',
              'created_at' => now(),
@@ -94,12 +96,14 @@ class UsersController extends Controller
      */
     public function edit(string $id)
     {
+        //Roles For 
+        $roles = Role::all();
+
         $users = User::whereHas('role', function($q) {
             $q->where('name', '!=', 'SUPER_ADMIN');
         })->find($id);
 
-
-        return Response()->json(['users' =>$users]);
+        return Response()->json(['users' =>$users,'roles' =>$roles]);
     }
 
     /**
@@ -116,6 +120,7 @@ class UsersController extends Controller
             'last_name' => $validatedData['last_name'],
             'email' => $validatedData['email'],
             'phone' => $validatedData['phone'],
+            'role_id' => $validatedData['role'],
             'status' => $validatedData['status'],
             'updated_at' => now(),
         ]);

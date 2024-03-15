@@ -21,6 +21,7 @@
                                         <th scope="col">Name</th>
                                         <th scope="col">Email</th>
                                         <th scope="col">Phone</th>
+                                        <th scope="col">Role</th>
                                         <th scope="col">Status</th>
                                         <th scope="col">Action</th>
                                     </tr>
@@ -32,6 +33,7 @@
                                         <td>{{ucfirst($data->first_name) ?? ''}} {{ucfirst($data->last_name) ?? ''}}</td>
                                         <td>{{$data->email ?? ''}}</td>
                                         <td>{{$data->phone}}</td>
+                                        <td>{{$data->role->name ?? ''}}</td>
                                         <td>
                                              @if($data->status == 'inactive')
                                             <span class="badge rounded-pill bg-danger">{{ucfirst($data->status)}}</span>
@@ -87,7 +89,21 @@
                                             <div class="col-sm-9">
                                                 <input type="number" class="form-control" name="phone" id="phone">
                                             </div>
-                                        </div>   
+                                        </div>  
+                                        <div class="row mb-3">
+                                            <label for="role" class="col-sm-3 col-form-label required">Role</label>
+                                            <div class="col-sm-9">
+                                                <select name="role" class="form-select" id="role">
+                                                <option value="">Give User Role</option>
+                                                    @foreach ($roles as $data)
+                                                    <option value="{{$data->id}}">
+                                                        {{$data->name}}
+                                                    </option>
+                                                    @endforeach
+                                                </select>
+                                                </select>
+                                            </div>
+                                        </div> 
                                         <div class="row mb-3">
                                             <label for="password" class="col-sm-3 col-form-label required">Password</label>
                                             <div class="col-sm-9">
@@ -151,6 +167,20 @@
                                                 <input type="number" class="form-control" name="phone" id="edit_phone">
                                             </div>
                                         </div>   
+                                        <div class="row mb-3">
+                                            <label for="edit_role" class="col-sm-3 col-form-label required">Role</label>
+                                            <div class="col-sm-9">
+                                                <select name="role" class="form-select" id="edit_role">
+                                                <option value="">Give User Role</option>
+                                                    @foreach ($roles as $data)
+                                                    <option value="{{$data->id}}">
+                                                        {{$data->name}}
+                                                    </option>
+                                                    @endforeach
+                                                </select>
+                                                </select>
+                                            </div>
+                                        </div> 
                                         <!-- <div class="row mb-3">
                                             <label for="edit_password" class="col-sm-3 col-form-label required">Password</label>
                                             <div class="col-sm-9">
@@ -291,6 +321,8 @@
                     $('#edit_email').val(res.users.email);
                     $('#edit_phone').val(res.users.phone);  
                     $('#edit_status option[value="' + res.users.status + '"]').attr('selected',
+                    'selected');
+                    $('#edit_role option[value="' + res.users.role_id + '"]').attr('selected',
                     'selected');
                 }
             }

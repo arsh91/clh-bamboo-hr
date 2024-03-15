@@ -18,7 +18,8 @@ class DatabaseSeeder extends Seeder
         //     'name' => 'Test User',
         //     'email' => 'test@example.com',
         // ]);
-        $this->call(AdminUserSeeder::class);
+        // NOTE: USE ADMIN USER SEEDER AT STATRTING OTHERWISE IT WILL DELETE TABLE RECORDS
+        $this->call(AdminUserSeeder::class); 
         $this->call(RolesSeeder::class);
 
     }

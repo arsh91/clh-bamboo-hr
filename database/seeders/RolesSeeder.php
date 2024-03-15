@@ -15,13 +15,27 @@ class RolesSeeder extends Seeder
     {
         Role::truncate();
         
-               Role::insert([
+            Role::insert([
+               [
                 'name' => 'SUPER_ADMIN',
                 'description' => 'Role For Project Admin.',
                 'created_at' => now(),
                 'updated_at' => now(),
-            ]);
-
+                ],
+                [
+                    'name' => 'ADMIN',
+                    'description' => 'ADMIN CREATED BY SUPER ADMIN',
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ],
+                [
+                    'name' => 'REVIEWER',
+                    'description' => 'Role For REVIEWR.',
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]
+            ]
+            );
             $this->command->info('Roles created successfully.');
     }
 }
