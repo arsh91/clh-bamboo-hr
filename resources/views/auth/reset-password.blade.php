@@ -62,7 +62,7 @@
                       <div class="invalid-feedback">Please enter your password!</div>
                     </div>
                     <div class="col-12">
-                      <button class="btn btn-primary w-100" type="submit">Reset Password</button>
+                      <button class="btn btn-default w-100" type="submit">Reset Password</button>
                     </div>
                   </form>
 

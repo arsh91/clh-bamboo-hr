@@ -1254,7 +1254,7 @@ h6 {
 }
 
 .btn-primary{
-  background-color: #922726;
+  background-color: #0b5ed7;
   color: white;
   border: none;
 }
@@ -1297,3 +1297,11 @@ header .header-alert{
   .pointer{
     cursor: pointer;
   }
+
+  button.btn.btn-default{
+    background: #922726;
+    color: #fff;
+  }
+  button.btn.btn-default:hover {
+    background: #231911;
+}

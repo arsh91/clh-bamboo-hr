@@ -7,7 +7,7 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-body">
-                    <button class="btn btn-primary my-3" onClick="openusersModal()" href="javascript:void(0)">Add Catalog</button>
+                    <button class="btn btn-default my-3" onClick="openusersModal()" href="javascript:void(0)">Add Catalog</button>
                     <!-- <h5 class="card-title">Table with stripped rows</h5> -->
                     <br>
 
@@ -139,7 +139,7 @@
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                        <button type="submit" class="btn btn-primary">Save</button>
+                                        <button type="submit" class="btn btn-default">Save</button>
                                     </div>
                                 </form>
                             </div>
@@ -228,7 +228,7 @@
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                        <button type="submit" class="btn btn-primary">Save</button>
+                                        <button type="submit" class="btn btn-default">Save</button>
                                     </div>
                                 </form>
                             </div>
