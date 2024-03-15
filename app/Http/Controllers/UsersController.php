@@ -18,7 +18,8 @@ class UsersController extends Controller
     public function index()
     {
         $loginUser = auth()->user();
-        $roles = Role::all();
+        //Get Roles For User Without Super Admin
+        $roles = Role::whereNot('name','SUPER_ADMIN')->get();
         //Get Users Without Super Admin
         if($loginUser->role->name == 'SUPER_ADMIN'){
             $users = User::with('role')->whereHas('role', function($q) {
@@ -96,8 +97,8 @@ class UsersController extends Controller
      */
     public function edit(string $id)
     {
-        //Roles For 
-        $roles = Role::all();
+       //Get Roles For User Without Super Admin
+       $roles = Role::whereNot('name','SUPER_ADMIN')->get();
 
         $users = User::whereHas('role', function($q) {
             $q->where('name', '!=', 'SUPER_ADMIN');

@@ -43,9 +43,15 @@ class AuthController extends Controller
             ]);
 
             if (Auth::attempt($credentials)) {
-                $request->session()->regenerate();
-
-                return redirect()->intended('dashboard');
+            // Retrieve user by email
+            $user = User::where('email', $credentials['email'])->first();
+                if ($user->status == 'active') {
+                    $request->session()->regenerate();
+                    return redirect()->intended('dashboard');
+                }else{
+                    Auth::logout();
+                    return redirect()->back()->with(['error'=> 'Your account is currently inactive. Please contact support for assistance.']);
+                }
             }
 
             return back()->withErrors([

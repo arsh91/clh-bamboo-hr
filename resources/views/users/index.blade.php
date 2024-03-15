@@ -94,7 +94,7 @@
                                             <label for="role" class="col-sm-3 col-form-label required">Role</label>
                                             <div class="col-sm-9">
                                                 <select name="role" class="form-select" id="role">
-                                                <option value="">Give User Role</option>
+                                                <option value="">Select User Role</option>
                                                     @foreach ($roles as $data)
                                                     <option value="{{$data->id}}">
                                                         {{$data->name}}
@@ -171,7 +171,7 @@
                                             <label for="edit_role" class="col-sm-3 col-form-label required">Role</label>
                                             <div class="col-sm-9">
                                                 <select name="role" class="form-select" id="edit_role">
-                                                <option value="">Give User Role</option>
+                                                <option value="">Select User Role</option>
                                                     @foreach ($roles as $data)
                                                     <option value="{{$data->id}}">
                                                         {{$data->name}}
