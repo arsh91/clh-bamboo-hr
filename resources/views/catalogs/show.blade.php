@@ -132,7 +132,7 @@
                                         <td>{{ isset($product['sku']) && $product['sku'] ? $product['sku'] : 'NA' }}</td>
                                         <td>{{$product['price'] ?? 'NA'}}</td>
                                         <td>{{$product['regular_price'] ?? 'NA'}}</td>
-                                        <td>{{$product['sale_price'] ?? 'NA'}}</td>
+                                        <td>{{ isset($product['sale_price']) && $product['sale_price'] ? $product['sale_price'] : 'NA' }}</td>
                                         <td>{{isset($product['publish_date']) && $product['publish_date'] ? $product['publish_date'] : 'NA'}}</td>
                                         <td>{{isset($product['stock']) && $product['stock'] ? $product['stock'] : 'NA'}}</td>
                                         <td>

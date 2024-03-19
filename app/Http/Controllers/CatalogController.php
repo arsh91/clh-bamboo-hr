@@ -82,14 +82,25 @@ class CatalogController extends Controller
             'customers' => [15, 11, 32, 18, 9, 24, 11],
             'categories' => ["2018-09-19T00:00:00.000Z", "2018-09-19T01:30:00.000Z", "2018-09-19T02:30:00.000Z", "2018-09-19T03:30:00.000Z", "2018-09-19T04:30:00.000Z", "2018-09-19T05:30:00.000Z", "2018-09-19T06:30:00.000Z"]
         ];
-        
-           $results =  $this->getProducts($id);
+        try {
+            $results =  $this->getProducts($id);
            
-        if($results['success'] == true && $results['status'] == 200 ){
-           $products = $results['data'];
-        }else{
+            if($results['success'] == true && $results['status'] == 200 ){
+               $products = $results['data'];
+            }else{
+                $products = [];
+            }
+        } catch (\Exception $e) {
+            //throw $th;
             $products = [];
         }
+        //    $results =  $this->getProducts($id);
+           
+        // if($results['success'] == true && $results['status'] == 200 ){
+        //    $products = $results['data'];
+        // }else{
+        //     $products = [];
+        // }
         
         return view('catalogs.show',compact('catalog','data','products'));
     }
