@@ -28,32 +28,34 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                @foreach($catalogs as $index => $data)
-                                    <tr>
-                                        <th scope="row">{{ $index + 1 }}</th>
-                                        <!-- <td>{{ucfirst($data->name) ?? ''}} </td> -->
-                                        <td>{{ucfirst($data->title) ?? ''}}</td>
-                                        <td>{{$data->base_price ?? ''}}</td>
-                                        <td>{{$data->sku ?? 'NA'}}</td>
-                                        <td>
-                                            @if ($data->image)
-                                            <img src="{{ asset('storage/' . $data->image) }}" height="40" width="70" alt="Catalog Image">
-                                            @else
-                                                NA
-                                            @endif 
-                                        </td>
-                                        <td>
-                                             @if($data->status == 'draft')
-                                            <span class="badge rounded-pill bg-warning">{{ucfirst($data->status)}}</span>
-                                            @else
-                                            <span class="badge rounded-pill  bg-success">{{ucfirst($data->status)}}</span>
-                                            @endif
-                                        </td>
-                                        <td> 
-                                            <i onClick="editCatalogs('{{ $data->id }}')" href="javascript:void(0)" class="fa fa-edit fa-fw pointer btn-fa-catalog"></i>
+                                    @foreach($catalogs as $index => $data)
+                                        <tr>
+                                            <th scope="row">{{ $index + 1 }}</th>
+                                            <!-- <td>{{ucfirst($data->name) ?? ''}} </td> -->
+                                            <td>{{ucfirst($data->title) ?? ''}}</td>
+                                            <td>{{$data->base_price ?? ''}}</td>
+                                            <td>{{$data->sku ?? 'NA'}}</td>
+                                            <td>
+                                                @if ($data->image)
+                                                <img src="{{ asset('storage/' . $data->image) }}" height="40" width="70" alt="Catalog Image">
+                                                @else
+                                                    NA
+                                                @endif 
+                                            </td>
+                                            <td>
+                                                @if($data->status == 'draft')
+                                                <span class="badge rounded-pill bg-warning">{{ucfirst($data->status)}}</span>
+                                                @else
+                                                <span class="badge rounded-pill  bg-success">{{ucfirst($data->status)}}</span>
+                                                @endif
+                                            </td>
+                                            <td> 
+                                                <i onClick="editCatalogs('{{ $data->id }}')" href="javascript:void(0)" class="fa fa-edit fa-fw pointer btn-fa-catalog"></i>
 
-                                            <i onClick="deleteCatalogs('{{ $data->id }}')" href="javascript:void(0)" class="fa fa-trash fa-fw pointer btn-fa-catalog"></i></td>
-                                    </tr>
+                                                <i onClick="deleteCatalogs('{{ $data->id }}')" href="javascript:void(0)" class="fa fa-trash fa-fw pointer btn-fa-catalog"></i>
+                                                <a href="{{ url('/catalog/'.$data->id)}}" class="btn btn-default-border">Show Products</a>
+                                            </td>
+                                        </tr>
                                     @endforeach
                                 </tbody>
                             </table>
@@ -447,7 +449,6 @@
             .then(function (response) {
                 // Handle the response data
                 var categories = response.data;
-                console.log(categories)
 
                 $('#edit_category').empty(); // Clear existing options
                 $('#edit_category').append($('<option>').text('Select Category').val('')); // Add default option

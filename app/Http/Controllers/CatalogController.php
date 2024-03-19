@@ -6,8 +6,10 @@ use App\Helpers\Helper;
 use App\Http\Requests\AddCatalog;
 use App\Http\Requests\UpdateCatalog;
 use App\Models\Catalog;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class CatalogController extends Controller
 {
@@ -74,7 +76,22 @@ class CatalogController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $catalog = Catalog::find($id);
+        $data = [
+            'revenue' => [11, 32, 45, 32, 34, 52, 41],
+            'customers' => [15, 11, 32, 18, 9, 24, 11],
+            'categories' => ["2018-09-19T00:00:00.000Z", "2018-09-19T01:30:00.000Z", "2018-09-19T02:30:00.000Z", "2018-09-19T03:30:00.000Z", "2018-09-19T04:30:00.000Z", "2018-09-19T05:30:00.000Z", "2018-09-19T06:30:00.000Z"]
+        ];
+        
+           $results =  $this->getProducts($id);
+           
+        if($results['success'] == true && $results['status'] == 200 ){
+           $products = $results['data'];
+        }else{
+            $products = [];
+        }
+        
+        return view('catalogs.show',compact('catalog','data','products'));
     }
 
     /**
@@ -216,9 +233,9 @@ class CatalogController extends Controller
 
     public function fetchCategories()
     {
-        $consumerKey = 'ck_db66350c57384308f7ffe8045cada46ee3e7d96e';
-        $consumerSecret = 'cs_7c01bf3a4f3fae66a8cd8c4f40890b91c36151d2';
-        $apiUrl = 'https://recollection.com/wp-json/wc/v3/products/categories';
+        $consumerKey =  env('CONSUMER_KEY');
+        $consumerSecret = env('CONSUMER_SECRET');
+        $apiUrl = env('WORDPRESS_URL').'wp-json/wc/v3/products/categories';
 
         $response = Http::withBasicAuth($consumerKey, $consumerSecret)
         ->withoutVerifying()->get($apiUrl, ['per_page' => 100]); // Or use a large number to get all categories
@@ -230,4 +247,34 @@ class CatalogController extends Controller
             return response()->json(['error' => 'Error fetching categories'], 500);
         }
     }
+
+    private function getProducts($id = null)
+    {
+        $consumerKey = env('CONSUMER_KEY');
+        $consumerSecret = env('CONSUMER_SECRET');
+        $apiUrl = rtrim(env('WORDPRESS_URL'), '/') . '/wp-json/custom/v3/products-by-meta';
+    
+        try {
+            $response = Http::withBasicAuth($consumerKey, $consumerSecret)
+                ->withoutVerifying()
+                ->get($apiUrl, ['cat_id' => $id]);
+    
+            // Check if the request was successful
+            if ($response->successful()) {
+                $data = $response->json(); 
+                // dd($data);
+                return $data; // Return the data
+                
+            } else {
+                // Handle unsuccessful response (e.g., log error)
+                Log::error('Failed to fetch data from WordPress API');
+                return null; // Return null or handle error response as needed
+            }
+        } catch (Exception $e) {
+            // Handle exceptions (e.g., log error)
+            Log::error('Exception occurred: ' . $e->getMessage());
+            return null; // Return null or handle exception as needed
+        }
+    }
+    
 }

@@ -10,7 +10,7 @@
 
                 <main id="main" class="main">
                     <div class="pagetitle">
-                        <h1>@yield('title')</h1>
+                        <h1>@yield('sub-title')</h1>
                     </div><!-- End Page Title -->  
                 <div id="app">
                         <div class="row">                             

@@ -1298,10 +1298,21 @@ header .header-alert{
     cursor: pointer;
   }
 
-  button.btn.btn-default{
+  .btn.btn-default{
     background: #922726;
     color: #fff;
   }
-  button.btn.btn-default:hover {
+  .btn.btn-default:hover {
     background: #231911;
+}
+
+.btn.btn-default-border:hover {
+  background: #922726;
+  color: #fff;
+}
+
+.btn.btn-default-border {
+  border-color: #922726;
+  color: #231911;
+  /* background-color: #231911; */
 }
