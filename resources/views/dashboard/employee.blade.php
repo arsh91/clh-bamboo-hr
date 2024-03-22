@@ -33,6 +33,12 @@
                 <li class="nav-item" role="presentation">
                   <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#profile-overview" aria-selected="true" role="tab">Overview</button>
                 </li>
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-job" aria-selected="true" role="tab">Job</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-emergency" aria-selected="true" role="tab">Emergency</button>
+                </li>
               </ul>
               <div class="tab-content pt-2">
 
@@ -76,6 +82,98 @@
                   </div>
 
                 </div>
+
+                <!--second tab-->
+                <div class="tab-pane fade profile-edit pt-3" id="profile-job" role="tabpanel">
+
+                  <!-- Profile Edit Form -->
+                  <div class="card">
+                    <div class="card-body">
+                      <h5 class="card-title">Job Information Table</h5>
+
+                      <!-- Table with hoverable rows -->
+                      <table class="table table-hover">
+                        <thead>
+                          <tr>
+                            <th scope="col">Effective Date</th>
+                            <th scope="col">Location</th>
+                            <th scope="col">Division</th>
+                            <th scope="col">Department</th>
+                            <th scope="col">Job Title	</th>
+                            <th scope="col">Reports To	</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          
+                          @if(!empty($jobFields))
+                            @foreach($jobFields as $key=> $jobs)
+                              <tr>
+                                <td>{{$jobs[0]}}</td>
+                                <td>{{$jobs[1]}}</td>
+                                <td>{{$jobs[2]}}</td>
+                                <td>{{$jobs[3]}}</td>
+                                <td>{{$jobs[4]}}</td>
+                                <td>{{$jobs[5]}}</td>
+                              </tr>
+                            @endforeach
+                            @else
+                              <tr><td>No records found for the employee.</td></tr>
+                            @endif
+                                                    
+                        </tbody>
+                      </table>
+                      <!-- End Table with hoverable rows -->
+                    </div>
+                  </div>
+                </div><!--###end of second tab--->
+
+                <!--emergency third tab-->
+                <div class="tab-pane fade profile-edit pt-3" id="profile-emergency" role="tabpanel">
+
+                  <!-- Profile Edit Form -->
+                  <div class="card">
+                    <div class="card-body">
+                      <h5 class="card-title">Emergency Contact</h5>
+
+                      <!-- Table with hoverable rows -->
+                      <table class="table table-hover">
+                        <thead>
+                          <tr>
+                            <th scope="col">Name</th>
+                            <th scope="col">Relationship</th>
+                            <th scope="col">homePhone</th>
+                            <th scope="col">addressLine1</th>
+                            <th scope="col">addressLine2	</th>
+                            <th scope="col">mobilePhone	</th>
+                            <th scope="col">email	</th>
+                            <th scope="col">zipcode	</th>
+                            <th scope="col">city	</th>
+                            <th scope="col">state	</th>
+                            <th scope="col">country	</th>
+                            <th scope="col">workPhone	</th>
+                            <th scope="col">workPhoneExtension	</th>
+                            <th scope="col">primaryContact	</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          
+                          @if(!empty($emergencyContacts))
+                            @foreach($emergencyContacts as $key=> $contacts)
+                            <?php dump($contacts); ?>
+                              <tr>
+                                
+                              </tr>
+                            @endforeach
+                            @else
+                              <tr><td>No records found for the employee.</td></tr>
+                            @endif
+                                                    
+                        </tbody>
+                      </table>
+                      <!-- End Table with hoverable rows -->
+                    </div>
+                  </div>
+                </div><!--###end of second tab--->
 
               </div><!-- End Bordered Tabs -->
 

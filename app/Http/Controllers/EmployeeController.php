@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Services\BambooHrService;
+use \BambooHR\API\BambooAPI;
 
 class EmployeeController extends Controller
 {
@@ -25,30 +26,22 @@ class EmployeeController extends Controller
 
     public function employeDetail($empId){
 
-        $apiKey = '40d056dd98d048b1d50c46392c77bd2bbbf0431f';
-        $params = 'firstName,lastName,jobTitle,workPhone,mobilePhone,workEmail,department,location,division,supervisor,photoUrl,canUploadPhoto';
-        $endpoint = 'https://40d056dd98d048b1d50c46392c77bd2bbbf0431f:x@api.bamboohr.com/api/gateway.php/clhmentalhealth/v1/employees/'.$empId.'/?fields='.$params.'&format=JSON';
+        $empFieldsArray = array('firstName,lastName,jobTitle,workPhone,mobilePhone,workEmail,department,location,division,supervisor,photoUrl,canUploadPhoto');
+
+        $bhr = new BambooAPI("clhmentalhealth");
+        $bhr->setSecretKey("40d056dd98d048b1d50c46392c77bd2bbbf0431f");
+        $response = $bhr->getDirectory();
+        $getEmployee = $bhr->getEmployee($empId, $empFieldsArray);
+        if($getEmployee->isError()) {
+        trigger_error("Error communicating with BambooHR: " . $getEmployee->getErrorMessage());
+        }
+
+        $getEmployeeData = $getEmployee->getContent();
     
-        $response = file_get_contents($endpoint, false, stream_context_create([
-            'http' => [
-                'header' => "Authorization: Basic " . base64_encode($apiKey . ':x')
-            ]
-        ]));
 
-        //call employee image api
-        $imageEndpoint = 'https://40d056dd98d048b1d50c46392c77bd2bbbf0431f:x@api.bamboohr.com/api/gateway.php/clhmentalhealth/v1/employees/'.$empId.'/photo/small';
-        $headers = [
-            'Authorization: Basic ' . base64_encode($apiKey . ':x'),
-            'Content-Type: image/jpeg'
-            // Add more headers as needed
-        ];
-        $imgResponse = file_get_contents($imageEndpoint, false, stream_context_create([
-            'http' => [
-                'header' => implode("\r\n", $headers),
-            ]
-        ]));
-
-
+       //FOR EMPLOYEE IMAGE
+        $imgResponse = $bhr->downloadEmployeePhoto($empId, 'small', array(["width" => 100], ["height" => 100]));
+        $imgResponse = $imgResponse->getContent();
         if ($imgResponse !== false) {
             // Get the MIME type of the image
             $imageInfo = getimagesizefromstring($imgResponse);
@@ -57,11 +50,52 @@ class EmployeeController extends Controller
             // Generate a base64 encoded string of the image
             $base64Image = 'data:' . $imageMimeType . ';base64,' . base64_encode($imgResponse);
         }
-    
-        $xml = simplexml_load_string($response);
-        $employeeData = json_encode($xml);       
+        
+        //GET INFO OF JOB TABLE
+        $getJobInfo = $bhr->getTable($empId, 'jobInfo');
+        if($getJobInfo->isError()) {
+            trigger_error("Error communicating with BambooHR: " . $getJobInfo->getErrorMessage());
+        }
+        $getJobInfo = $getJobInfo->getContent();
+        $getJobInfo = json_encode($getJobInfo);       
+        $getJobInfo = json_decode($getJobInfo, true);
+        $jobFields = [];
+
+        foreach ($getJobInfo as $job) {
+            foreach($job as $item){
+                // Check if the item has the 'field' key
+                if (isset($item['field'])) {
+                    // Add the 'field' array to the $fields array
+                    $jobFields[] = $item['field'];
+                }
+            }
+        }
+
+        //GET EMERGENCY TAB DATA
+        $getEmergencyContacts = $bhr->getTable($empId, 'emergencyContacts');
+        
+        if($getEmergencyContacts->isError()) {
+            trigger_error("Error communicating with BambooHR: " . $getEmergencyContacts->getErrorMessage());
+        }
+        $getEmergencyContacts = $getEmergencyContacts->getContent();
+        
+        $getEmergencyContacts = json_encode($getEmergencyContacts);       
+        $getEmergencyContacts = json_decode($getEmergencyContacts, true);
+        $emergencyContacts = [];
+
+        $emergency = $getEmergencyContacts['row'];
+        if (isset($emergency['field'])) {
+            foreach($emergency['field'] as $key=> $field){
+                $emergencyContacts[] = $this->checkIfArray($field);
+            }     
+        }
+
+        $params = 'firstName,lastName,jobTitle,workPhone,mobilePhone,workEmail,department,location,division,supervisor,photoUrl,canUploadPhoto';
+        
+        $employeeData = json_encode($getEmployeeData);       
         $dataArray = json_decode($employeeData, true);
         $empKeyArr = explode(',', $params);
+      
         $empData = [];
         foreach($dataArray['field'] as $key=> $field){
             $empData[$empKeyArr[$key]]= $this->checkIfArray($field);            
@@ -69,7 +103,7 @@ class EmployeeController extends Controller
         $empData['ID'] = $empId;
         //dump($empData);
         // dd('--');
-        return view('dashboard.employee',compact('empData', 'base64Image'));
+        return view('dashboard.employee',compact('empData', 'base64Image', 'jobFields', 'emergencyContacts'));
         
     }
 
