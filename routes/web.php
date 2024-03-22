@@ -1,9 +1,9 @@
 <?php
 
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\CatalogController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\UsersController;
+use App\Http\Controllers\EmployeeController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -38,20 +38,19 @@ Route::group(['middleware' => ['auth']], function() {
             Route::get('/users/edit/{id}',[UsersController::class,'edit'])->name('users.edit');
             Route::post('/users/{user}',[UsersController::class,'update'])->name('users.update');
             Route::delete('/users/delete/{user}',[UsersController::class,'destroy'])->name('users.destroy');
+
+          //  Route::get('/employee/{id}',[DashboardController::class,'employeDetail'])->name('employee');
+
+            /** THE ROUTES ARE FOR EMPLOYEE CONTROLLER */
+           // Route::get('/employees/{id}', [EmployeeController::class, 'show'])->name('employees.show');
+            Route::get('/employee/{id}', [EmployeeController::class, 'employeDetail'])->name('employees.detail');
+            
         });
         //Ends Protected Routes For Admin
 
-        Route::get('/catalogs', [CatalogController::class,'index'])->name('catalogs.index');
-        Route::post('/catalogs/add/',[CatalogController::class,'store']);
-        Route::get('/catalogs/edit/{id}',[CatalogController::class,'edit'])->name('catalogs.edit');
-        Route::post('/catalogs/{catalog}',[CatalogController::class,'update'])->name('catalogs.update');
-        Route::delete('/catalogs/delete/{catalog}',[CatalogController::class,'destroy'])->name('catalogs.destroy');
-        Route::get('/catalog/{id}',[CatalogController::class,'show'])->name('catalogs.show');
-
-
-        Route::get('/fetch-catalog-categories', [CatalogController::class,'fetchCategories']);
-
-
     Route::get('logout', [AuthController::class, 'logOut'])->name('logout');
+
+
+
 });
 //Authenticated Group Routes Ends
