@@ -185,7 +185,7 @@
                               @endfor
                             </tr>
                             @else
-                              <tr><td colspan="5">No records found for the employee.</td></tr>
+                              <!--<tr><td colspan="12">No records found for the employee.</td></tr>-->
                             @endif
                                                     
                         </tbody>
