@@ -81,7 +81,7 @@ class EmployeeController extends Controller
                     }
                 }
             }
-        }
+        } 
       // dump($jobFields); dd('--');
         //GET EMERGENCY TAB DATA
         $getEmergencyContacts = $bhr->getTable($empId, 'emergencyContacts');
