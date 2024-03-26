@@ -80,6 +80,20 @@
                     <div class="col-lg-3 col-md-4 label">Supervisor</div>
                     <div class="col-lg-9 col-md-8">{{$empData['supervisor']}}</div>
                   </div>
+                  <div class="row">
+                    <div class="col-lg-3 col-md-4 label">Status</div>
+                    <div class="col-lg-9 col-md-8">
+                    @if (array_key_exists('employmentStatus', $empData))
+
+                      @if($empData['employmentStatus'] == 'Active')
+                        <button type="button" class="btn btn-success mb-2">{{$empData['employmentStatus']}}</button></div>
+                      @elseif($empData['employmentStatus'] == 'Inactive')
+                        <button type="button" class="btn btn-danger mb-2">{{$empData['employmentStatus']}}</button></div>
+                      @endif
+                    @else
+                    N/A
+                    @endif
+                      </div>
 
                 </div>
 
@@ -117,7 +131,7 @@
                               </tr>
                             @endforeach
                             @else
-                              <tr><td>No records found for the employee.</td></tr>
+                              <tr><td colpan="4">No records found for the employee.</td></tr>
                             @endif
                                                     
                         </tbody>
@@ -136,7 +150,7 @@
                       <h5 class="card-title">Emergency Contact</h5>
 
                       <!-- Table with hoverable rows -->
-                      <table class="table table-hover">
+                      <table class="table table-hover" id="emergency_table">
                         <thead>
                           <tr>
                             <th scope="col">Name</th>
@@ -157,15 +171,21 @@
                         </thead>
                         <tbody>
                           
-                          @if(!empty($emergencyContacts))
-                            @foreach($emergencyContacts as $key=> $contacts)
-                            <?php dump($contacts); ?>
-                              <tr>
-                                
-                              </tr>
-                            @endforeach
+                          @if(!empty($emergencyContacts)) 
+                          @php
+                              
+                              $collectionLength = count($emergencyContacts);
+                          @endphp
+                           <tr>
+                              @for ($i = 0; $i < $collectionLength; $i++)
+                             
+                                <td>
+                                  {{ $emergencyContacts[$i] }}
+                                </td>
+                              @endfor
+                            </tr>
                             @else
-                              <tr><td>No records found for the employee.</td></tr>
+                              <tr><td colspan="5">No records found for the employee.</td></tr>
                             @endif
                                                     
                         </tbody>
@@ -188,7 +208,14 @@
 <!--begin::Page Custom Javascript(used by this page)-->
 
 <script>
-
+$(document).ready(function() {
+    var table = $('#emergency_table').DataTable({
+            "scrollX": true, // Enable horizontal scrolling
+            "scrollY": "400px", // Set the height of the vertical scrolling
+            "scrollCollapse": true, // Allow the table to be scrolled without the scrollbar being visible
+            "paging": false // Disable pagination (optional)
+        });
+});
 </script>
 <!--end::Page Custom Javascript-->
 @endsection
