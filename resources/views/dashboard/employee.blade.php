@@ -110,9 +110,9 @@
                         <thead>
                           <tr>
                             <th scope="col">Effective Date</th>
-                            <th scope="col">Location</th>
-                            <th scope="col">Division</th>
+                            <th scope="col">Location</th>                            
                             <th scope="col">Department</th>
+                            <th scope="col">Division</th>
                             <th scope="col">Job Title	</th>
                             <th scope="col">Reports To	</th>
                           </tr>
