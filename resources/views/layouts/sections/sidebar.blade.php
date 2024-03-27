@@ -18,13 +18,6 @@
       </li>
       @endif
 
-      <li class="nav-item">
-        <a class="nav-link {{ request()->is('catalogs') ? '' : 'collapsed' }} " href="{{ url('/catalogs') }}">
-          <i class="bi bi-menu-button-wide"></i>
-          <span>Catalogs</span>
-        </a>
-      </li>
-
     </ul>
 
   </aside>

@@ -90,8 +90,8 @@
                                                 <input type="number" class="form-control" name="phone" id="phone">
                                             </div>
                                         </div>  
-                                        <div class="row mb-3">
-                                            <label for="role" class="col-sm-3 col-form-label required">Role</label>
+                                        <!--<div class="row mb-3">
+                                            <label for="role" class="col-sm-3 col-form-label">Role</label>
                                             <div class="col-sm-9">
                                                 <select name="role" class="form-select" id="role">
                                                 <option value="">Select User Role</option>
@@ -103,7 +103,7 @@
                                                 </select>
                                                 </select>
                                             </div>
-                                        </div> 
+                                        </div> -->
                                         <div class="row mb-3">
                                             <label for="password" class="col-sm-3 col-form-label required">Password</label>
                                             <div class="col-sm-9">
