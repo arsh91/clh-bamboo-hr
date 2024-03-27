@@ -7,8 +7,8 @@
   <meta content="" name="keywords">
   <meta name="csrf-token" content="{{ csrf_token() }}">
   <!-- Favicons -->
-  <link href="{{ asset('assets/img/logo/modern-hill-small.png') }}" rel="icon">
-  <link href="{{ asset('assets/img/logo/modern-hill-small.png') }}" rel="apple-touch-icon">
+  <link href="{{ asset('assets/img/logo/clh.jpg') }}" rel="icon">
+  <link href="{{ asset('assets/img/logo/clh.jpg') }}" rel="apple-touch-icon">
 
   <!-- Google Fonts -->
   <link href="https://fonts.gstatic.com" rel="preconnect">
@@ -17,10 +17,10 @@
   <!-- Vendor CSS Files -->
   <link href="{{ asset('assets/vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
   <link href="{{ asset('assets/vendor/bootstrap-icons/bootstrap-icons.css') }}" rel="stylesheet">
-  <link href="{{ asset('assets/vendor/boxicons/css/boxicons.min.css') }}" rel="stylesheet">
+  <!--<link href="{{ asset('assets/vendor/boxicons/css/boxicons.min.css') }}" rel="stylesheet">
   <link href="{{ asset('assets/vendor/quill/quill.snow.css') }}" rel="stylesheet">
   <link href="{{ asset('assets/vendor/quill/quill.bubble.css') }}" rel="stylesheet">
-  <link href="{{ asset('assets/vendor/remixicon/remixicon.css') }}" rel="stylesheet">
+  <link href="{{ asset('assets/vendor/remixicon/remixicon.css') }}" rel="stylesheet">-->
   <link href="{{ asset('assets/vendor/simple-datatables/style.css') }}" rel="stylesheet">
   <link href="//cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 
