@@ -93,18 +93,27 @@ class EmployeeController extends Controller
         
         $getEmergencyContacts = json_encode($getEmergencyContacts);       
         $getEmergencyContacts = json_decode($getEmergencyContacts, true);
-       // dump($getEmergencyContacts); dd('-----');
+       
         $emergencyContacts = [];
+        $emptyEmeregencyFields = [];
        
         if(count($getEmergencyContacts) > 0){
             $emergency = $getEmergencyContacts['row'];        
             if (isset($emergency['field'])) {
                 foreach($emergency['field'] as $key=> $field){
                     $emergencyContacts[] = $this->checkIfArray($field);
+                    $emptyEmeregencyFields[] = $this->checkEmptyFields($field);
                 }     
             }
         }
-        
+
+        //return the empty fileds 
+        $emptyEmeregencyFields = array_filter($emptyEmeregencyFields, function($value) {
+            return $value !== "";
+        });
+
+         //dump($emergencyContacts); 
+        // dump($emptyEmeregencyFields); dd('-----');
 
         $params = 'firstName,lastName,jobTitle,workPhone,mobilePhone,workEmail,department,location,division,supervisor,employmentStatus';
         
@@ -119,7 +128,7 @@ class EmployeeController extends Controller
         $empData['ID'] = $empId;
        // dump($empData);  dd('----');
 
-        return view('dashboard.employee',compact('empData', 'base64Image', 'jobFields', 'emergencyContacts'));
+        return view('dashboard.employee',compact('empData', 'base64Image', 'jobFields', 'emergencyContacts', 'emptyEmeregencyFields'));
         
     }
 
@@ -133,6 +142,14 @@ class EmployeeController extends Controller
             $finalVal = 'N/A';
         }
         return $finalVal;
+    }
+
+    private function checkEmptyFields($arrayObj){
+        $emptyVal = '';
+        if(is_array($arrayObj)){
+            $emptyVal = $arrayObj['@attributes']['id'];
+        }
+        return $emptyVal;
     }
 
     private function checkIfImageExists($arrayObj){
