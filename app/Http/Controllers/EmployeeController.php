@@ -128,8 +128,43 @@ class EmployeeController extends Controller
         $empData['ID'] = $empId;
        // dump($empData);  dd('----');
 
+       //we will get the empty fields from personal tab of an employee
+       $blankPersonalFields = $this->getPersonalBlankFields($empId);
+
         return view('dashboard.employee',compact('empData', 'base64Image', 'jobFields', 'emergencyContacts', 'emptyEmeregencyFields'));
         
+    }
+
+    private function getPersonalBlankFields($empId){
+        $empFieldsArray = array('employeeNumber,employmentStatus,firstName,middleName,lastName,preferredName,dateOfBirth,gender,maritalStatus,customAllergies,customT-ShirtSize,address1,address2,city,state,zipcode,country,workPhone,workPhoneExtension,mobilePhone,homePhone,workEmail,homeEmail,customCollege,customDegree,customMajor,customGPA,customEducationStartDate,customEducationEndDate');
+
+        $bhr = new BambooAPI("clhmentalhealth");
+        $bhr->setSecretKey("40d056dd98d048b1d50c46392c77bd2bbbf0431f");
+        //$response = $bhr->getDirectory();
+        $getEmployee = $bhr->getEmployee($empId, $empFieldsArray);
+        if($getEmployee->isError()) {
+        trigger_error("Error communicating with BambooHR: " . $getEmployee->getErrorMessage());
+        }
+
+        $getEmployeeData = $getEmployee->getContent();
+        $employeePersonalData = json_encode($getEmployeeData);       
+        $empPersonalArray = json_decode($employeePersonalData, true);
+        $params = 'Employee Number,Employment Status,First Name,Middle Name,Last Name,Preferred Name,Date Of Birth,Gender,Marital Status,Custom Allergies,T-Shirt Size,Street 1,Street 2,City,State,Zip,Country,Work Phone,work Phone Extension,Mobile Phone,Home Phone,Work Email,Home Email,College,Degree,Major Specialization,GPA,Start Date,End Date';
+        $empKeyArr = explode(',', $params);
+        $emptyData = [];
+        if(count($empPersonalArray) > 0){     
+            if (isset($empPersonalArray['field'])) {
+                foreach($empPersonalArray['field'] as $key=> $field){
+                    $emptyData[$empKeyArr[$key]]= $this->checkEmptyFields($field);            
+                }
+            }
+        }
+        $emptyData = array_filter($emptyData, function($value) {
+            return $value !== "";
+        });
+       // dump($emptyData);
+       // dd('checking perosnal tab data');
+        return $emptyData;
     }
 
     
