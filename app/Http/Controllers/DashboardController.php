@@ -55,6 +55,7 @@ class DashboardController extends Controller
         $employees = $employees['employee'];
         
         $empMainArr = array();
+        $empIdsArr = array();
         $i = 0;
         foreach($employees as $empKeys=> $emp){
             $empID = $emp['@attributes']['id'];
@@ -67,6 +68,7 @@ class DashboardController extends Controller
             $empMainArr[$i]['department'] = $this->checkIfArray($emp['field'][$employeeFieldsIndexes['department']]);
             $empMainArr[$i]['manager'] = $this->checkIfArray($emp['field'][$employeeFieldsIndexes['manager']]);
             //$empMainArr[$i]['profile'] = 'https://clhmentalhealth.bamboohr.com/employees/employee.php?id='.$empID;
+            $empIdsAr[] = $empID;
             $i++;
 
             
@@ -87,8 +89,10 @@ class DashboardController extends Controller
                 
             // }
             
-        }        
-        return view('dashboard.index',compact('usersCount', 'empMainArr', 'employeeFieldsIndexes'));
+        }  
+
+        $empIdsAr = json_encode($empIdsAr);     
+        return view('dashboard.index',compact('usersCount', 'empMainArr', 'employeeFieldsIndexes', 'empIdsAr'));
     }
 
     public function employeDetail($empId){

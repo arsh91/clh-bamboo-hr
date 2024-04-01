@@ -41,11 +41,12 @@
                                                 @foreach($employeeFieldsIndexes as $key => $fields)
                                                 <th scope="col">{{ucfirst($key)}}</th>
                                                 @endforeach
+                                                <th>Blank Fields</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             @foreach($empMainArr as $key => $fields)
-                                                <tr>
+                                                <tr class="employee-row" data-row-id="{{ $fields['ID'] }}">
                                                     
                                                     <td><a href="{{ route('employees.detail', $fields['ID']) }}">{{$fields['ID']}}</a>      </td>
                                                     <td><?php print_r($fields['photo']); ?></td>
@@ -55,6 +56,13 @@
                                                     <td>{{$fields['email']}}</td>
                                                     <td>{{$fields['department']}}</td>
                                                     <td>{{$fields['manager']}}</td>
+                                                    <td id="row-{{ $fields['ID'] }}">
+                                                        <div class="d-flex justify-content-center">
+                                                            <div class="spinner-border" role="status">
+                                                            <span class="visually-hidden">Loading...</span>
+                                                            </div>
+                                                        </div>
+                                                    </td>
                                                 </tr>
                                             @endforeach
                                             <?php
@@ -75,6 +83,7 @@
                                         </tbody>
                                     </table>
                                 </div>
+                                <input type="hidden" name="json_ids" id="empIdsAr" value="{{$empIdsAr}}">
                             </div>
                             <!-- End Table with stripped rows -->
                         </div>
@@ -127,6 +136,28 @@ $(document).ready(function() {
             $('.btn-success').hide();
         }
     });
+
+    //Will show empty field counts here from different tabs
+    function fetchRowData(rowId) {
+        $.ajax({
+            url: '/employee/row/' + rowId, // Route to get data for a single row
+            method: 'GET',
+            success: function(response){
+                // Handle the response, e.g., append data to a table row
+                $('#row-' + rowId).html(response); // Assuming there's a row with id "row-{rowId}" in your HTML
+            },
+            error: function(xhr, status, error){
+                console.error(error);
+            }
+        });
+    }
+
+    // Iterate over each row and fetch data
+    $('.employee-row').each(function(){
+        var rowId = $(this).data('row-id'); // Assuming each row has a data attribute "data-row-id" containing the employee ID
+        fetchRowData(rowId);
+    });
+
 });
 
 

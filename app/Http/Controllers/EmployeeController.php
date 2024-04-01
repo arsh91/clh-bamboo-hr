@@ -131,10 +131,17 @@ class EmployeeController extends Controller
        //we will get the empty fields from personal tab of an employee
        $blankPersonalFields = $this->getPersonalBlankFields($empId);
 
-        return view('dashboard.employee',compact('empData', 'base64Image', 'jobFields', 'emergencyContacts', 'emptyEmeregencyFields'));
+       //get the empty fields array from JOB tab of an employee
+       $blankJobFields = $this->getJobBlankFields($empId);
+
+        return view('dashboard.employee',compact('empData', 'base64Image', 'jobFields', 'emergencyContacts', 'emptyEmeregencyFields', 'blankPersonalFields', 'blankJobFields'));
         
     }
 
+    /**
+     * Get blank fields from Personal Tab of an Employee
+     * @param $empId
+     */
     private function getPersonalBlankFields($empId){
         $empFieldsArray = array('employeeNumber,employmentStatus,firstName,middleName,lastName,preferredName,dateOfBirth,gender,maritalStatus,customAllergies,customT-ShirtSize,address1,address2,city,state,zipcode,country,workPhone,workPhoneExtension,mobilePhone,homePhone,workEmail,homeEmail,customCollege,customDegree,customMajor,customGPA,customEducationStartDate,customEducationEndDate');
 
@@ -149,7 +156,8 @@ class EmployeeController extends Controller
         $getEmployeeData = $getEmployee->getContent();
         $employeePersonalData = json_encode($getEmployeeData);       
         $empPersonalArray = json_decode($employeePersonalData, true);
-        $params = 'Employee Number,Employment Status,First Name,Middle Name,Last Name,Preferred Name,Date Of Birth,Gender,Marital Status,Custom Allergies,T-Shirt Size,Street 1,Street 2,City,State,Zip,Country,Work Phone,work Phone Extension,Mobile Phone,Home Phone,Work Email,Home Email,College,Degree,Major Specialization,GPA,Start Date,End Date';
+        $params = substr($empFieldsArray[0], 6, -2);
+        //dump($params); dd('---');
         $empKeyArr = explode(',', $params);
         $emptyData = [];
         if(count($empPersonalArray) > 0){     
@@ -165,6 +173,50 @@ class EmployeeController extends Controller
        // dump($emptyData);
        // dd('checking perosnal tab data');
         return $emptyData;
+    }
+
+    private function getJobBlankFields($empId){
+        $jobFieldsArray = array('hireDate,originalHireDate,ethnicity,eeo,customEmployeeNumber,customHourlyRate,customPersonalEmail,customHireDate');
+        $bhr = new BambooAPI("clhmentalhealth");
+        $bhr->setSecretKey("40d056dd98d048b1d50c46392c77bd2bbbf0431f");
+        //$response = $bhr->getDirectory();
+        $getJobTabData = $bhr->getEmployee($empId, $jobFieldsArray);
+        if($getJobTabData->isError()) {
+            trigger_error("Error communicating with BambooHR: " . $getJobTabData->getErrorMessage());
+        }
+
+        $getEmployeeJobData = $getJobTabData->getContent();
+        $employeeJobTabData = json_encode($getEmployeeJobData);       
+        $empJobTabArray = json_decode($employeeJobTabData, true);
+        $params = 'hireDate,originalHireDate,ethnicity,eeo,customEmployeeNumber,customHourlyRate,customPersonalEmail,customHireDate';
+        $empKeyArr = explode(',', $params);
+        $emptyData = [];
+        if(count($empJobTabArray) > 0){     
+            if (isset($empJobTabArray['field'])) {
+                foreach($empJobTabArray['field'] as $key=> $field){
+                    $emptyData[$empKeyArr[$key]]= $this->checkEmptyFields($field);            
+                }
+            }
+        }
+        $emptyData = array_filter($emptyData, function($value) {
+            return $value !== "";
+        });
+        //dump($emptyData);
+        ///dd('checking JOB tab data');
+        return $emptyData;
+
+        
+    }
+
+    public function employeEmptyFieldsCount($empId){
+        $blankPersonalFields = $this->getPersonalBlankFields($empId);
+        $blankJobFields = $this->getJobBlankFields($empId);
+        $html = '<ul style="color:red;">';
+        $html .= '<li>Personal : '.count($blankPersonalFields).'</li>';
+        $html .= '<li>Job : '.count($blankJobFields).'</li>';
+        $html .= '</ul>';
+        return $html;
+        //dump(count($blankPersonalFields)); dd('--');
     }
 
     

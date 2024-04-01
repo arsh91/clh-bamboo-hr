@@ -208,26 +208,56 @@
             <h5 class="card-title">Blank Fields</h5>           
             <ul class="nav nav-tabs nav-tabs-bordered" id="myTabjustified" role="tablist">
                 <li class="nav-item flex-fill" role="presentation">
-                  <button class="nav-link w-100" id="home-tab" data-bs-toggle="tab" data-bs-target="#home-justified" type="button" role="tab" aria-controls="home" aria-selected="true">Personal</button>
+                  <button class="nav-link w-100 active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home-justified" type="button" role="tab" aria-controls="home" aria-selected="true">Personal</button>
                 </li>
                 <li class="nav-item flex-fill" role="presentation">
                   <button class="nav-link w-100" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile-justified" type="button" role="tab" aria-controls="profile" aria-selected="false" tabindex="-1">Job</button>
                 </li>
                 <li class="nav-item flex-fill" role="presentation">
-                  <button class="nav-link w-100 active" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact-justified" type="button" role="tab" aria-controls="contact" aria-selected="false" tabindex="-1">Emergency</button>
+                  <button class="nav-link w-100" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact-justified" type="button" role="tab" aria-controls="contact" aria-selected="false" tabindex="-1">Emergency</button>
                 </li>
               </ul>
               <div class="tab-content pt-2" id="myTabjustifiedContent">
-                <div class="tab-pane fade" id="home-justified" role="tabpanel" aria-labelledby="home-tab">
-                  Empty fields from Personal Tab
-                </div>
-                <div class="tab-pane fade" id="profile-justified" role="tabpanel" aria-labelledby="profile-tab">
-                  Empty fields from Job Tab
-                </div>
-                <div class="tab-pane fade active show" id="contact-justified" role="tabpanel" aria-labelledby="contact-tab">
+                <div class="tab-pane fade active show" id="home-justified" role="tabpanel" aria-labelledby="home-tab">
                   <div class="row">
                     <div class="col-lg-6">                      
-                      <h5 class="card-title">Emergency Contact</h5>
+                      <h5 class="card-title">Personal Blank Fields</h5>
+                      <ul class="list-group">
+                        @if(!empty($blankPersonalFields))
+                        @foreach($blankPersonalFields as $key=> $blankFields)
+                        <li class="list-group-item">
+                          {{$blankFields}}
+                        </li>
+                        @endforeach
+                        @else
+                          <p>No Blank Field Found In Personal Tab.</p>
+                        @endif
+                      </ul>
+                    </div>
+                  </div><!--##row-->
+                </div>
+                <div class="tab-pane fade" id="profile-justified" role="tabpanel" aria-labelledby="profile-tab">
+                  <div class="row">
+                    <div class="col-lg-6">                      
+                      <h5 class="card-title">Job Blank Fields</h5>
+                      <ul class="list-group">
+                        @if(!empty($blankJobFields))
+                        @foreach($blankJobFields as $key=> $blankFields)
+                        <li class="list-group-item">
+                          {{$blankFields}}
+                        </li>
+                        @endforeach
+                        @else
+                          <p>No Blank Field Found.</p>
+                        @endif
+                      </ul>
+                    </div>
+                  </div><!--##row-->
+                </div>
+                <div class="tab-pane fade" id="contact-justified" role="tabpanel" aria-labelledby="contact-tab">
+                  <div class="row">
+                    <div class="col-lg-6">                      
+                      <h5 class="card-title">Emergency Blank Fields</h5>
                       <ul class="list-group">
                         @if(!empty($emptyEmeregencyFields))
                         @foreach($emptyEmeregencyFields as $key=> $val)
@@ -235,6 +265,8 @@
                           {{$val}}
                         </li>
                         @endforeach
+                        @else
+                          <p>No emergency contacts have been added for this employee.</p>
                         @endif
                       </ul>
                     </div>
