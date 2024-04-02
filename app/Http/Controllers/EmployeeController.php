@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Services\BambooHrService;
 use \BambooHR\API\BambooAPI;
+use Carbon\Carbon;
+
 
 class EmployeeController extends Controller
 {
@@ -27,6 +29,7 @@ class EmployeeController extends Controller
     public function employeDetail($empId)
     {
         $base64Image = '';
+        $expDateTracker = [];
         $empFieldsArray = array('firstName,lastName,jobTitle,workPhone,mobilePhone,workEmail,department,location,division,supervisor,employmentStatus');
 
         $bhr = new BambooAPI("clhmentalhealth");
@@ -84,36 +87,10 @@ class EmployeeController extends Controller
         } 
       // dump($jobFields); dd('--');
         //GET EMERGENCY TAB DATA
-        $getEmergencyContacts = $bhr->getTable($empId, 'emergencyContacts');
-        
-        if($getEmergencyContacts->isError()) {
-            trigger_error("Error communicating with BambooHR: " . $getEmergencyContacts->getErrorMessage());
-        }
-        $getEmergencyContacts = $getEmergencyContacts->getContent();
-        
-        $getEmergencyContacts = json_encode($getEmergencyContacts);       
-        $getEmergencyContacts = json_decode($getEmergencyContacts, true);
-       
-        $emergencyContacts = [];
-        $emptyEmeregencyFields = [];
-       
-        if(count($getEmergencyContacts) > 0){
-            $emergency = $getEmergencyContacts['row'];        
-            if (isset($emergency['field'])) {
-                foreach($emergency['field'] as $key=> $field){
-                    $emergencyContacts[] = $this->checkIfArray($field);
-                    $emptyEmeregencyFields[] = $this->checkEmptyFields($field);
-                }     
-            }
-        }
-
-        //return the empty fileds 
-        $emptyEmeregencyFields = array_filter($emptyEmeregencyFields, function($value) {
-            return $value !== "";
-        });
-
-         //dump($emergencyContacts); 
-        // dump($emptyEmeregencyFields); dd('-----');
+        $getEmergencyContacts = $this->getEmergencyFields($empId);
+       //dump($getEmergencyContacts);dd();
+        $emergencyContacts = $getEmergencyContacts['filled'];
+        $emptyEmeregencyFields = $getEmergencyContacts['empty'];
 
         $params = 'firstName,lastName,jobTitle,workPhone,mobilePhone,workEmail,department,location,division,supervisor,employmentStatus';
         
@@ -134,7 +111,35 @@ class EmployeeController extends Controller
        //get the empty fields array from JOB tab of an employee
        $blankJobFields = $this->getJobBlankFields($empId);
 
-        return view('dashboard.employee',compact('empData', 'base64Image', 'jobFields', 'emergencyContacts', 'emptyEmeregencyFields', 'blankPersonalFields', 'blankJobFields'));
+       //get expiration tracker Dates
+       $expDateTracker[] = $this->getDateTrackers($empId, 'License');
+       $expDateTracker[] = $this->getDateTrackers($empId, 'Insurance');
+       $expDateTracker[] = $this->getDateTrackers($empId, 'Record');
+       $expDateTracker[] = $this->getDateTrackers($empId, 'Professional_License');
+       $expDateTracker[] = $this->getDateTrackers($empId, 'First_Aid');
+       $expDateTracker[] = $this->getDateTrackers($empId, 'Tact_II');
+       $expDateTracker[] = $this->getDateTrackers($empId, 'TB_Test');
+       $expDateTracker[] = $this->getDateTrackers($empId, 'Professional_Liability');
+       $expDateTracker[] = $this->getDateTrackers($empId, 'Other_Professional_License');
+       $expDateTracker[] = $this->getDateTrackers($empId, 'RCYCP_Certification');
+       $expDateTracker[] = $this->getDateTrackers($empId, 'DEA_Registration');
+       $expDateTracker[] = $this->getDateTrackers($empId, 'Psychiatric_Nurse_Practitioner_Certification');
+       $expDateTracker[] = $this->getDateTrackers($empId, 'CDS_Registration');
+       $expDateTracker[] = $this->getDateTrackers($empId, 'National_Practitioner_Data_Bank');
+    //    $expDateTracker[] = $this->getDateTrackers($empId, 'Annual_Evaluation');
+       $expDateTracker[] = $this->getDateTrackers($empId, '72_Hour_Treatment_Plan');
+       $expDateTracker[] = $this->getDateTrackers($empId, '30_Day_Treatment_Plan');
+       $expDateTracker[] = $this->getDateTrackers($empId, '90_Day_Treatment_Plan');
+       $expDateTracker[] = $this->getDateTrackers($empId, 'Psych_Evaluation');
+       $expDateTracker[] = $this->getDateTrackers($empId, 'Safe_Environment_Plan');
+       $expDateTracker[] = $this->getDateTrackers($empId, 'Physical');
+       $expDateTracker[] = $this->getDateTrackers($empId, 'Dental');
+       $expDateTracker[] = $this->getDateTrackers($empId, 'Vision');
+       $expDateTracker[] = $this->getDateTrackers($empId, 'Sexual_Abuse_Awareness');
+       $expDateTracker[] = $this->getDateTrackers($empId, 'Medication_Technician_Certificate');
+    //    dump($expDateTracker); dd('-------------');
+
+        return view('dashboard.employee',compact('empData', 'base64Image', 'jobFields', 'emergencyContacts', 'emptyEmeregencyFields', 'blankPersonalFields', 'blankJobFields','expDateTracker'));
         
     }
 
@@ -143,7 +148,7 @@ class EmployeeController extends Controller
      * @param $empId
      */
     private function getPersonalBlankFields($empId){
-        $empFieldsArray = array('employeeNumber,employmentStatus,firstName,middleName,lastName,preferredName,dateOfBirth,gender,maritalStatus,customAllergies,customT-ShirtSize,address1,address2,city,state,zipcode,country,workPhone,workPhoneExtension,mobilePhone,homePhone,workEmail,homeEmail,customCollege,customDegree,customMajor,customGPA,customEducationStartDate,customEducationEndDate');
+        $empFieldsArray = array('employeeNumber,employmentStatus,firstName,lastName,dateOfBirth,gender,maritalStatus,customAllergies,customT-ShirtSize,address1,city,state,zipcode,country,mobilePhone,workEmail,homeEmail,customCollege,customDegree,customGPA,customEducationStartDate,customEducationEndDate');
 
         $bhr = new BambooAPI("clhmentalhealth");
         $bhr->setSecretKey("40d056dd98d048b1d50c46392c77bd2bbbf0431f");
@@ -208,12 +213,308 @@ class EmployeeController extends Controller
         
     }
 
+    private function getEmergencyFields($empId){
+        //GET EMERGENCY TAB 
+        $emergencyContacts = $emptyEmeregencyFields = $finalArr = [];
+        $bhr = new BambooAPI("clhmentalhealth");
+        $bhr->setSecretKey("40d056dd98d048b1d50c46392c77bd2bbbf0431f");
+        $getEmergencyContacts = $bhr->getTable($empId, 'emergencyContacts');
+        
+        if($getEmergencyContacts->isError()) {
+            trigger_error("Error communicating with BambooHR: " . $getEmergencyContacts->getErrorMessage());
+        }
+        $getEmergencyContacts = $getEmergencyContacts->getContent();
+        
+        $getEmergencyContacts = json_encode($getEmergencyContacts);       
+        $getEmergencyContacts = json_decode($getEmergencyContacts, true);
+       
+        if(count($getEmergencyContacts) > 0){
+            $emergency = $getEmergencyContacts['row'];        
+            if (isset($emergency['field'])) 
+            {                
+                $requiredFields = $this->getEmeregencyFields($emergency['field']);
+                foreach($requiredFields as $key=> $field)
+                {
+                    //dump($field);
+                    $emergencyContacts[] = $this->checkIfArray($field);
+                    $emptyEmeregencyFields[] = $this->checkEmptyFields($field);
+                }
+            }
+        }
+        
+        //return the empty fileds 
+        $emptyEmeregencyFields = array_filter($emptyEmeregencyFields, function($value) {
+            return $value !== "";
+        });
+    
+        $finalArr = ['filled'=>$emergencyContacts, 'empty'=>$emptyEmeregencyFields];
+        return $finalArr;
+    }
+
+    /**Will return only specific fields from EMERGENCY CONTACT TAB
+     * according to document shared
+     */
+    private function getEmeregencyFields($fieldsArr){
+       
+        $keysToRemove = ['2','4','5', '12']; // removed EXT, HomePhone, MobilePhone, Street2 fields
+        foreach ($keysToRemove as $key) {
+            if (array_key_exists($key, $fieldsArr)) {
+                unset($fieldsArr[$key]);
+            }
+        }
+        return $fieldsArr;
+    }
+
+    private function getExpirationTracker($empId){
+        $expFieldsArray = array("customDriver'sLicenseExpirationDate,customDriver'sInsuranceExpirationDate,customDrivingRecordExpirationDate,customProfessionalLicenseIssuanceDate,customFirstAid/CPRExpirationDate,customTactIIExpirationDate,customTBTestResultsExpirationDate,customProfessionalLiabilityInsuranceExpirationDate,customOtherProfessionalLicenseExpirationDate,customRCYCPCertificationExpirationDate,customDEALicenseExpirationDate,customPsychiatricNursePractitionerCertificationExpirationDate,customCDSRegistrationExpirationDate,customNPDBQueryExpirationDate,customJCAHO/AnnualTrainingsExpirationDate,custom72HourTreatmentPlanExpirationDate,custom30DayTreatmentPlanExpirationDate,custom90DayTreatmentPlanExpirationDate,customPsychEvaluationExpirationDate,customSafeEnvironmentPlanExpirationDate,customPhysicalExpirationDate,customDentalExpirationDate,customVisionExpirationDate,customSexualAbuseAwareness&PreventionExpirationDate,customMedicationTechnicianCertificateExpirationDate");
+        $bhr = new BambooAPI("clhmentalhealth");
+        $bhr->setSecretKey("40d056dd98d048b1d50c46392c77bd2bbbf0431f");
+        //$response = $bhr->getDirectory();
+        $getExpTabData = $bhr->getEmployee($empId, $expFieldsArray);
+        if($getExpTabData->isError()) {
+            trigger_error("Error communicating with BambooHR: " . $getExpTabData->getErrorMessage());
+        }
+
+        $getEmployeeExpData = $getExpTabData->getContent();
+        $employeeJobTabData = json_encode($getEmployeeExpData);       
+        $empExpTabArray = json_decode($employeeJobTabData, true);
+        $params = "Driver's License Expiration Date,Driver's Insurance Expiration Date,Driving Record Expiration Date
+        ,Professional License Expiration Date,First Aid/CPR Expiration Date,TACT II/Behavioral Interventions Training Expiration Date,TB Test Results Expiration Date,Professional Liability Insurance Expiration Date,Other Professional License Expiration Date,RCYCP Certification Expiration Date,DEA License Expiration Date,Psychiatric Nurse Practitioner Certification Expiration Date,CDS Registration Expiration Date,NPDB Query Expiration Date,JCAHO/Annual Trainings Expiration Date,72 Hour Treatment Plan Expiration Date,30 Day Treatment Plan Expiration Date,90 Day Treatment Plan Expiration Date,Psych Evaluation Expiration Date,Safe Environment Plan Expiration Date,Physical Expiration Date,Dental Expiration Date,Vision Expiration Date,Sexual Abuse Awareness & Prevention Expiration Date,Medication Technician Certificate Expiration Date";
+        $empKeyArr = explode(',', $params);
+        $trackerData = [];
+        if(count($empExpTabArray) > 0){     
+            if (isset($empExpTabArray['field'])) {
+                foreach($empExpTabArray['field'] as $key=> $field){
+                   
+                    
+                    $trackerData[$empKeyArr[$key]]= $field;            
+                }
+            }
+        }
+
+       // $dates = $this->checkIfDateIsExpired($trackerData);
+        
+        dump($trackerData); dd();
+    }
+
+    private function getDateTrackers($empId, $trackerType){
+        $expFieldsArray = [];
+        $params = '';
+
+        switch($trackerType){
+            case 'License':
+                $expFieldsArray = array("customDriver'sLicenseIssuanceDate,customDriver'sLicenseExpirationDate");
+                $params = "driver_issuance,driver_expiration";
+            break;
+            case "Insurance":
+                $expFieldsArray = array("customDriver'sInsuranceIssuanceDate,customDriver'sInsuranceExpirationDate");
+                $params = "driver_insurance_issuance,driver_insurance_expiration";
+            break;
+            case "Record":
+                $expFieldsArray = array("customDrivingRecordIssuanceDate,customDrivingRecordExpirationDate");
+                $params = "record_issuance,record_expiration";
+            break;
+            case "Professional_License":
+                $expFieldsArray = array("customProfessionalLicenseIssuanceDate1,customProfessionalLicenseIssuanceDate");
+                $params = "professional_issuance,professional_expiration";
+            break;
+            case "First_Aid":
+                $expFieldsArray = array("customFirstAid/CPRIssuanceDate,customFirstAid/CPRExpirationDate");
+                $params = "firstaid_issuance,firstaid_expiration";
+            break;
+            case "Tact_II":
+                $expFieldsArray = array("customTactIIIssuanceDate,customTactIIExpirationDate");
+                $params = "tact_issuance,tact_expiration";
+            break;
+            case "TB_Test":
+                $expFieldsArray = array("customTBTestResultsDate,customTBTestResultsExpirationDate");
+                $params = "tbtest_issuance,tbtest_expiration";
+            break;
+            case "Professional_Liability":
+                $expFieldsArray = array("customProfessionalLiabilityInsuranceIssuanceDate,customProfessionalLiabilityInsuranceExpirationDate");
+                $params = "liability_issuance,liability_expiration";
+            break;
+            case "Other_Professional_License":
+                $expFieldsArray = array("customOtherProfessionalLicenseIssuanceDate,customOtherProfessionalLicenseExpirationDate");
+                $params = "other_professional_issuance,liability_professional_expiration";
+            break;
+            case "RCYCP_Certification":
+                $expFieldsArray = array("customRCYCPCertificationIssuanceDate,customRCYCPCertificationExpirationDate");
+                $params = "RCYCP_certification_issuance,RCYCP_certification_expiration";
+            break;
+            case "DEA_Registration":
+                $expFieldsArray = array("customDEALicenseIssuanceDate,customDEALicenseExpirationDate");
+                $params = "DEA_registration_issuance,DEA_registration_expiration";
+            break;
+            case "Psychiatric_Nurse_Practitioner_Certification":
+                $expFieldsArray = array("customPsychiatricNursePractitionerCertificationIssuanceDate,customPsychiatricNursePractitionerCertificationExpirationDate");
+                $params = "Psychiatric_Nurse_Practitioner_issuance,Psychiatric_Nurse_Practitioner_expiration";
+            break;
+            case "CDS_Registration":
+                $expFieldsArray = array("customCDSRegistrationIssuanceDate,customCDSRegistrationExpirationDate");
+                $params = "CDS_Registration_issuance,CDS_Registration_expiration";
+            break;
+            case "National_Practitioner_Data_Bank":
+                $expFieldsArray = array("customNPDBQueryDate,customNPDBQueryExpirationDate");
+                $params = "National_Practitioner_Data_issuance,National_Practitioner_Data_expiration";
+            break;
+            case "Annual_Evaluation":
+                $expFieldsArray = array("customAnnualEvaluationExpirationDate,customJCAHO/AnnualTrainingsExpirationDate");
+                $params = "Annual_Evaluation_expiration,JCAHO_Annual_Trainings_expiration";
+            break;
+            case "72_Hour_Treatment_Plan":
+                $expFieldsArray = array("custom72HourTreatmentPlanIssuanceDate,custom72HourTreatmentPlanExpirationDate");
+                $params = "72_Hour_issuance,72_Hour_expiration";
+            break;
+            case "30_Day_Treatment_Plan":
+                $expFieldsArray = array("custom30DayTreatmentPlanIssuanceDate,custom30DayTreatmentPlanExpirationDate");
+                $params = "30_Day_Treatment_issuance,30_Day_Treatment_expiration";
+            break;
+            case "90_Day_Treatment_Plan":
+                $expFieldsArray = array("custom90DayTreatmentPlanIssuanceDate,custom90DayTreatmentPlanExpirationDate");
+                $params = "90_Day_Treatment_issuance,90_Day_Treatment_expiration";
+            break;
+            case "Psych_Evaluation":
+                $expFieldsArray = array("customPsychEvaluationIssuanceDate,customPsychEvaluationExpirationDate");
+                $params = "Psych_Evaluation_issuance,Psych_Evaluation_expiration";
+            break;
+            case "Safe_Environment_Plan":
+                $expFieldsArray = array("customSafeEnvironmentPlanIssuanceDate,customSafeEnvironmentPlanExpirationDate");
+                $params = "Safe_Environment_issuance,Safe_Environment_expiration";
+            break;
+            case "Physical":
+                $expFieldsArray = array("customPhysicalIssuanceDate,customPhysicalExpirationDate");
+                $params = "Physical_issuance,Physical_expiration";
+            break;
+            case "Dental":
+                $expFieldsArray = array("customDentalIssuanceDate,customDentalExpirationDate");
+                $params = "Dental_issuance,Dental_expiration";
+            break;
+            case "Vision":
+                $expFieldsArray = array("customVisionIssuanceDate,customVisionExpirationDate");
+                $params = "Vision_issuance,Vision_expiration";
+            break;
+            case "Sexual_Abuse_Awareness":
+                $expFieldsArray = array("customSexualAbuseAwareness&PreventionIssuanceDate,customSexualAbuseAwareness&PreventionExpirationDate");
+                $params = "Sexual_Abuse_Awareness_issuance,Sexual_Abuse_Awareness_expiration";
+            break;
+            case "Medication_Technician_Certificate":
+                $expFieldsArray = array("customMedicationDateTracker,customMedicationTechnicianCertificateExpirationDate");
+                $params = "Medication_Technician_issuance,Medication_Technician_expiration";
+            break;
+        }        
+
+        
+        $bhr = new BambooAPI("clhmentalhealth");
+        $bhr->setSecretKey("40d056dd98d048b1d50c46392c77bd2bbbf0431f");
+        //$response = $bhr->getDirectory();
+        $getExpTabData = $bhr->getEmployee($empId, $expFieldsArray);
+        if($getExpTabData->isError()) {
+            trigger_error("Error communicating with BambooHR: " . $getExpTabData->getErrorMessage());
+        }
+
+        $getEmployeeExpData = $getExpTabData->getContent();
+        $employeeJobTabData = json_encode($getEmployeeExpData);       
+        $empExpTabArray = json_decode($employeeJobTabData, true);
+        
+        $empKeyArr = explode(',', $params);
+        $trackerData = [];
+        // Get today's date
+        $today = Carbon::now()->startOfDay();
+        if(count($empExpTabArray) > 0){     
+            if (isset($empExpTabArray['field'])) {
+                $trackerData['type'] = $trackerType;
+                foreach($empExpTabArray['field'] as $key=> $field){    
+                    $keyName =  explode('_', $empKeyArr[$key]);
+                    $keyName = end($keyName);
+                    $trackerData[$keyName]= $field;
+                    $trackerData['status'] = 'ACTIVE';
+                    if ($field == '0000-00-00') {
+                        $trackerData['status'] = 'NODATE';
+                    } else if($keyName == 'expiration') {
+                        // Convert the given date string into a Carbon instance
+                        $date = Carbon::createFromFormat('Y-m-d', $field)->startOfDay();
+
+                        // Calculate the difference between today's date and the given date
+                        $differenceInDays = $today->diffInDays($date, false);
+
+                        if ($differenceInDays < 0) {
+                            // Date is already expired
+                            $trackerData['status'] = 'EXPIRED';
+                        } elseif ($differenceInDays >= 15 && $differenceInDays <= 30) {
+                            // Date is going to expire within the next 15 to 30 days
+                            $trackerData['status'] = 'GETTINGEXPIRE';
+                        }
+                    }
+                }
+            }
+        }
+        return $trackerData;
+    }
+
+    private function checkIfDateIsExpired($trackerData){
+        $datesArr = [];
+        foreach($trackerData as $key => $trackerDate){
+            //dump($key);dd('---');
+            $currentDate = date("Y-m-d"); // Get today's date in the same format
+            
+            
+            if ($trackerDate != '0000-00-00') { // we will not consider the empty input values from tracker TAB
+                /**---------------------------------------- */
+                // Get today's date
+                $today = Carbon::now()->startOfDay();
+
+                // Convert the given date string into a Carbon instance
+                $date = Carbon::createFromFormat('Y-m-d', $trackerDate)->startOfDay();
+
+                // Calculate the difference between today's date and the given date
+                $differenceInDays = $today->diffInDays($date, false);
+
+                if ($differenceInDays > 0) {
+                    // Date is already expired
+                    $datesArr['expired'][$key] = $trackerDate;
+                } elseif ($differenceInDays >= 15 && $differenceInDays <= 30) {
+                    // Date is going to expire within the next 15 to 30 days
+                    $datesArr['gng_to_expire'][$key] = $trackerDate;
+                } else {
+                    // Date is not expired and not going to expire within the next 15 to 30 days
+                    $datesArr['not_expired'][$key] = $trackerDate;
+                }
+            }
+        }
+        dump($datesArr);
+       // return $datesArr; 
+    }
+
     public function employeEmptyFieldsCount($empId){
+        $colorBClass = $colorPClass = '';
         $blankPersonalFields = $this->getPersonalBlankFields($empId);
         $blankJobFields = $this->getJobBlankFields($empId);
-        $html = '<ul style="color:red;">';
-        $html .= '<li>Personal : '.count($blankPersonalFields).'</li>';
-        $html .= '<li>Job : '.count($blankJobFields).'</li>';
+        $getEmergencyContacts = $this->getEmergencyFields($empId);
+        $blankEmergencyFields =$getEmergencyContacts['empty'];
+       // dump($blankEmergencyFields); dd('---------');
+        if( count($blankJobFields) > 0 ){
+            $colorBClass = 'color:red;';
+        }else if ( count($blankJobFields) == 0) {
+            $colorBClass = 'color:green;';
+        }
+                
+        if( count($blankPersonalFields) > 0 ){
+            $colorPClass = 'color:red;';
+        }else if ( count($blankPersonalFields) == 0) {
+            $colorPClass = 'color:green;';
+        }
+
+        if( count($blankEmergencyFields) > 0 ){
+            $colorEClass = 'color:red;';
+        }else if ( count($blankEmergencyFields) == 0) {
+            $colorEClass = 'color:green;';
+        }
+
+        $html = '<ul>';
+        $html .= '<li style="'.$colorPClass.'">Personal : '.count($blankPersonalFields).'</li>';
+        $html .= '<li style="'.$colorBClass.'">Job : '.count($blankJobFields).'</li>';
+        $html .= '<li style="'.$colorEClass.'">Emergency : '.count($blankEmergencyFields).'</li>';
         $html .= '</ul>';
         return $html;
         //dump(count($blankPersonalFields)); dd('--');

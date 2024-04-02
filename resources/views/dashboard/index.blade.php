@@ -135,29 +135,30 @@ $(document).ready(function() {
             // Hide the button
             $('.btn-success').hide();
         }
-    });
+    
 
+        
+    });
     //Will show empty field counts here from different tabs
     function fetchRowData(rowId) {
-        $.ajax({
-            url: '/employee/row/' + rowId, // Route to get data for a single row
-            method: 'GET',
-            success: function(response){
-                // Handle the response, e.g., append data to a table row
-                $('#row-' + rowId).html(response); // Assuming there's a row with id "row-{rowId}" in your HTML
-            },
-            error: function(xhr, status, error){
-                console.error(error);
-            }
+            $.ajax({
+                url: '/employee/row/' + rowId, // Route to get data for a single row
+                method: 'GET',
+                success: function(response){
+                    // Handle the response, e.g., append data to a table row
+                    $('#row-' + rowId).html(response); // Assuming there's a row with id "row-{rowId}" in your HTML
+                },
+                error: function(xhr, status, error){
+                    console.error(error);
+                }
+            });
+        }
+
+        // Iterate over each row and fetch data
+        $('.employee-row').each(function(){
+            var rowId = $(this).data('row-id'); // Assuming each row has a data attribute "data-row-id" containing the employee ID
+            fetchRowData(rowId);
         });
-    }
-
-    // Iterate over each row and fetch data
-    $('.employee-row').each(function(){
-        var rowId = $(this).data('row-id'); // Assuming each row has a data attribute "data-row-id" containing the employee ID
-        fetchRowData(rowId);
-    });
-
 });
 
 

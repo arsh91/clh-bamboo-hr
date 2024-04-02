@@ -5,7 +5,15 @@
 .highlight {
     background-color: yellow; /* Set the background color to yellow */
 }
-
+.EXPIRED-class, .NODATE-class{
+  background-color: red;
+}
+.GETTINGEXPIRE-class{
+  background-color: yellow;
+}
+/* .ACTIVE-class{
+  background-color: green;
+} */
 </style>
 
 <section class="section profile">
@@ -155,17 +163,13 @@
                           <tr>
                             <th scope="col">Name</th>
                             <th scope="col">Relationship</th>
-                            <th scope="col">homePhone</th>
                             <th scope="col">addressLine1</th>
-                            <th scope="col">addressLine2	</th>
-                            <th scope="col">mobilePhone	</th>
                             <th scope="col">email	</th>
                             <th scope="col">zipcode	</th>
                             <th scope="col">city	</th>
                             <th scope="col">state	</th>
                             <th scope="col">country	</th>
                             <th scope="col">workPhone	</th>
-                            <th scope="col">workPhoneExtension	</th>
                             <th scope="col">primaryContact	</th>
                           </tr>
                         </thead>
@@ -276,6 +280,42 @@
               
           </div>
         </div>
+      </div>
+      <!---SHOW THE Expire Date tracker data--->
+      <div class="row">
+        <div class="card">
+          <div class="card-body"> 
+            <h5 class="card-title">Expiration Date Tracker</h5>
+            <!-- Table with hoverable rows -->
+              <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th scope="col">Type</th>
+                    <th scope="col">Issue Date</th>                            
+                    <th scope="col">Expire Date</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  
+                  @if(!empty($expDateTracker))
+                    @foreach($expDateTracker as $key=> $dateTracker)
+                    <tr class="{{ $dateTracker['status'] }}-class">
+                      <td>{{ $dateTracker['type'] }}</td>
+                      <td>{{ $dateTracker['issuance'] }}</td>
+                      <td>{{ $dateTracker['expiration'] }}</td>
+                    </tr>
+                    @endforeach
+                    @else
+                      <tr><td colpan="4">No records found for the employee.</td></tr>
+                    @endif
+                                            
+                </tbody>
+              </table>
+              <!-- End Table with hoverable rows -->
+          </div>
+        </div>
+      </div><!--##row3-->
+      <!---##Date tracker--->
     </section>
 @endsection
 @section('custom_js')
