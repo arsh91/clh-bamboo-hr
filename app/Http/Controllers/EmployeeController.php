@@ -103,16 +103,106 @@ class EmployeeController extends Controller
             $empData[$empKeyArr[$key]]= $this->checkIfArray($field);            
         }
         $empData['ID'] = $empId;
-       // dump($empData);  dd('----');
+        //dump($empData);  dd('----');
+
+        $empDivision = $empData['division'];
+        $empDepartment = $empData['department'];
+        $empJobInfo = $empData['jobTitle'];
 
        //we will get the empty fields from personal tab of an employee
        $blankPersonalFields = $this->getPersonalBlankFields($empId);
 
        //get the empty fields array from JOB tab of an employee
        $blankJobFields = $this->getJobBlankFields($empId);
+       //FIRST CHECK DEPARTMENT
+       if($empDepartment == env('GROUP_HOME')){
+            if($empDivision == env('GROUP_HOME_RCYCP')){
+                $expDateTracker[] = $this->getDateTrackers($empId, 'License');
+                $expDateTracker[] = $this->getDateTrackers($empId, 'Insurance');
+                $expDateTracker[] = $this->getDateTrackers($empId, 'Record');
+                $expDateTracker[] = $this->getDateTrackers($empId, 'First_Aid');
+                $expDateTracker[] = $this->getDateTrackers($empId, 'Tact_II');
+                $expDateTracker[] = $this->getDateTrackers($empId, 'TB_Test');
+                $expDateTracker[] = $this->getDateTrackers($empId, 'RCYCP_Certification');
+                $expDateTracker[] = $this->getDateTrackers($empId, 'Sexual_Abuse_Awareness');
+            }
+        }else if ($empDepartment == env('DEPARTMENT_PRP')){ //when the department is PRP and then division is `Family Care Coordinator`|| `Family Care Coordinator`
+            if($empDivision == env('DIVISION_PRP_COORD') || $empDivision == env('DIVISION_PRP_SPEC')){
+                $expDateTracker[] = $this->getDateTrackers($empId, 'License');
+                $expDateTracker[] = $this->getDateTrackers($empId, 'Insurance');
+                $expDateTracker[] = $this->getDateTrackers($empId, 'Record');
+                $expDateTracker[] = $this->getDateTrackers($empId, 'First_Aid');
+                $expDateTracker[] = $this->getDateTrackers($empId, 'TB_Test');
+                $expDateTracker[] = $this->getDateTrackers($empId, 'Professional_Liability');
+                $expDateTracker[] = $this->getDateTrackers($empId, 'Sexual_Abuse_Awareness');
+            }
+        }else if($empDepartment == env('DEPARTMENT_OMHC')){
+            if($empJobInfo == env('JOBINFO_COOCCURING_OMHC')){
+                $expDateTracker[] = $this->getDateTrackers($empId, 'License');
+                $expDateTracker[] = $this->getDateTrackers($empId, 'Insurance');
+                $expDateTracker[] = $this->getDateTrackers($empId, 'Record');
+                $expDateTracker[] = $this->getDateTrackers($empId, 'Professional_License');
+                $expDateTracker[] = $this->getDateTrackers($empId, 'First_Aid');
+                $expDateTracker[] = $this->getDateTrackers($empId, 'TB_Test');
+                $expDateTracker[] = $this->getDateTrackers($empId, 'Professional_Liability');
+                $expDateTracker[] = $this->getDateTrackers($empId, 'Annual_EvaluationJC');
+                $expDateTracker[] = $this->getDateTrackers($empId, 'Annual_Evaluation');
+                $expDateTracker[] = $this->getDateTrackers($empId, 'Sexual_Abuse_Awareness');
+                $expDateTracker[] = $this->getDateTrackers($empId, 'National_Practitioner_Data_Bank');
+            }if($empJobInfo == env('JOBINFO_Intern_OMHC')){ //when the department is `OMHC;Substance Use Disorder (SUD)` and jobtitle is `INTERN`
+                $expDateTracker[] = $this->getDateTrackers($empId, 'License');
+                $expDateTracker[] = $this->getDateTrackers($empId, 'Insurance');
+                $expDateTracker[] = $this->getDateTrackers($empId, 'Record');
+                $expDateTracker[] = $this->getDateTrackers($empId, 'First_Aid');
+                $expDateTracker[] = $this->getDateTrackers($empId, 'TB_Test');
+                $expDateTracker[] = $this->getDateTrackers($empId, 'Professional_Liability');
+
+            }
+        }else if($empDepartment == env('DEPARTMENT_MENTAL_HEALTH_OMHC')){ //when department is OMHC and MENTAL HEALTH
+            if($empJobInfo == env('JOBINFO_MENTAL_HEALTH_OMHC')){
+                $expDateTracker[] = $this->getDateTrackers($empId, 'License');
+                $expDateTracker[] = $this->getDateTrackers($empId, 'Insurance');
+                $expDateTracker[] = $this->getDateTrackers($empId, 'Record');
+                $expDateTracker[] = $this->getDateTrackers($empId, 'Professional_License');
+                $expDateTracker[] = $this->getDateTrackers($empId, 'First_Aid');
+                $expDateTracker[] = $this->getDateTrackers($empId, 'TB_Test');
+                $expDateTracker[] = $this->getDateTrackers($empId, 'Professional_Liability');
+                $expDateTracker[] = $this->getDateTrackers($empId, 'Annual_EvaluationJC');
+                $expDateTracker[] = $this->getDateTrackers($empId, 'Annual_Evaluation');
+                $expDateTracker[] = $this->getDateTrackers($empId, 'Sexual_Abuse_Awareness');
+                $expDateTracker[] = $this->getDateTrackers($empId, 'National_Practitioner_Data_Bank');
+            }else if($empJobInfo == env('JOBINFO_Clinical_OMHC')){ //when department is OMHC and jobtitle is `clinical director`
+                $expDateTracker[] = $this->getDateTrackers($empId, 'License');
+                $expDateTracker[] = $this->getDateTrackers($empId, 'Insurance');
+                $expDateTracker[] = $this->getDateTrackers($empId, 'Record');
+                $expDateTracker[] = $this->getDateTrackers($empId, 'First_Aid');
+                $expDateTracker[] = $this->getDateTrackers($empId, 'TB_Test');
+                $expDateTracker[] = $this->getDateTrackers($empId, 'Professional_License');
+                $expDateTracker[] = $this->getDateTrackers($empId, 'Professional_Liability');
+                $expDateTracker[] = $this->getDateTrackers($empId, 'National_Practitioner_Data_Bank');
+                $expDateTracker[] = $this->getDateTrackers($empId, 'Annual_EvaluationJC');
+                $expDateTracker[] = $this->getDateTrackers($empId, 'Annual_Evaluation');
+                $expDateTracker[] = $this->getDateTrackers($empId, 'Sexual_Abuse_Awareness');
+            }else if($empJobInfo == env('JOBINFO_Nurse_Practitioner_OMHC')){  // jobtitle is `Psychiatric Nurse Practitioner`
+                $expDateTracker[] = $this->getDateTrackers($empId, 'License');
+                $expDateTracker[] = $this->getDateTrackers($empId, 'Insurance');
+                $expDateTracker[] = $this->getDateTrackers($empId, 'Record');
+                $expDateTracker[] = $this->getDateTrackers($empId, 'First_Aid');
+                $expDateTracker[] = $this->getDateTrackers($empId, 'TB_Test');
+                $expDateTracker[] = $this->getDateTrackers($empId, 'Professional_License');
+                $expDateTracker[] = $this->getDateTrackers($empId, 'Professional_Liability');
+                $expDateTracker[] = $this->getDateTrackers($empId, 'National_Practitioner_Data_Bank');
+                $expDateTracker[] = $this->getDateTrackers($empId, 'Annual_EvaluationJC');
+                $expDateTracker[] = $this->getDateTrackers($empId, 'Annual_Evaluation');
+                $expDateTracker[] = $this->getDateTrackers($empId, 'Sexual_Abuse_Awareness');
+                $expDateTracker[] = $this->getDateTrackers($empId, 'Psychiatric_Nurse_Practitioner_Certification');
+                $expDateTracker[] = $this->getDateTrackers($empId, 'CDS_Registration');
+                $expDateTracker[] = $this->getDateTrackers($empId, 'DEA_Registration');
+            }
+        }
 
        //get expiration tracker Dates
-       $expDateTracker[] = $this->getDateTrackers($empId, 'License');
+       /*$expDateTracker[] = $this->getDateTrackers($empId, 'License');
        $expDateTracker[] = $this->getDateTrackers($empId, 'Insurance');
        $expDateTracker[] = $this->getDateTrackers($empId, 'Record');
        $expDateTracker[] = $this->getDateTrackers($empId, 'Professional_License');
@@ -126,7 +216,8 @@ class EmployeeController extends Controller
        $expDateTracker[] = $this->getDateTrackers($empId, 'Psychiatric_Nurse_Practitioner_Certification');
        $expDateTracker[] = $this->getDateTrackers($empId, 'CDS_Registration');
        $expDateTracker[] = $this->getDateTrackers($empId, 'National_Practitioner_Data_Bank');
-    //    $expDateTracker[] = $this->getDateTrackers($empId, 'Annual_Evaluation');
+        $expDateTracker[] = $this->getDateTrackers($empId, 'Annual_Evaluation');
+        $expDateTracker[] = $this->getDateTrackers($empId, 'Annual_EvaluationJC');
        $expDateTracker[] = $this->getDateTrackers($empId, '72_Hour_Treatment_Plan');
        $expDateTracker[] = $this->getDateTrackers($empId, '30_Day_Treatment_Plan');
        $expDateTracker[] = $this->getDateTrackers($empId, '90_Day_Treatment_Plan');
@@ -136,8 +227,8 @@ class EmployeeController extends Controller
        $expDateTracker[] = $this->getDateTrackers($empId, 'Dental');
        $expDateTracker[] = $this->getDateTrackers($empId, 'Vision');
        $expDateTracker[] = $this->getDateTrackers($empId, 'Sexual_Abuse_Awareness');
-       $expDateTracker[] = $this->getDateTrackers($empId, 'Medication_Technician_Certificate');
-    //    dump($expDateTracker); dd('-------------');
+       $expDateTracker[] = $this->getDateTrackers($empId, 'Medication_Technician_Certificate');*/
+       // dump($expDateTracker); dd('-------------');
 
         return view('dashboard.employee',compact('empData', 'base64Image', 'jobFields', 'emergencyContacts', 'emptyEmeregencyFields', 'blankPersonalFields', 'blankJobFields','expDateTracker'));
         
@@ -265,38 +356,11 @@ class EmployeeController extends Controller
         return $fieldsArr;
     }
 
-    private function getExpirationTracker($empId){
-        $expFieldsArray = array("customDriver'sLicenseExpirationDate,customDriver'sInsuranceExpirationDate,customDrivingRecordExpirationDate,customProfessionalLicenseIssuanceDate,customFirstAid/CPRExpirationDate,customTactIIExpirationDate,customTBTestResultsExpirationDate,customProfessionalLiabilityInsuranceExpirationDate,customOtherProfessionalLicenseExpirationDate,customRCYCPCertificationExpirationDate,customDEALicenseExpirationDate,customPsychiatricNursePractitionerCertificationExpirationDate,customCDSRegistrationExpirationDate,customNPDBQueryExpirationDate,customJCAHO/AnnualTrainingsExpirationDate,custom72HourTreatmentPlanExpirationDate,custom30DayTreatmentPlanExpirationDate,custom90DayTreatmentPlanExpirationDate,customPsychEvaluationExpirationDate,customSafeEnvironmentPlanExpirationDate,customPhysicalExpirationDate,customDentalExpirationDate,customVisionExpirationDate,customSexualAbuseAwareness&PreventionExpirationDate,customMedicationTechnicianCertificateExpirationDate");
-        $bhr = new BambooAPI("clhmentalhealth");
-        $bhr->setSecretKey("40d056dd98d048b1d50c46392c77bd2bbbf0431f");
-        //$response = $bhr->getDirectory();
-        $getExpTabData = $bhr->getEmployee($empId, $expFieldsArray);
-        if($getExpTabData->isError()) {
-            trigger_error("Error communicating with BambooHR: " . $getExpTabData->getErrorMessage());
-        }
-
-        $getEmployeeExpData = $getExpTabData->getContent();
-        $employeeJobTabData = json_encode($getEmployeeExpData);       
-        $empExpTabArray = json_decode($employeeJobTabData, true);
-        $params = "Driver's License Expiration Date,Driver's Insurance Expiration Date,Driving Record Expiration Date
-        ,Professional License Expiration Date,First Aid/CPR Expiration Date,TACT II/Behavioral Interventions Training Expiration Date,TB Test Results Expiration Date,Professional Liability Insurance Expiration Date,Other Professional License Expiration Date,RCYCP Certification Expiration Date,DEA License Expiration Date,Psychiatric Nurse Practitioner Certification Expiration Date,CDS Registration Expiration Date,NPDB Query Expiration Date,JCAHO/Annual Trainings Expiration Date,72 Hour Treatment Plan Expiration Date,30 Day Treatment Plan Expiration Date,90 Day Treatment Plan Expiration Date,Psych Evaluation Expiration Date,Safe Environment Plan Expiration Date,Physical Expiration Date,Dental Expiration Date,Vision Expiration Date,Sexual Abuse Awareness & Prevention Expiration Date,Medication Technician Certificate Expiration Date";
-        $empKeyArr = explode(',', $params);
-        $trackerData = [];
-        if(count($empExpTabArray) > 0){     
-            if (isset($empExpTabArray['field'])) {
-                foreach($empExpTabArray['field'] as $key=> $field){
-                   
-                    
-                    $trackerData[$empKeyArr[$key]]= $field;            
-                }
-            }
-        }
-
-       // $dates = $this->checkIfDateIsExpired($trackerData);
-        
-        dump($trackerData); dd();
-    }
-
+    /**THIS METHOD RUNS to get the dates that are
+     * GOING TO EXPIRE
+     * ALREADY EXPIRED
+     * According to the role/department
+     */
     private function getDateTrackers($empId, $trackerType){
         $expFieldsArray = [];
         $params = '';
@@ -360,7 +424,11 @@ class EmployeeController extends Controller
             break;
             case "Annual_Evaluation":
                 $expFieldsArray = array("customAnnualEvaluationExpirationDate,customJCAHO/AnnualTrainingsExpirationDate");
-                $params = "Annual_Evaluation_expiration,JCAHO_Annual_Trainings_expiration";
+                $params = "Annual_Evaluation_expiration,JCAHO_Annual_Trainings_expirationJCAHO";
+            break;
+            case "Annual_EvaluationJC":
+                $expFieldsArray = array("customAnnualEvaluationExpirationDate,customJCAHO/AnnualTrainingsExpirationDate");
+                $params = "Annual_Evaluation_expiration,JCAHO_Annual_Trainings_expirationJCAHO";
             break;
             case "72_Hour_Treatment_Plan":
                 $expFieldsArray = array("custom72HourTreatmentPlanIssuanceDate,custom72HourTreatmentPlanExpirationDate");
@@ -419,11 +487,12 @@ class EmployeeController extends Controller
         
         $empKeyArr = explode(',', $params);
         $trackerData = [];
+        $annualJC_array = [];
         // Get today's date
         $today = Carbon::now()->startOfDay();
         if(count($empExpTabArray) > 0){     
             if (isset($empExpTabArray['field'])) {
-                $trackerData['type'] = $trackerType;
+                $trackerData['type'] = $trackerType;                
                 foreach($empExpTabArray['field'] as $key=> $field){    
                     $keyName =  explode('_', $empKeyArr[$key]);
                     $keyName = end($keyName);
@@ -431,7 +500,7 @@ class EmployeeController extends Controller
                     $trackerData['status'] = 'ACTIVE';
                     if ($field == '0000-00-00') {
                         $trackerData['status'] = 'NODATE';
-                    } else if($keyName == 'expiration') {
+                    } else if($keyName == 'expiration' || $keyName == 'expirationJCAHO') {
                         // Convert the given date string into a Carbon instance
                         $date = Carbon::createFromFormat('Y-m-d', $field)->startOfDay();
 
@@ -447,44 +516,20 @@ class EmployeeController extends Controller
                         }
                     }
                 }
+                if($trackerData['type'] == 'Annual_Evaluation' ){ 
+                    $trackerData['issuance'] = "0000-00-00";                    
+                    
+                }else if($trackerData['type'] == 'Annual_EvaluationJC' ){                    
+                        $trackerData['type'] = 'JCAHO';
+                        $trackerData['issuance'] = '0000-00-00';
+                        $trackerData['expiration'] = $trackerData['expirationJCAHO'];
+                    
+                }
             }
         }
         return $trackerData;
     }
 
-    private function checkIfDateIsExpired($trackerData){
-        $datesArr = [];
-        foreach($trackerData as $key => $trackerDate){
-            //dump($key);dd('---');
-            $currentDate = date("Y-m-d"); // Get today's date in the same format
-            
-            
-            if ($trackerDate != '0000-00-00') { // we will not consider the empty input values from tracker TAB
-                /**---------------------------------------- */
-                // Get today's date
-                $today = Carbon::now()->startOfDay();
-
-                // Convert the given date string into a Carbon instance
-                $date = Carbon::createFromFormat('Y-m-d', $trackerDate)->startOfDay();
-
-                // Calculate the difference between today's date and the given date
-                $differenceInDays = $today->diffInDays($date, false);
-
-                if ($differenceInDays > 0) {
-                    // Date is already expired
-                    $datesArr['expired'][$key] = $trackerDate;
-                } elseif ($differenceInDays >= 15 && $differenceInDays <= 30) {
-                    // Date is going to expire within the next 15 to 30 days
-                    $datesArr['gng_to_expire'][$key] = $trackerDate;
-                } else {
-                    // Date is not expired and not going to expire within the next 15 to 30 days
-                    $datesArr['not_expired'][$key] = $trackerDate;
-                }
-            }
-        }
-        dump($datesArr);
-       // return $datesArr; 
-    }
 
     public function employeEmptyFieldsCount($empId){
         $colorBClass = $colorPClass = '';
