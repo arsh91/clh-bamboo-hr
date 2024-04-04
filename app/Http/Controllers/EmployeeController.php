@@ -134,6 +134,8 @@ class EmployeeController extends Controller
                 $expDateTracker[] = $this->getDateTrackers($empId, 'First_Aid');
                 $expDateTracker[] = $this->getDateTrackers($empId, 'TB_Test');
                 $expDateTracker[] = $this->getDateTrackers($empId, 'Professional_Liability');
+                $expDateTracker[] = $this->getDateTrackers($empId, 'Annual_EvaluationJC');
+                $expDateTracker[] = $this->getDateTrackers($empId, 'Annual_Evaluation');
                 $expDateTracker[] = $this->getDateTrackers($empId, 'Sexual_Abuse_Awareness');
             }
         }else if($empDepartment == env('DEPARTMENT_OMHC')){
