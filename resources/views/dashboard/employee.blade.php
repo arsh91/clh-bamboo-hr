@@ -7,6 +7,7 @@
 }
 .EXPIRED-class, .NODATE-class{
   background-color: red;
+  color:#ffffff;
 }
 .GETTINGEXPIRE-class{
   background-color: yellow;
