@@ -115,8 +115,8 @@ class EmployeeController extends Controller
        //get the empty fields array from JOB tab of an employee
        $blankJobFields = $this->getJobBlankFields($empId);
        //FIRST CHECK DEPARTMENT
-       if($empDepartment == env('GROUP_HOME')){ //if department is `Residential Group Home` and jobtitle=
-            if($empJobInfo == env('JOBINFO_GROUP_HOME_CHILD_YOUTH')){ 
+       if($empDepartment == env('GROUP_HOME')){ //if department is `Residential Group Home` 
+            if($empJobInfo == env('JOBINFO_GROUP_HOME_CHILD_YOUTH')){ //Group Home Residential Child Youth Care Practitioner
                 $expDateTracker[] = $this->getDateTrackers($empId, 'License');
                 $expDateTracker[] = $this->getDateTrackers($empId, 'Insurance');
                 $expDateTracker[] = $this->getDateTrackers($empId, 'Record');
@@ -127,7 +127,7 @@ class EmployeeController extends Controller
                 $expDateTracker[] = $this->getDateTrackers($empId, 'Annual_Evaluation');
                 $expDateTracker[] = $this->getDateTrackers($empId, 'Annual_EvaluationJC');
                 $expDateTracker[] = $this->getDateTrackers($empId, 'Sexual_Abuse_Awareness');
-            }else if($empJobInfo == env('JOBINFO_GROUP_HOME_YOUTH')){
+            }else if($empJobInfo == env('JOBINFO_GROUP_HOME_YOUTH')){ //Group Home Youth	
                 $expDateTracker[] = $this->getDateTrackers($empId, '72_Hour_Treatment_Plan');
                 $expDateTracker[] = $this->getDateTrackers($empId, '30_Day_Treatment_Plan');
                 $expDateTracker[] = $this->getDateTrackers($empId, '90_Day_Treatment_Plan');
@@ -138,7 +138,17 @@ class EmployeeController extends Controller
                 $expDateTracker[] = $this->getDateTrackers($empId, 'Vision');
             }
         }else if ($empDepartment == env('DEPARTMENT_PRP')){ //when the department is PRP and then division is `Family Care Coordinator`|| `Family Care Coordinator`
-            if($empDivision == env('DIVISION_PRP_COORD') || $empDivision == env('DIVISION_PRP_SPEC')){
+            if($empDivision == env('DIVISION_PRP_FAMILY_COORD')){
+                $expDateTracker[] = $this->getDateTrackers($empId, 'License');
+                $expDateTracker[] = $this->getDateTrackers($empId, 'Insurance');
+                $expDateTracker[] = $this->getDateTrackers($empId, 'Record');
+                $expDateTracker[] = $this->getDateTrackers($empId, 'First_Aid');
+                $expDateTracker[] = $this->getDateTrackers($empId, 'TB_Test');
+                $expDateTracker[] = $this->getDateTrackers($empId, 'Professional_Liability');
+                $expDateTracker[] = $this->getDateTrackers($empId, 'Annual_EvaluationJC');
+                $expDateTracker[] = $this->getDateTrackers($empId, 'Annual_Evaluation');
+                $expDateTracker[] = $this->getDateTrackers($empId, 'Sexual_Abuse_Awareness');
+            }else if($empDivision == env('DIVISION_PRP_COORDINATOR_SPEC')){ //specialist
                 $expDateTracker[] = $this->getDateTrackers($empId, 'License');
                 $expDateTracker[] = $this->getDateTrackers($empId, 'Insurance');
                 $expDateTracker[] = $this->getDateTrackers($empId, 'Record');
