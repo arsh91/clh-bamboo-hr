@@ -46,7 +46,7 @@ Route::group(['middleware' => ['auth']], function() {
             Route::get('/employee/{id}', [EmployeeController::class, 'employeDetail'])->name('employees.detail');
 
             Route::get('/employee/row/{id}', [EmployeeController::class, 'employeEmptyFieldsCount'])->name('employees.emptyFieldCount');
-            
+            Route::get('/employee/row/timetracker/{id}', [EmployeeController::class, 'employeTimetracker'])->name('employees.timetracker');
         });
         //Ends Protected Routes For Admin
 

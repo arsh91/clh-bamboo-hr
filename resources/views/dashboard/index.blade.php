@@ -154,10 +154,25 @@ $(document).ready(function() {
             });
         }
 
+        function fetchTimeTrackerRowData(rowId) {
+            $.ajax({
+                url: '/employee/row/timetracker/' + rowId, // Route to get data for a single row
+                method: 'GET',
+                success: function(response){
+                    // Handle the response, e.g., append data to a table row
+                    $('#row-' + rowId).html(response); // Assuming there's a row with id "row-{rowId}" in your HTML
+                },
+                error: function(xhr, status, error){
+                    console.error(error);
+                }
+            });
+        }
+
         // Iterate over each row and fetch data
         $('.employee-row').each(function(){
             var rowId = $(this).data('row-id'); // Assuming each row has a data attribute "data-row-id" containing the employee ID
-            fetchRowData(rowId);
+            // fetchRowData(rowId);
+            fetchTimeTrackerRowData(rowId);
         });
 });
 

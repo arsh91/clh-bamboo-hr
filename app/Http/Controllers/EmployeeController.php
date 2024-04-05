@@ -103,8 +103,6 @@ class EmployeeController extends Controller
             $empData[$empKeyArr[$key]]= $this->checkIfArray($field);            
         }
         $empData['ID'] = $empId;
-        //dump($empData);  dd('----');
-
         $empDivision = $empData['division'];
         $empDepartment = $empData['department'];
         $empJobInfo = $empData['jobTitle'];
@@ -172,14 +170,18 @@ class EmployeeController extends Controller
                 $expDateTracker[] = $this->getDateTrackers($empId, 'Annual_Evaluation');
                 $expDateTracker[] = $this->getDateTrackers($empId, 'Sexual_Abuse_Awareness');
                 $expDateTracker[] = $this->getDateTrackers($empId, 'National_Practitioner_Data_Bank');
-            }if($empJobInfo == env('JOBINFO_Intern_OMHC')){ //when the department is `OMHC;Substance Use Disorder (SUD)` and jobtitle is `INTERN`
+            }else if($empJobInfo == env('JOBINFO_Intern_OMHC')){ //when the department is `OMHC;Substance Use Disorder (SUD)` and jobtitle is `INTERN`
                 $expDateTracker[] = $this->getDateTrackers($empId, 'License');
                 $expDateTracker[] = $this->getDateTrackers($empId, 'Insurance');
                 $expDateTracker[] = $this->getDateTrackers($empId, 'Record');
                 $expDateTracker[] = $this->getDateTrackers($empId, 'First_Aid');
                 $expDateTracker[] = $this->getDateTrackers($empId, 'TB_Test');
                 $expDateTracker[] = $this->getDateTrackers($empId, 'Professional_Liability');
-
+            }else if($empJobInfo == env('JOBINFO_GROUP_SUBSTANCE_USE_DISORDER_COUNSELOR')){
+                $types = ['License', 'Insurance', 'Record', 'First_Aid', 'TB_Test', 'Professional_Liability', 'Professional_License', 'National_Practitioner_Data_Bank', 'Annual_EvaluationJC', 'Annual_Evaluation', 'Sexual_Abuse_Awareness'];
+                foreach ($types as $type) {
+                    $expDateTracker[$type] = $this->getDateTrackers($empId, $type);
+                }
             }
         }else if($empDepartment == env('DEPARTMENT_MENTAL_HEALTH_OMHC')){ //when department is OMHC and MENTAL HEALTH
             if($empJobInfo == env('JOBINFO_MENTAL_HEALTH_OMHC')){
@@ -298,7 +300,6 @@ class EmployeeController extends Controller
         $jobFieldsArray = array('hireDate,originalHireDate,ethnicity,eeo,customEmployeeNumber,customHourlyRate,customPersonalEmail,customHireDate');
         $bhr = new BambooAPI("clhmentalhealth");
         $bhr->setSecretKey("40d056dd98d048b1d50c46392c77bd2bbbf0431f");
-        //$response = $bhr->getDirectory();
         $getJobTabData = $bhr->getEmployee($empId, $jobFieldsArray);
         if($getJobTabData->isError()) {
             trigger_error("Error communicating with BambooHR: " . $getJobTabData->getErrorMessage());
@@ -620,4 +621,286 @@ class EmployeeController extends Controller
         }
         return $finalImage;
     }
+
+    public function employeTimetracker($empId){
+        $empId = '628';
+        $base64Image = '';
+        $expDateTracker = [];
+        // $empFieldsArray = array('jobTitle, department, division');
+        $empFieldsArray = array('jobTitle,department,division');
+
+        $bhr = new BambooAPI(env('YOUR_COMPANY_ID'));
+        $bhr->setSecretKey(env('YOUR_API_KEY'));
+        $getEmployee = $bhr->getEmployee($empId, $empFieldsArray);
+        if($getEmployee->isError()) {
+        trigger_error("Error communicating with BambooHR: " . $getEmployee->getErrorMessage());
+        }
+
+        $getEmployeeData = $getEmployee->getContent();
+          
+        $employeeData = json_encode($getEmployeeData);       
+        $dataArray = json_decode($employeeData, true);
+
+        $empDepartment = $dataArray['field'][1];
+        $empJobInfo = $dataArray['field'][0];
+        $empDivision = $dataArray['field'][2];
+        // dd($empDivision);
+
+        // dd($getEmployeeData);
+        $data = $this->getTimeTeackerData($empDepartment, $empJobInfo,$empDivision, $empId);
+
+            dd($data);
+
+    //     $colorBClass = $colorPClass = '';
+    //     $blankPersonalFields = $this->getPersonalBlankFields($empId);
+    //     $blankJobFields = $this->getJobBlankFields($empId);
+        // $getEmergencyContacts = $this->getEmergencyFields($empId);
+        // dd($getEmergencyContacts);
+    //     $blankEmergencyFields =$getEmergencyContacts['empty'];
+    //    // dump($blankEmergencyFields); dd('---------');
+    //     if( count($blankJobFields) > 0 ){
+    //         $colorBClass = 'color:red;';
+    //     }else if ( count($blankJobFields) == 0) {
+    //         $colorBClass = 'color:green;';
+    //     }
+                
+    //     if( count($blankPersonalFields) > 0 ){
+    //         $colorPClass = 'color:red;';
+    //     }else if ( count($blankPersonalFields) == 0) {
+    //         $colorPClass = 'color:green;';
+    //     }
+
+    //     if( count($blankEmergencyFields) > 0 ){
+    //         $colorEClass = 'color:red;';
+    //     }else if ( count($blankEmergencyFields) == 0) {
+    //         $colorEClass = 'color:green;';
+    //     }
+
+    //     $html = '<ul>';
+    //     $html .= '<li style="'.$colorPClass.'">Personal : '.count($blankPersonalFields).'</li>';
+    //     $html .= '<li style="'.$colorBClass.'">Job : '.count($blankJobFields).'</li>';
+    //     $html .= '<li style="'.$colorEClass.'">Emergency : '.count($blankEmergencyFields).'</li>';
+    //     $html .= '</ul>';
+    $html = '<div>djfdlkjghfjkdg<div>';
+        return $html;
+        //dump(count($blankPersonalFields)); dd('--');
+    }
+
+private function getTimeTeackerData($empDepartment,$empJobInfo, $empDivision,  $empId  ){
+    $expDateTracker = [];
+    $types = [];
+    if($empDepartment == env('GROUP_HOME')){  
+        if($empJobInfo == env('JOBINFO_GROUP_HOME_CHILD_YOUTH')){ 
+            $types = ['License', 'Insurance', 'Record', 'First_Aid', 'TB_Test', 'RCYCP_Certification', 'Tact_II', 'Annual_EvaluationJC', 'Annual_Evaluation', 'Sexual_Abuse_Awareness'];
+        }else if($empJobInfo == env('JOBINFO_GROUP_HOME_YOUTH')){	
+            $types = ['72_Hour_Treatment_Plan', '30_Day_Treatment_Plan', '90_Day_Treatment_Plan', 'Psych_Evaluation', 'Safe_Environment_Plan', 'Physical', 'Dental', 'Vision'];
+        }
+    }else if ($empDepartment == env('DEPARTMENT_PRP')){ 
+        if($empDivision == env('DIVISION_PRP_FAMILY_COORD')){
+            $types = ['License', 'Insurance', 'Record', 'First_Aid', 'TB_Test', 'Professional_Liability', 'Annual_EvaluationJC', 'Annual_Evaluation', 'Sexual_Abuse_Awareness'];
+        }else if($empDivision == env('DIVISION_PRP_COORDINATOR_SPEC')){ 
+            $types = ['License', 'Insurance', 'Record', 'First_Aid', 'TB_Test', 'Professional_Liability', 'Annual_EvaluationJC', 'Annual_Evaluation', 'Sexual_Abuse_Awareness'];
+        }
+    }else if($empDepartment == env('DEPARTMENT_OMHC')){
+        if($empJobInfo == env('JOBINFO_COOCCURING_OMHC')){
+            $types = ['License', 'Insurance', 'Record', 'First_Aid', 'TB_Test', 'Professional_Liability', 'Annual_EvaluationJC', 'Annual_Evaluation', 'Sexual_Abuse_Awareness', 'Professional_License', 'National_Practitioner_Data_Bank'];
+        }else if($empJobInfo == env('JOBINFO_Intern_OMHC')){ 
+            $types = ['License', 'Insurance', 'Record', 'First_Aid', 'TB_Test', 'Professional_Liability'];
+        }else if($empJobInfo == env('JOBINFO_GROUP_SUBSTANCE_USE_DISORDER_COUNSELOR')){
+            $types = ['License', 'Insurance', 'Record', 'First_Aid', 'TB_Test', 'Professional_Liability', 'Professional_License', 'National_Practitioner_Data_Bank', 'Annual_EvaluationJC', 'Annual_Evaluation', 'Sexual_Abuse_Awareness'];
+        }
+    }else if($empDepartment == env('DEPARTMENT_MENTAL_HEALTH_OMHC')){ 
+        if($empJobInfo == env('JOBINFO_MENTAL_HEALTH_OMHC')){
+            $types = ['License', 'Insurance', 'Record', 'First_Aid', 'TB_Test', 'Professional_Liability', 'Professional_License', 'National_Practitioner_Data_Bank', 'Annual_EvaluationJC', 'Annual_Evaluation', 'Sexual_Abuse_Awareness'];
+        }else if($empJobInfo == env('JOBINFO_Clinical_OMHC')){ 
+            $types = ['License', 'Insurance', 'Record', 'First_Aid', 'TB_Test', 'Professional_Liability', 'Professional_License', 'National_Practitioner_Data_Bank', 'Annual_EvaluationJC', 'Annual_Evaluation', 'Sexual_Abuse_Awareness'];
+        }else if($empJobInfo == env('JOBINFO_Nurse_Practitioner_OMHC')){  
+            $types = ['License', 'Insurance', 'Record', 'First_Aid', 'TB_Test', 'Professional_Liability', 'Professional_License', 'National_Practitioner_Data_Bank', 'Annual_EvaluationJC', 'Annual_Evaluation', 'Sexual_Abuse_Awareness', 'Psychiatric_Nurse_Practitioner_Certification', 'CDS_Registration', 'DEA_Registration'];
+        }
+    }
+    $count = [];
+    
+    if (is_array($types) && !empty($types)) {
+        foreach ($types as $type) {
+            if($this->getDateTrackersCount($empId, $type)){
+                $count[] = $this->getDateTrackersCount($empId, $type);
+            }
+        }
+
+        dd($count);
+    }
+    return $expDateTracker;
+}
+
+private function getDateTrackersCount($empId, $trackerType){
+    $return = false;
+    $expFieldsArray = [];
+    $params = '';
+    $counts = [
+        'expire' => 0,
+        'expire_soon' => 0
+    ];
+    switch($trackerType){
+        case 'License':
+            $expFieldsArray = array("customDriver'sLicenseIssuanceDate,customDriver'sLicenseExpirationDate");
+            $params = "driver_issuance,driver_expiration";
+        break;
+        case "Insurance":
+            $expFieldsArray = array("customDriver'sInsuranceIssuanceDate,customDriver'sInsuranceExpirationDate");
+            $params = "driver_insurance_issuance,driver_insurance_expiration";
+        break;
+        case "Record":
+            $expFieldsArray = array("customDrivingRecordIssuanceDate,customDrivingRecordExpirationDate");
+            $params = "record_issuance,record_expiration";
+        break;
+        case "Professional_License":
+            $expFieldsArray = array("customProfessionalLicenseIssuanceDate1,customProfessionalLicenseIssuanceDate");
+            $params = "professional_issuance,professional_expiration";
+        break;
+        case "First_Aid":
+            $expFieldsArray = array("customFirstAid/CPRIssuanceDate,customFirstAid/CPRExpirationDate");
+            $params = "firstaid_issuance,firstaid_expiration";
+        break;
+        case "Tact_II":
+            $expFieldsArray = array("customTactIIIssuanceDate,customTactIIExpirationDate");
+            $params = "tact_issuance,tact_expiration";
+        break;
+        case "TB_Test":
+            $expFieldsArray = array("customTBTestResultsDate,customTBTestResultsExpirationDate");
+            $params = "tbtest_issuance,tbtest_expiration";
+        break;
+        case "Professional_Liability":
+            $expFieldsArray = array("customProfessionalLiabilityInsuranceIssuanceDate,customProfessionalLiabilityInsuranceExpirationDate");
+            $params = "liability_issuance,liability_expiration";
+        break;
+        case "Other_Professional_License":
+            $expFieldsArray = array("customOtherProfessionalLicenseIssuanceDate,customOtherProfessionalLicenseExpirationDate");
+            $params = "other_professional_issuance,liability_professional_expiration";
+        break;
+        case "RCYCP_Certification":
+            $expFieldsArray = array("customRCYCPCertificationIssuanceDate,customRCYCPCertificationExpirationDate");
+            $params = "RCYCP_certification_issuance,RCYCP_certification_expiration";
+        break;
+        case "DEA_Registration":
+            $expFieldsArray = array("customDEALicenseIssuanceDate,customDEALicenseExpirationDate");
+            $params = "DEA_registration_issuance,DEA_registration_expiration";
+        break;
+        case "Psychiatric_Nurse_Practitioner_Certification":
+            $expFieldsArray = array("customPsychiatricNursePractitionerCertificationIssuanceDate,customPsychiatricNursePractitionerCertificationExpirationDate");
+            $params = "Psychiatric_Nurse_Practitioner_issuance,Psychiatric_Nurse_Practitioner_expiration";
+        break;
+        case "CDS_Registration":
+            $expFieldsArray = array("customCDSRegistrationIssuanceDate,customCDSRegistrationExpirationDate");
+            $params = "CDS_Registration_issuance,CDS_Registration_expiration";
+        break;
+        case "National_Practitioner_Data_Bank":
+            $expFieldsArray = array("customNPDBQueryDate,customNPDBQueryExpirationDate");
+            $params = "National_Practitioner_Data_issuance,National_Practitioner_Data_expiration";
+        break;
+        case "Annual_Evaluation":
+            $expFieldsArray = array("customAnnualEvaluationExpirationDate,customJCAHO/AnnualTrainingsExpirationDate");
+            $params = "Annual_Evaluation_expiration,JCAHO_Annual_Trainings_expirationJCAHO";
+        break;
+        case "Annual_EvaluationJC":
+            $expFieldsArray = array("customAnnualEvaluationExpirationDate,customJCAHO/AnnualTrainingsExpirationDate");
+            $params = "Annual_Evaluation_expiration,JCAHO_Annual_Trainings_expirationJCAHO";
+        break;
+        case "72_Hour_Treatment_Plan":
+            $expFieldsArray = array("custom72HourTreatmentPlanIssuanceDate,custom72HourTreatmentPlanExpirationDate");
+            $params = "72_Hour_issuance,72_Hour_expiration";
+        break;
+        case "30_Day_Treatment_Plan":
+            $expFieldsArray = array("custom30DayTreatmentPlanIssuanceDate,custom30DayTreatmentPlanExpirationDate");
+            $params = "30_Day_Treatment_issuance,30_Day_Treatment_expiration";
+        break;
+        case "90_Day_Treatment_Plan":
+            $expFieldsArray = array("custom90DayTreatmentPlanIssuanceDate,custom90DayTreatmentPlanExpirationDate");
+            $params = "90_Day_Treatment_issuance,90_Day_Treatment_expiration";
+        break;
+        case "Psych_Evaluation":
+            $expFieldsArray = array("customPsychEvaluationIssuanceDate,customPsychEvaluationExpirationDate");
+            $params = "Psych_Evaluation_issuance,Psych_Evaluation_expiration";
+        break;
+        case "Safe_Environment_Plan":
+            $expFieldsArray = array("customSafeEnvironmentPlanIssuanceDate,customSafeEnvironmentPlanExpirationDate");
+            $params = "Safe_Environment_issuance,Safe_Environment_expiration";
+        break;
+        case "Physical":
+            $expFieldsArray = array("customPhysicalIssuanceDate,customPhysicalExpirationDate");
+            $params = "Physical_issuance,Physical_expiration";
+        break;
+        case "Dental":
+            $expFieldsArray = array("customDentalIssuanceDate,customDentalExpirationDate");
+            $params = "Dental_issuance,Dental_expiration";
+        break;
+        case "Vision":
+            $expFieldsArray = array("customVisionIssuanceDate,customVisionExpirationDate");
+            $params = "Vision_issuance,Vision_expiration";
+        break;
+        case "Sexual_Abuse_Awareness":
+            $expFieldsArray = array("customSexualAbuseAwareness&PreventionIssuanceDate,customSexualAbuseAwareness&PreventionExpirationDate");
+            $params = "Sexual_Abuse_Awareness_issuance,Sexual_Abuse_Awareness_expiration";
+        break;
+        case "Medication_Technician_Certificate":
+            $expFieldsArray = array("customMedicationDateTracker,customMedicationTechnicianCertificateExpirationDate");
+            $params = "Medication_Technician_issuance,Medication_Technician_expiration";
+        break;
+    }        
+
+    
+    $bhr = new BambooAPI("clhmentalhealth");
+    $bhr->setSecretKey("40d056dd98d048b1d50c46392c77bd2bbbf0431f");
+    //$response = $bhr->getDirectory();
+    $getExpTabData = $bhr->getEmployee($empId, $expFieldsArray);
+    if($getExpTabData->isError()) {
+        trigger_error("Error communicating with BambooHR: " . $getExpTabData->getErrorMessage());
+    }
+
+    $getEmployeeExpData = $getExpTabData->getContent();
+    $employeeJobTabData = json_encode($getEmployeeExpData);       
+    $empExpTabArray = json_decode($employeeJobTabData, true);
+    $today = Carbon::now()->startOfDay();
+    $secondDates = [];
+    if(count($empExpTabArray) > 0){   
+
+        foreach ($empExpTabArray as $type => $data) {
+            dump($data);
+
+            if (isset($data['field'][1])) {
+                $return = $data['field'][1];
+
+
+            }
+
+        }
+
+        // $expired = [];
+        // $expireSoon = [];
+        // foreach ($secondDates as $date) {
+        //     $expirationDate = Carbon::createFromFormat('Y-m-d', $date)->startOfDay();
+
+        //     // Calculate the difference between today's date and the given date
+        //     $differenceInDays = $today->diffInDays($date, false);
+
+        //     if ($differenceInDays < 0) {
+        //         // Date is already expired
+        //         $expired[] = $expirationDate->toDateString();
+        //         $counts['expire']++;
+        //     } elseif ($differenceInDays >= 15 && $differenceInDays <= 30) {
+        //         // Date is going to expire within the next 15 to 30 days
+        //         $expireSoon[] = $expirationDate->toDateString();
+        //         $counts['expire_soon']++;
+        //     }
+        // }
+        
+
+        // echo "Expired: " . implode(", ", $counts) . "\n";
+        // echo "Expire soon: " . implode(", ", $expireSoon) . "\n";
+    dump($return);
+
+
+    }
+
+    return $return;
+}
 }
