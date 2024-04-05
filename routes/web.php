@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\DocumentController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -47,6 +48,10 @@ Route::group(['middleware' => ['auth']], function() {
 
             Route::get('/employee/row/{id}', [EmployeeController::class, 'employeEmptyFieldsCount'])->name('employees.emptyFieldCount');
             
+            /**ROUTES FOR EMPLOYEE DOCUMENTS */ 
+            Route::get('/employee/documents/{id}', [DocumentController::class, 'listEmplyeeDocuments'])->name('employees.documents');
+        
+        
         });
         //Ends Protected Routes For Admin
 
