@@ -41,12 +41,13 @@
                                                 @foreach($employeeFieldsIndexes as $key => $fields)
                                                 <th scope="col">{{ucfirst($key)}}</th>
                                                 @endforeach
+                                                <th>Blank Fields</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             @foreach($empMainArr as $key => $fields)
-                                                <tr>
-                                                    
+                                                <tr class="employee-row" data-row-id="{{ $fields['ID'] }}" data-department="{{ $fields['department'] }}" data-division="{{ $fields['division'] }}" data-jobinfo="{{ $fields['jobTitle'] }}">
+                                                
                                                     <td><a href="{{ route('employees.detail', $fields['ID']) }}">{{$fields['ID']}}</a>      </td>
                                                     <td><?php print_r($fields['photo']); ?></td>
                                                     <td>{{$fields['firstname']}}</td>
@@ -55,6 +56,20 @@
                                                     <td>{{$fields['email']}}</td>
                                                     <td>{{$fields['department']}}</td>
                                                     <td>{{$fields['manager']}}</td>
+                                                    <td>{{$fields['jobTitle']}}</td>
+                                                    <td>{{$fields['division']}}</td>
+                                                    <td id="row-{{ $fields['ID'] }}">
+                                                        <span class="job-{{ $fields['ID'] }}"> <div class="spinner-border" role="status">
+                                                            <span class="visually-hidden">Loading...</span>
+                                                            </div></span>
+                                                        <span class="tracker-{{ $fields['ID'] }}"> <div class="spinner-border" role="status">
+                                                            <span class="visually-hidden">Loading...</span>
+                                                            </div></span>
+
+                                                        <div class="d-flex justify-content-center">
+                                                           
+                                                        </div>
+                                                    </td>
                                                 </tr>
                                             @endforeach
                                             <?php
@@ -75,6 +90,7 @@
                                         </tbody>
                                     </table>
                                 </div>
+                                <input type="hidden" name="json_ids" id="empIdsAr" value="{{$empIdsAr}}">
                             </div>
                             <!-- End Table with stripped rows -->
                         </div>
@@ -126,7 +142,77 @@ $(document).ready(function() {
             // Hide the button
             $('.btn-success').hide();
         }
+    
+
+        
     });
+    //Will show empty field counts here from different tabs
+    function fetchRowData(rowId) {
+            $.ajax({
+                url: '/employee/row/' + rowId, // Route to get data for a single row
+                method: 'GET',
+                success: function(response){
+                    // Handle the response, e.g., append data to a table row
+                    $('.job-' + rowId).html(response); // Assuming there's a row with id "row-{rowId}" in your HTML
+                },
+                error: function(xhr, status, error){
+                    console.error(error);
+                }
+            });
+        }
+
+        function fetchTimeTrackerRowData(rowId, division, department, jobInfo) {
+            $.ajax({
+                url: '/employee/row/timetracker/' + rowId, 
+                method: 'POST',
+        headers: {
+            'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+        },
+        data: {
+            division: division,
+            department: department,
+            jobInfo: jobInfo
+        },
+   
+                success: function(response){
+                    // Handle the response, e.g., append data to a table row
+                    $('.tracker-' + rowId).html(response); // Assuming there's a row with id "row-{rowId}" in your HTML
+                },
+                error: function(xhr, status, error){
+                    console.error(error);
+                }
+            });
+        }
+
+        // Iterate over each row and fetch data
+        // $('.employee-row').each(function(){
+        //     var rowId = $(this).data('row-id'); 
+        //     var division = $(this).data('division'); 
+        //     var jobInfo = $(this).data('jobinfo'); 
+        //     var department = $(this).data('department'); 
+        //      fetchRowData(rowId);
+        //     fetchTimeTrackerRowData(rowId, division, department, jobInfo);
+        // });
+
+        function fetchDataForVisibleRows() {
+                table.rows({page: 'current'}).nodes().each(function (node, index) {
+                    var rowId = $(node).data('row-id');
+                    var division = $(node).data('division');
+                    var jobInfo = $(node).data('jobinfo');
+                    var department = $(node).data('department');
+
+                    fetchRowData(rowId);
+                    fetchTimeTrackerRowData(rowId, division, department, jobInfo);
+                });
+            }
+
+            // Fetch data for visible rows when the page changes
+            table.on('draw', function () {
+                fetchDataForVisibleRows();
+            });
+
+            // Initial fetch for the visible rows on page load
+            fetchDataForVisibleRows();
 });
 
 

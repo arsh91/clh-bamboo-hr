@@ -5,7 +5,16 @@
 .highlight {
     background-color: yellow; /* Set the background color to yellow */
 }
-
+.EXPIRED-class, .NODATE-class{
+  background-color: red;
+  color:#ffffff;
+}
+.GETTINGEXPIRE-class{
+  background-color: yellow;
+}
+/* .ACTIVE-class{
+  background-color: green;
+} */
 </style>
 
 <section class="section profile">
@@ -155,17 +164,13 @@
                           <tr>
                             <th scope="col">Name</th>
                             <th scope="col">Relationship</th>
-                            <th scope="col">homePhone</th>
                             <th scope="col">addressLine1</th>
-                            <th scope="col">addressLine2	</th>
-                            <th scope="col">mobilePhone	</th>
                             <th scope="col">email	</th>
                             <th scope="col">zipcode	</th>
                             <th scope="col">city	</th>
                             <th scope="col">state	</th>
                             <th scope="col">country	</th>
                             <th scope="col">workPhone	</th>
-                            <th scope="col">workPhoneExtension	</th>
                             <th scope="col">primaryContact	</th>
                           </tr>
                         </thead>
@@ -202,6 +207,116 @@
 
         </div>
       </div>
+      <div class="row">
+        <div class="card">
+          <div class="card-body"> 
+            <h5 class="card-title">Blank Fields</h5>           
+            <ul class="nav nav-tabs nav-tabs-bordered" id="myTabjustified" role="tablist">
+                <li class="nav-item flex-fill" role="presentation">
+                  <button class="nav-link w-100 active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home-justified" type="button" role="tab" aria-controls="home" aria-selected="true">Personal</button>
+                </li>
+                <li class="nav-item flex-fill" role="presentation">
+                  <button class="nav-link w-100" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile-justified" type="button" role="tab" aria-controls="profile" aria-selected="false" tabindex="-1">Job</button>
+                </li>
+                <li class="nav-item flex-fill" role="presentation">
+                  <button class="nav-link w-100" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact-justified" type="button" role="tab" aria-controls="contact" aria-selected="false" tabindex="-1">Emergency</button>
+                </li>
+              </ul>
+              <div class="tab-content pt-2" id="myTabjustifiedContent">
+                <div class="tab-pane fade active show" id="home-justified" role="tabpanel" aria-labelledby="home-tab">
+                  <div class="row">
+                    <div class="col-lg-6">                      
+                      <h5 class="card-title">Personal Blank Fields</h5>
+                      <ul class="list-group">
+                        @if(!empty($blankPersonalFields))
+                        @foreach($blankPersonalFields as $key=> $blankFields)
+                        <li class="list-group-item">
+                          {{$blankFields}}
+                        </li>
+                        @endforeach
+                        @else
+                          <p>No Blank Field Found In Personal Tab.</p>
+                        @endif
+                      </ul>
+                    </div>
+                  </div><!--##row-->
+                </div>
+                <div class="tab-pane fade" id="profile-justified" role="tabpanel" aria-labelledby="profile-tab">
+                  <div class="row">
+                    <div class="col-lg-6">                      
+                      <h5 class="card-title">Job Blank Fields</h5>
+                      <ul class="list-group">
+                        @if(!empty($blankJobFields))
+                        @foreach($blankJobFields as $key=> $blankFields)
+                        <li class="list-group-item">
+                          {{$blankFields}}
+                        </li>
+                        @endforeach
+                        @else
+                          <p>No Blank Field Found.</p>
+                        @endif
+                      </ul>
+                    </div>
+                  </div><!--##row-->
+                </div>
+                <div class="tab-pane fade" id="contact-justified" role="tabpanel" aria-labelledby="contact-tab">
+                  <div class="row">
+                    <div class="col-lg-6">                      
+                      <h5 class="card-title">Emergency Blank Fields</h5>
+                      <ul class="list-group">
+                        @if(!empty($emptyEmeregencyFields))
+                        @foreach($emptyEmeregencyFields as $key=> $val)
+                        <li class="list-group-item">
+                          {{$val}}
+                        </li>
+                        @endforeach
+                        @else
+                          <p>No emergency contacts have been added for this employee.</p>
+                        @endif
+                      </ul>
+                    </div>
+                  </div><!--##row-->                  
+                </div>
+              </div><!--#tab content-->
+              
+          </div>
+        </div>
+      </div>
+      <!---SHOW THE Expire Date tracker data--->
+      <div class="row">
+        <div class="card">
+          <div class="card-body"> 
+            <h5 class="card-title">Expiration Date Tracker</h5>
+            <!-- Table with hoverable rows -->
+              <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th scope="col">Type</th>
+                    <th scope="col">Issue Date</th>                            
+                    <th scope="col">Expire Date</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  
+                  @if(!empty($expDateTracker))
+                    @foreach($expDateTracker as $key=> $dateTracker)
+                    <tr class="{{ $dateTracker['status'] }}-class">
+                      <td>{{ $dateTracker['type'] }}</td>
+                      <td>{{ $dateTracker['issuance'] }}</td>
+                      <td>{{ $dateTracker['expiration'] }}</td>
+                    </tr>
+                    @endforeach
+                    @else
+                      <tr><td colpan="4">No records found for the employee.</td></tr>
+                    @endif
+                                            
+                </tbody>
+              </table>
+              <!-- End Table with hoverable rows -->
+          </div>
+        </div>
+      </div><!--##row3-->
+      <!---##Date tracker--->
     </section>
 @endsection
 @section('custom_js')
