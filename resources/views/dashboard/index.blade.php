@@ -17,7 +17,7 @@
                 <!-- Employee related tabs -->
                 <div class="container mt-5">
                     <!-- Bootstrap Tabs -->
-                    <ul class="nav nav-tabs d-flex" id="myTabjustified" role="tablist">
+                    <!-- <ul class="nav nav-tabs d-flex" id="myTabjustified" role="tablist">
                         <li class="nav-item flex-fill" role="presentation">
                             <button class="nav-link w-100 active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home-justified" type="button" role="tab" aria-controls="home" aria-selected="false" tabindex="-1">Employee's Information</button>
                         </li>
@@ -27,11 +27,11 @@
                         <li class="nav-item flex-fill" role="presentation">
                             <button class="nav-link w-100" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact-justified" type="button" role="tab" aria-controls="contact" aria-selected="false" tabindex="-1">Training Overview From TalentLMS</button>
                         </li>
-                    </ul>
+                    </ul> -->
 
                     <!-- Tab content -->
-                    <div class="tab-content pt-2" id="myTabjustifiedContent">
-                        <div class="tab-pane fade active show" id="home-justified" role="tabpanel" aria-labelledby="home-tab">
+                    <!-- <div class="tab-content pt-2" id="myTabjustifiedContent"> -->
+                        <!-- <div class="tab-pane fade active show" id="home-justified" role="tabpanel" aria-labelledby="home-tab"> -->
                             <!-- Table with stripped rows -->
                             <div class="box-header with-border" id="filter-box">
                                 <div class="box-body table-responsive" style="margin-bottom: 5%">
@@ -94,14 +94,14 @@
                                 <input type="hidden" name="json_ids" id="empIdsAr" value="{{$empIdsAr}}">
                             </div>
                             <!-- End Table with stripped rows -->
-                        </div>
-                        <div class="tab-pane fade" id="profile-justified" role="tabpanel" aria-labelledby="profile-tab">
+                        <!-- </div> -->
+                        <!-- <div class="tab-pane fade" id="profile-justified" role="tabpanel" aria-labelledby="profile-tab">
                             We will show blank data here
                         </div>
                         <div class="tab-pane fade" id="contact-justified" role="tabpanel" aria-labelledby="contact-tab">
                             Other Information
-                        </div>
-                    </div>
+                        </div> -->
+                    <!-- </div> -->
                 </div>
                 <!-- End Employee Tabs -->
                 @endif

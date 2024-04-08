@@ -635,35 +635,18 @@ class EmployeeController extends Controller
          $empDivision = $request->input('division');
          $empDepartment = $request->input('department');
          $empJobInfo = $request->input('jobInfo');
-        //  dd($department);
-        // $empId = '628';
-        // $empFieldsArray = array('jobTitle,department,division');
-
-        // $bhr = new BambooAPI(env('YOUR_COMPANY_ID'));
-        // $bhr->setSecretKey(env('YOUR_API_KEY'));
-        // $getEmployee = $bhr->getEmployee($empId, $empFieldsArray);
-        // if($getEmployee->isError()) {
-        // trigger_error("Error communicating with BambooHR: " . $getEmployee->getErrorMessage());
-        // }
-
-        // $getEmployeeData = $getEmployee->getContent();
-          
-        // $employeeData = json_encode($getEmployeeData);       
-        // $dataArray = json_decode($employeeData, true);
-
-        // $empDepartment = $dataArray['field'][1];
-        // $empJobInfo = $dataArray['field'][0];
-        // $empDivision = $dataArray['field'][2];
         $data = $this->getTimeTrackerData($empDepartment, $empJobInfo,$empDivision, $empId);
-        $html = '<ul>';
+        $html = '';
+        if($data['expire'] > 0 ||  $data['expire'] > 0){
         if($data['expire'] > 0){
-            
             $html .= '<span class="badge bg-danger">Expire : '.$data['expire'].'</span>';
         }
         if($data['expire_soon'] > 0){
             $html .= '<span class="badge bg-warning text-dark">Going to Expire : '.$data['expire_soon'].'</span>';
         }
-        $html .= '</ul>';
+    }else{
+        $html .= '<span class="badge bg-success">No Expire date </span>';
+    }
         return $html;
     }
 
