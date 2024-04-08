@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Services\BambooHrService;
 use \BambooHR\API\BambooAPI;
 use Carbon\Carbon;
-
+use Illuminate\Http\Request;
 
 class EmployeeController extends Controller
 {
@@ -622,73 +622,48 @@ class EmployeeController extends Controller
         return $finalImage;
     }
 
-    public function employeTimetracker($empId){
-        $empId = '628';
-        $base64Image = '';
-        $expDateTracker = [];
-        // $empFieldsArray = array('jobTitle, department, division');
-        $empFieldsArray = array('jobTitle,department,division');
+    public function employeTimetracker($empId, Request $request){
+         $empDivision = $request->input('division');
+         $empDepartment = $request->input('department');
+         $empJobInfo = $request->input('jobInfo');
+        //  dd($department);
+        // $empId = '628';
+        // $empFieldsArray = array('jobTitle,department,division');
 
-        $bhr = new BambooAPI(env('YOUR_COMPANY_ID'));
-        $bhr->setSecretKey(env('YOUR_API_KEY'));
-        $getEmployee = $bhr->getEmployee($empId, $empFieldsArray);
-        if($getEmployee->isError()) {
-        trigger_error("Error communicating with BambooHR: " . $getEmployee->getErrorMessage());
-        }
+        // $bhr = new BambooAPI(env('YOUR_COMPANY_ID'));
+        // $bhr->setSecretKey(env('YOUR_API_KEY'));
+        // $getEmployee = $bhr->getEmployee($empId, $empFieldsArray);
+        // if($getEmployee->isError()) {
+        // trigger_error("Error communicating with BambooHR: " . $getEmployee->getErrorMessage());
+        // }
 
-        $getEmployeeData = $getEmployee->getContent();
+        // $getEmployeeData = $getEmployee->getContent();
           
-        $employeeData = json_encode($getEmployeeData);       
-        $dataArray = json_decode($employeeData, true);
+        // $employeeData = json_encode($getEmployeeData);       
+        // $dataArray = json_decode($employeeData, true);
 
-        $empDepartment = $dataArray['field'][1];
-        $empJobInfo = $dataArray['field'][0];
-        $empDivision = $dataArray['field'][2];
-        // dd($empDivision);
-
-        // dd($getEmployeeData);
-        $data = $this->getTimeTeackerData($empDepartment, $empJobInfo,$empDivision, $empId);
-
-            dd($data);
-
-    //     $colorBClass = $colorPClass = '';
-    //     $blankPersonalFields = $this->getPersonalBlankFields($empId);
-    //     $blankJobFields = $this->getJobBlankFields($empId);
-        // $getEmergencyContacts = $this->getEmergencyFields($empId);
-        // dd($getEmergencyContacts);
-    //     $blankEmergencyFields =$getEmergencyContacts['empty'];
-    //    // dump($blankEmergencyFields); dd('---------');
-    //     if( count($blankJobFields) > 0 ){
-    //         $colorBClass = 'color:red;';
-    //     }else if ( count($blankJobFields) == 0) {
-    //         $colorBClass = 'color:green;';
-    //     }
-                
-    //     if( count($blankPersonalFields) > 0 ){
-    //         $colorPClass = 'color:red;';
-    //     }else if ( count($blankPersonalFields) == 0) {
-    //         $colorPClass = 'color:green;';
-    //     }
-
-    //     if( count($blankEmergencyFields) > 0 ){
-    //         $colorEClass = 'color:red;';
-    //     }else if ( count($blankEmergencyFields) == 0) {
-    //         $colorEClass = 'color:green;';
-    //     }
-
-    //     $html = '<ul>';
-    //     $html .= '<li style="'.$colorPClass.'">Personal : '.count($blankPersonalFields).'</li>';
-    //     $html .= '<li style="'.$colorBClass.'">Job : '.count($blankJobFields).'</li>';
-    //     $html .= '<li style="'.$colorEClass.'">Emergency : '.count($blankEmergencyFields).'</li>';
-    //     $html .= '</ul>';
-    $html = '<div>djfdlkjghfjkdg<div>';
+        // $empDepartment = $dataArray['field'][1];
+        // $empJobInfo = $dataArray['field'][0];
+        // $empDivision = $dataArray['field'][2];
+        $data = $this->getTimeTrackerData($empDepartment, $empJobInfo,$empDivision, $empId);
+        $html = '<ul>';
+        if($data['expire'] > 0){
+            
+            $html .= '<li style="color:red;" >Expire : '.$data['expire'].'</li>';
+        }
+        if($data['expire_soon'] > 0){
+            $html .= '<li style="color:red;" >Expire Soon : '.$data['expire_soon'].'</li>';
+        }
+        $html .= '</ul>';
         return $html;
-        //dump(count($blankPersonalFields)); dd('--');
     }
 
-private function getTimeTeackerData($empDepartment,$empJobInfo, $empDivision,  $empId  ){
-    $expDateTracker = [];
+private function getTimeTrackerData($empDepartment,$empJobInfo, $empDivision,  $empId  ){
     $types = [];
+    $counts = [
+        'expire' => 0,
+        'expire_soon' => 0
+    ];
     if($empDepartment == env('GROUP_HOME')){  
         if($empJobInfo == env('JOBINFO_GROUP_HOME_CHILD_YOUTH')){ 
             $types = ['License', 'Insurance', 'Record', 'First_Aid', 'TB_Test', 'RCYCP_Certification', 'Tact_II', 'Annual_EvaluationJC', 'Annual_Evaluation', 'Sexual_Abuse_Awareness'];
@@ -718,28 +693,41 @@ private function getTimeTeackerData($empDepartment,$empJobInfo, $empDivision,  $
             $types = ['License', 'Insurance', 'Record', 'First_Aid', 'TB_Test', 'Professional_Liability', 'Professional_License', 'National_Practitioner_Data_Bank', 'Annual_EvaluationJC', 'Annual_Evaluation', 'Sexual_Abuse_Awareness', 'Psychiatric_Nurse_Practitioner_Certification', 'CDS_Registration', 'DEA_Registration'];
         }
     }
-    $count = [];
+    $allDateCount = [];
     
     if (is_array($types) && !empty($types)) {
         foreach ($types as $type) {
             if($this->getDateTrackersCount($empId, $type)){
-                $count[] = $this->getDateTrackersCount($empId, $type);
+                $allDateCount[] = $this->getDateTrackersCount($empId, $type);
+            }
+            // dd($this->getDateTrackersCount($empId, $type));
+        }
+        // $allDateCount =  [ 
+        //  "2024-2-20",
+        //     "2024-04-28",
+        //     "2024-05-25",
+        //      "2025-01-31",
+        // "2025-05-13"
+        // ];
+        
+        $today = Carbon::now()->startOfDay();
+        if(count($counts)> 0){
+        foreach ($allDateCount as $date) {
+            $differenceInDays = $today->diffInDays($date, false);
+            if ($differenceInDays < 0) {
+                $counts['expire']++;
+            } elseif ($differenceInDays >= 15 && $differenceInDays <= 30) {
+                $counts['expire_soon']++;
             }
         }
-
-        dd($count);
     }
-    return $expDateTracker;
+    }
+    return $counts;
 }
 
 private function getDateTrackersCount($empId, $trackerType){
     $return = false;
     $expFieldsArray = [];
-    $params = '';
-    $counts = [
-        'expire' => 0,
-        'expire_soon' => 0
-    ];
     switch($trackerType){
         case 'License':
             $expFieldsArray = array("customDriver'sLicenseIssuanceDate,customDriver'sLicenseExpirationDate");
@@ -859,46 +847,11 @@ private function getDateTrackersCount($empId, $trackerType){
     $getEmployeeExpData = $getExpTabData->getContent();
     $employeeJobTabData = json_encode($getEmployeeExpData);       
     $empExpTabArray = json_decode($employeeJobTabData, true);
-    $today = Carbon::now()->startOfDay();
-    $secondDates = [];
     if(count($empExpTabArray) > 0){   
-
-        foreach ($empExpTabArray as $type => $data) {
-            dump($data);
-
-            if (isset($data['field'][1])) {
-                $return = $data['field'][1];
-
-
-            }
+            if (isset($empExpTabArray['field'][1])) {
+                $return = $empExpTabArray['field'][1];
 
         }
-
-        // $expired = [];
-        // $expireSoon = [];
-        // foreach ($secondDates as $date) {
-        //     $expirationDate = Carbon::createFromFormat('Y-m-d', $date)->startOfDay();
-
-        //     // Calculate the difference between today's date and the given date
-        //     $differenceInDays = $today->diffInDays($date, false);
-
-        //     if ($differenceInDays < 0) {
-        //         // Date is already expired
-        //         $expired[] = $expirationDate->toDateString();
-        //         $counts['expire']++;
-        //     } elseif ($differenceInDays >= 15 && $differenceInDays <= 30) {
-        //         // Date is going to expire within the next 15 to 30 days
-        //         $expireSoon[] = $expirationDate->toDateString();
-        //         $counts['expire_soon']++;
-        //     }
-        // }
-        
-
-        // echo "Expired: " . implode(", ", $counts) . "\n";
-        // echo "Expire soon: " . implode(", ", $expireSoon) . "\n";
-    dump($return);
-
-
     }
 
     return $return;

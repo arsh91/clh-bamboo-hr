@@ -21,7 +21,8 @@ class DashboardController extends Controller
             'email' => 7,
             'department'=>8,
             'manager'=>13,
-            //'profile'=>18,            
+            'jobTitle'=>4,
+            'division'=>10,            
         );
 
         //Count of Users Without Super Admin
@@ -67,6 +68,8 @@ class DashboardController extends Controller
             $empMainArr[$i]['email'] = $this->checkIfArray($emp['field'][$employeeFieldsIndexes['email']]);
             $empMainArr[$i]['department'] = $this->checkIfArray($emp['field'][$employeeFieldsIndexes['department']]);
             $empMainArr[$i]['manager'] = $this->checkIfArray($emp['field'][$employeeFieldsIndexes['manager']]);
+            $empMainArr[$i]['jobTitle'] = $this->checkIfArray($emp['field'][$employeeFieldsIndexes['jobTitle']]);
+            $empMainArr[$i]['division'] = $this->checkIfArray($emp['field'][$employeeFieldsIndexes['division']]);
             //$empMainArr[$i]['profile'] = 'https://clhmentalhealth.bamboohr.com/employees/employee.php?id='.$empID;
             $empIdsAr[] = $empID;
             $i++;

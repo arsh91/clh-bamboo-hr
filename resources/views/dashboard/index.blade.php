@@ -46,8 +46,8 @@
                                         </thead>
                                         <tbody>
                                             @foreach($empMainArr as $key => $fields)
-                                                <tr class="employee-row" data-row-id="{{ $fields['ID'] }}">
-                                                    
+                                                <tr class="employee-row" data-row-id="{{ $fields['ID'] }}" data-department="{{ $fields['department'] }}" data-division="{{ $fields['division'] }}" data-jobinfo="{{ $fields['jobTitle'] }}">
+                                                
                                                     <td><a href="{{ route('employees.detail', $fields['ID']) }}">{{$fields['ID']}}</a>      </td>
                                                     <td><?php print_r($fields['photo']); ?></td>
                                                     <td>{{$fields['firstname']}}</td>
@@ -56,11 +56,18 @@
                                                     <td>{{$fields['email']}}</td>
                                                     <td>{{$fields['department']}}</td>
                                                     <td>{{$fields['manager']}}</td>
+                                                    <td>{{$fields['jobTitle']}}</td>
+                                                    <td>{{$fields['division']}}</td>
                                                     <td id="row-{{ $fields['ID'] }}">
-                                                        <div class="d-flex justify-content-center">
-                                                            <div class="spinner-border" role="status">
+                                                        <span class="job-{{ $fields['ID'] }}"> <div class="spinner-border" role="status">
                                                             <span class="visually-hidden">Loading...</span>
-                                                            </div>
+                                                            </div></span>
+                                                        <span class="tracker-{{ $fields['ID'] }}"> <div class="spinner-border" role="status">
+                                                            <span class="visually-hidden">Loading...</span>
+                                                            </div></span>
+
+                                                        <div class="d-flex justify-content-center">
+                                                           
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -146,7 +153,7 @@ $(document).ready(function() {
                 method: 'GET',
                 success: function(response){
                     // Handle the response, e.g., append data to a table row
-                    $('#row-' + rowId).html(response); // Assuming there's a row with id "row-{rowId}" in your HTML
+                    $('.job-' + rowId).html(response); // Assuming there's a row with id "row-{rowId}" in your HTML
                 },
                 error: function(xhr, status, error){
                     console.error(error);
@@ -154,13 +161,22 @@ $(document).ready(function() {
             });
         }
 
-        function fetchTimeTrackerRowData(rowId) {
+        function fetchTimeTrackerRowData(rowId, division, department, jobInfo) {
             $.ajax({
-                url: '/employee/row/timetracker/' + rowId, // Route to get data for a single row
-                method: 'GET',
+                url: '/employee/row/timetracker/' + rowId, 
+                method: 'POST',
+        headers: {
+            'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+        },
+        data: {
+            division: division,
+            department: department,
+            jobInfo: jobInfo
+        },
+   
                 success: function(response){
                     // Handle the response, e.g., append data to a table row
-                    $('#row-' + rowId).html(response); // Assuming there's a row with id "row-{rowId}" in your HTML
+                    $('.tracker-' + rowId).html(response); // Assuming there's a row with id "row-{rowId}" in your HTML
                 },
                 error: function(xhr, status, error){
                     console.error(error);
@@ -170,9 +186,12 @@ $(document).ready(function() {
 
         // Iterate over each row and fetch data
         $('.employee-row').each(function(){
-            var rowId = $(this).data('row-id'); // Assuming each row has a data attribute "data-row-id" containing the employee ID
-            // fetchRowData(rowId);
-            fetchTimeTrackerRowData(rowId);
+            var rowId = $(this).data('row-id'); 
+            var division = $(this).data('division'); 
+            var jobInfo = $(this).data('jobinfo'); 
+            var department = $(this).data('department'); 
+             fetchRowData(rowId);
+            fetchTimeTrackerRowData(rowId, division, department, jobInfo);
         });
 });
 
