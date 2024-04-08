@@ -42,6 +42,7 @@
                                                 <th scope="col">{{ucfirst($key)}}</th>
                                                 @endforeach
                                                 <th>Blank Fields</th>
+                                                <th>Expiration Dates Count</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -62,13 +63,13 @@
                                                         <span class="job-{{ $fields['ID'] }}"> <div class="spinner-border" role="status">
                                                             <span class="visually-hidden">Loading...</span>
                                                             </div></span>
+                                                       
+                                                    </td>
+                                                    <td id="row-{{ $fields['ID'] }}">
+                                                      
                                                         <span class="tracker-{{ $fields['ID'] }}"> <div class="spinner-border" role="status">
                                                             <span class="visually-hidden">Loading...</span>
                                                             </div></span>
-
-                                                        <div class="d-flex justify-content-center">
-                                                           
-                                                        </div>
                                                     </td>
                                                 </tr>
                                             @endforeach
