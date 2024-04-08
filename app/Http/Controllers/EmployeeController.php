@@ -555,7 +555,6 @@ class EmployeeController extends Controller
     }
 
     public function employeEmptyFieldsCount($empId){
-        $colorBClass = $colorPClass = '';
         $html = '';
         $blankPersonalFields = $this->getPersonalBlankFields($empId);
         $blankJobFields = $this->getJobBlankFields($empId);
@@ -581,7 +580,6 @@ class EmployeeController extends Controller
         return $html;
     }
 
-    
     private function checkIfArray($arrayObj)
     {
         $finalVal = '';
@@ -599,19 +597,6 @@ class EmployeeController extends Controller
             $emptyVal = $arrayObj['@attributes']['id'];
         }
         return $emptyVal;
-    }
-
-    private function checkIfImageExists($arrayObj){
-        $finalImage = '';
-        if(!is_array($arrayObj)){
-            if (strpos($arrayObj, "https://images") === 0 || strpos($arrayObj, "https://resources") === 0) {                        
-                
-                $finalImage = '<img src="'.$arrayObj.'" alt="Photo URL">';
-            }
-        }else{
-            $finalImage = 'N/A';
-        }
-        return $finalImage;
     }
 
     public function employeTimetracker($empId, Request $request){
@@ -803,8 +788,8 @@ private function getDateTrackersCount($empId, $trackerType){
     }        
 
     
-    $bhr = new BambooAPI("clhmentalhealth");
-    $bhr->setSecretKey("40d056dd98d048b1d50c46392c77bd2bbbf0431f");
+    $bhr = new BambooAPI(env('YOUR_COMPANY_ID'));
+    $bhr->setSecretKey(env('YOUR_API_KEY'));
     $getExpTabData = $bhr->getEmployee($empId, $expFieldsArray);
     if($getExpTabData->isError()) {
         trigger_error("Error communicating with BambooHR: " . $getExpTabData->getErrorMessage());
