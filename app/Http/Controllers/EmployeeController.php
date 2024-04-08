@@ -557,34 +557,43 @@ class EmployeeController extends Controller
 
     public function employeEmptyFieldsCount($empId){
         $colorBClass = $colorPClass = '';
+        $html = '';
         $blankPersonalFields = $this->getPersonalBlankFields($empId);
         $blankJobFields = $this->getJobBlankFields($empId);
         $getEmergencyContacts = $this->getEmergencyFields($empId);
         $blankEmergencyFields =$getEmergencyContacts['empty'];
        // dump($blankEmergencyFields); dd('---------');
         if( count($blankJobFields) > 0 ){
-            $colorBClass = 'color:red;';
+            // $colorBClass = 'color:red;';
+            $html .= '<span class="badge bg-danger">Job : '.count($blankJobFields).'</span>';
         }else if ( count($blankJobFields) == 0) {
-            $colorBClass = 'color:green;';
+            // $colorBClass = 'color:green;';
+            $html .= '<span class="badge bg-success">Job : '.count($blankJobFields).'</span>';
+            
         }
                 
         if( count($blankPersonalFields) > 0 ){
-            $colorPClass = 'color:red;';
+            // $colorPClass = 'color:red;';
+            $html .= '<span class="badge bg-danger">Personal : '.count($blankPersonalFields).'</span>';
         }else if ( count($blankPersonalFields) == 0) {
-            $colorPClass = 'color:green;';
+            // $colorPClass = 'color:green;';
+            $html .= '<span class="badge bg-success">Personal : '.count($blankPersonalFields).'</span>';
+
         }
 
         if( count($blankEmergencyFields) > 0 ){
-            $colorEClass = 'color:red;';
+            // $colorEClass = 'color:red;';
+            $html .= '<span class="badge bg-danger">Emergency : '.count($blankEmergencyFields).'</span>';
         }else if ( count($blankEmergencyFields) == 0) {
-            $colorEClass = 'color:green;';
+            // $colorEClass = 'color:green;';
+            $html .= '<span class="badge bg-success">Emergency : '.count($blankEmergencyFields).'</span>';
         }
 
-        $html = '<ul>';
-        $html .= '<li style="'.$colorPClass.'">Personal : '.count($blankPersonalFields).'</li>';
-        $html .= '<li style="'.$colorBClass.'">Job : '.count($blankJobFields).'</li>';
-        $html .= '<li style="'.$colorEClass.'">Emergency : '.count($blankEmergencyFields).'</li>';
-        $html .= '</ul>';
+        // $html = '<ul>';
+        // $html .= '<li style="'.$colorPClass.'">Personal : '.count($blankPersonalFields).'</li>';
+        // $html .= '<li style="'.$colorBClass.'">Job : '.count($blankJobFields).'</li>';
+        // $html .= '<li style="'.$colorEClass.'">Emergency : '.count($blankEmergencyFields).'</li>';
+        // $html .= '</ul>';
         return $html;
         //dump(count($blankPersonalFields)); dd('--');
     }
@@ -649,10 +658,10 @@ class EmployeeController extends Controller
         $html = '<ul>';
         if($data['expire'] > 0){
             
-            $html .= '<li style="color:red;" >Expire : '.$data['expire'].'</li>';
+            $html .= '<span class="badge bg-danger">Expire : '.$data['expire'].'</span>';
         }
         if($data['expire_soon'] > 0){
-            $html .= '<li style="color:red;" >Expire Soon : '.$data['expire_soon'].'</li>';
+            $html .= '<span class="badge bg-warning text-dark">Going to Expire : '.$data['expire_soon'].'</span>';
         }
         $html .= '</ul>';
         return $html;
