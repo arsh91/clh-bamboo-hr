@@ -185,14 +185,34 @@ $(document).ready(function() {
         }
 
         // Iterate over each row and fetch data
-        $('.employee-row').each(function(){
-            var rowId = $(this).data('row-id'); 
-            var division = $(this).data('division'); 
-            var jobInfo = $(this).data('jobinfo'); 
-            var department = $(this).data('department'); 
-             fetchRowData(rowId);
-            fetchTimeTrackerRowData(rowId, division, department, jobInfo);
-        });
+        // $('.employee-row').each(function(){
+        //     var rowId = $(this).data('row-id'); 
+        //     var division = $(this).data('division'); 
+        //     var jobInfo = $(this).data('jobinfo'); 
+        //     var department = $(this).data('department'); 
+        //      fetchRowData(rowId);
+        //     fetchTimeTrackerRowData(rowId, division, department, jobInfo);
+        // });
+
+        function fetchDataForVisibleRows() {
+                table.rows({page: 'current'}).nodes().each(function (node, index) {
+                    var rowId = $(node).data('row-id');
+                    var division = $(node).data('division');
+                    var jobInfo = $(node).data('jobinfo');
+                    var department = $(node).data('department');
+
+                    fetchRowData(rowId);
+                    fetchTimeTrackerRowData(rowId, division, department, jobInfo);
+                });
+            }
+
+            // Fetch data for visible rows when the page changes
+            table.on('draw', function () {
+                fetchDataForVisibleRows();
+            });
+
+            // Initial fetch for the visible rows on page load
+            fetchDataForVisibleRows();
 });
 
 
