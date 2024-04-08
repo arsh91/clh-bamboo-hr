@@ -554,7 +554,6 @@ class EmployeeController extends Controller
         return $trackerData;
     }
 
-
     public function employeEmptyFieldsCount($empId){
         $colorBClass = $colorPClass = '';
         $html = '';
@@ -562,40 +561,24 @@ class EmployeeController extends Controller
         $blankJobFields = $this->getJobBlankFields($empId);
         $getEmergencyContacts = $this->getEmergencyFields($empId);
         $blankEmergencyFields =$getEmergencyContacts['empty'];
-       // dump($blankEmergencyFields); dd('---------');
         if( count($blankJobFields) > 0 ){
-            // $colorBClass = 'color:red;';
             $html .= '<span class="badge bg-danger">Job : '.count($blankJobFields).'</span>';
         }else if ( count($blankJobFields) == 0) {
-            // $colorBClass = 'color:green;';
             $html .= '<span class="badge bg-success">Job : '.count($blankJobFields).'</span>';
-            
         }
-                
+      
         if( count($blankPersonalFields) > 0 ){
-            // $colorPClass = 'color:red;';
             $html .= '<span class="badge bg-danger">Personal : '.count($blankPersonalFields).'</span>';
         }else if ( count($blankPersonalFields) == 0) {
-            // $colorPClass = 'color:green;';
             $html .= '<span class="badge bg-success">Personal : '.count($blankPersonalFields).'</span>';
-
         }
 
         if( count($blankEmergencyFields) > 0 ){
-            // $colorEClass = 'color:red;';
             $html .= '<span class="badge bg-danger">Emergency : '.count($blankEmergencyFields).'</span>';
         }else if ( count($blankEmergencyFields) == 0) {
-            // $colorEClass = 'color:green;';
             $html .= '<span class="badge bg-success">Emergency : '.count($blankEmergencyFields).'</span>';
         }
-
-        // $html = '<ul>';
-        // $html .= '<li style="'.$colorPClass.'">Personal : '.count($blankPersonalFields).'</li>';
-        // $html .= '<li style="'.$colorBClass.'">Job : '.count($blankJobFields).'</li>';
-        // $html .= '<li style="'.$colorEClass.'">Emergency : '.count($blankEmergencyFields).'</li>';
-        // $html .= '</ul>';
         return $html;
-        //dump(count($blankPersonalFields)); dd('--');
     }
 
     
@@ -635,35 +618,18 @@ class EmployeeController extends Controller
          $empDivision = $request->input('division');
          $empDepartment = $request->input('department');
          $empJobInfo = $request->input('jobInfo');
-        //  dd($department);
-        // $empId = '628';
-        // $empFieldsArray = array('jobTitle,department,division');
-
-        // $bhr = new BambooAPI(env('YOUR_COMPANY_ID'));
-        // $bhr->setSecretKey(env('YOUR_API_KEY'));
-        // $getEmployee = $bhr->getEmployee($empId, $empFieldsArray);
-        // if($getEmployee->isError()) {
-        // trigger_error("Error communicating with BambooHR: " . $getEmployee->getErrorMessage());
-        // }
-
-        // $getEmployeeData = $getEmployee->getContent();
-          
-        // $employeeData = json_encode($getEmployeeData);       
-        // $dataArray = json_decode($employeeData, true);
-
-        // $empDepartment = $dataArray['field'][1];
-        // $empJobInfo = $dataArray['field'][0];
-        // $empDivision = $dataArray['field'][2];
         $data = $this->getTimeTrackerData($empDepartment, $empJobInfo,$empDivision, $empId);
-        $html = '<ul>';
+        $html = '';
+        if($data['expire'] > 0 ||  $data['expire'] > 0){
         if($data['expire'] > 0){
-            
             $html .= '<span class="badge bg-danger">Expire : '.$data['expire'].'</span>';
         }
         if($data['expire_soon'] > 0){
             $html .= '<span class="badge bg-warning text-dark">Going to Expire : '.$data['expire_soon'].'</span>';
         }
-        $html .= '</ul>';
+    }else{
+        $html .= '<span class="badge bg-success">No Expire date </span>';
+    }
         return $html;
     }
 
@@ -709,16 +675,8 @@ private function getTimeTrackerData($empDepartment,$empJobInfo, $empDivision,  $
             if($this->getDateTrackersCount($empId, $type)){
                 $allDateCount[] = $this->getDateTrackersCount($empId, $type);
             }
-            // dd($this->getDateTrackersCount($empId, $type));
         }
-        // $allDateCount =  [ 
-        //  "2024-2-20",
-        //     "2024-04-28",
-        //     "2024-05-25",
-        //      "2025-01-31",
-        // "2025-05-13"
-        // ];
-        
+  
         $today = Carbon::now()->startOfDay();
         if(count($counts)> 0){
         foreach ($allDateCount as $date) {
@@ -847,7 +805,6 @@ private function getDateTrackersCount($empId, $trackerType){
     
     $bhr = new BambooAPI("clhmentalhealth");
     $bhr->setSecretKey("40d056dd98d048b1d50c46392c77bd2bbbf0431f");
-    //$response = $bhr->getDirectory();
     $getExpTabData = $bhr->getEmployee($empId, $expFieldsArray);
     if($getExpTabData->isError()) {
         trigger_error("Error communicating with BambooHR: " . $getExpTabData->getErrorMessage());
@@ -857,12 +814,11 @@ private function getDateTrackersCount($empId, $trackerType){
     $employeeJobTabData = json_encode($getEmployeeExpData);       
     $empExpTabArray = json_decode($employeeJobTabData, true);
     if(count($empExpTabArray) > 0){   
-            if (isset($empExpTabArray['field'][1])) {
-                $return = $empExpTabArray['field'][1];
-
+        if (isset($empExpTabArray['field'][1])) {
+            $return = $empExpTabArray['field'][1];
         }
     }
 
     return $return;
-}
+    }
 }
