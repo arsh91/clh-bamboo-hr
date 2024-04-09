@@ -54,6 +54,7 @@ class DocumentController extends Controller
         }
 
         $ListEmployeeFilesAndCategories = $this->listEmployeeFilesAndCategories($empId,$matchedDocsAccToRole);
+        //dump($ListEmployeeFilesAndCategories); dd('-----');
         
         return view('documents.listEmplyeeDocuments', compact('empData', 'base64Image', 'ListEmployeeFilesAndCategories'));
     }

@@ -101,18 +101,57 @@
             </ul>
             <div class="tab-content pt-2" id="myTabjustifiedContent">
                 <div class="tab-pane fade active show" id="home-justified" role="tabpanel" aria-labelledby="home-tab">
-                  <div class="row">
-                    <div class="col-lg-6">                      
-                      <h5 class="card-title">Document List</h5>
-                    </div>
+                  <div class="row">                     
+                    <h5 class="card-title">Document List</h5>
+                    <section class="section">
+                      
+                      <div class="iconslist">
+                        @if(!empty($ListEmployeeFilesAndCategories)) 
+                          @foreach($ListEmployeeFilesAndCategories as $filesAndCats)
+                            @if(isset($filesAndCats['files']))
+                              <div class="icon openModalBtn" data-toggle="modal" data-target="#commonModal" data-item-id="{{ $filesAndCats['docId'] }}">
+                                <i class="bi bi-folder-fill"></i>
+                                <div class="label">{{$filesAndCats['docName']}}</div>
+                                <input type="hidden" id="file_detail" value="@php echo json_encode($filesAndCats['files']) @endphp">
+                              </div><!--##filled file icon-->
+                            @else
+                              <div class="icon">
+                                <i class="bi bi-folder"></i>
+                                <div class="label">{{$filesAndCats['docName']}}</div>
+                              </div><!--##empty file icon-->
+                            @endif
+                            
+                            @endforeach
+                        @endif
+                      </div>
+                    
+                    </section><!--##section ends here-->
                   </div>
                 </div>
               </div>
           </div>
         </div>
       </div><!--##row-->
-              
-      
+      <!--#MODAL HTML-->
+      <!-- Common Modal -->
+      <div class="modal fade" id="commonModal" tabindex="-1" role="dialog" aria-labelledby="commonModalLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                  <div class="modal-header">
+                      <h5 class="modal-title" id="commonModalLabel">Modal Title</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                      <!-- Dynamic content will be inserted here -->
+                  </div>
+                  <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <!--#MODAL HTML-->
+            
       <!---SHOW THE Expire Date tracker data--->
       
       <!---##Date tracker--->
@@ -123,8 +162,20 @@
 
 <script>
 $(document).ready(function() {
+        // Event listener for button click
+        $('.openModalBtn').click(function() {
+            // Get item ID from data attribute
+            var itemId = $(this).data('item-id');
+            // Set modal title and content based on item ID (replace with your logic)
+            $('#commonModalLabel').text('Modal for Item ' + itemId);
+            $('#commonModal .modal-body').html('Content for Item ' + itemId);
+            // Show the modal
+            $('#commonModal').modal('show');
 
-});
+            //WIll List files here
+            console.log('modal is opened');
+        });
+    });
 </script>
 <!--end::Page Custom Javascript-->
 @endsection
