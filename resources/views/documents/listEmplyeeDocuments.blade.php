@@ -95,8 +95,14 @@
                           @foreach($ListEmployeeFilesAndCategories as $filesAndCats)
                             @if(isset($filesAndCats['files']))
                               <div class="icon openModalBtn" data-toggle="modal" data-target="#commonModal" data-item-id="{{ $filesAndCats['docId'] }}" data-item-name="{{ $filesAndCats['docName'] }}">
-                                <i class="bi bi-folder-fill"></i>
+                                <i class="bi bi-folder-fill" style="cursor:pointer;"></i>
                                 <div class="label">{{$filesAndCats['docName']}} </div>
+                                <span class="label">{{count($filesAndCats['files'])}} 
+                                   @if (count($filesAndCats['files']) == 1)
+                                          item
+                                      @else
+                                          items
+                                  @endif </span>
                                 <input type="hidden" id="file_detail-{{ $filesAndCats['docId'] }}" value="{{ json_encode($filesAndCats['files']) }}">
                               </div><!--##filled file icon-->
                             @else
