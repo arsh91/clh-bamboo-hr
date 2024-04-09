@@ -109,10 +109,10 @@
                         @if(!empty($ListEmployeeFilesAndCategories)) 
                           @foreach($ListEmployeeFilesAndCategories as $filesAndCats)
                             @if(isset($filesAndCats['files']))
-                              <div class="icon openModalBtn" data-toggle="modal" data-target="#commonModal" data-item-id="{{ $filesAndCats['docId'] }}">
+                              <div class="icon openModalBtn" data-toggle="modal" data-target="#commonModal" data-item-id="{{ $filesAndCats['docId'] }}" data-item-name="{{ $filesAndCats['docName'] }}">
                                 <i class="bi bi-folder-fill"></i>
-                                <div class="label">{{$filesAndCats['docName']}}</div>
-                                <input type="hidden" id="file_detail" value="@php echo json_encode($filesAndCats['files']) @endphp">
+                                <div class="label">{{$filesAndCats['docName']}} </div>
+                                <input type="hidden" id="file_detail-{{ $filesAndCats['docId'] }}" value="{{ json_encode($filesAndCats['files']) }}">
                               </div><!--##filled file icon-->
                             @else
                               <div class="icon">
@@ -120,7 +120,6 @@
                                 <div class="label">{{$filesAndCats['docName']}}</div>
                               </div><!--##empty file icon-->
                             @endif
-                            
                             @endforeach
                         @endif
                       </div>
@@ -162,20 +161,24 @@
 
 <script>
 $(document).ready(function() {
-        // Event listener for button click
-        $('.openModalBtn').click(function() {
-            // Get item ID from data attribute
-            var itemId = $(this).data('item-id');
-            // Set modal title and content based on item ID (replace with your logic)
-            $('#commonModalLabel').text('Modal for Item ' + itemId);
-            $('#commonModal .modal-body').html('Content for Item ' + itemId);
-            // Show the modal
-            $('#commonModal').modal('show');
-
-            //WIll List files here
-            console.log('modal is opened');
+    $('.openModalBtn').click(function() {
+        var itemId = $(this).data('item-id');
+        var itemName= $(this).data('item-name');
+        $('#commonModalLabel').text(itemName);
+        var filesJson = $('#file_detail-'+ itemId).val();
+        var filesArray = JSON.parse(filesJson);
+        var fileHtml = '<div class="iconslist">';
+        filesArray.forEach(function(file) {
+            fileHtml +=  `<div class="icon">
+                 <a href="${file.url}" target="_blank"><i class="bi bi-file-arrow-down-fill" style="font-size:34px"></i></a>
+                  <div class="label">${file.name}</div>
+                </div>`;
         });
+        fileHtml += '</div>';
+        $('#commonModal .modal-body').html(fileHtml);
+        $('#commonModal').modal('show');
     });
+});
 </script>
 <!--end::Page Custom Javascript-->
 @endsection
