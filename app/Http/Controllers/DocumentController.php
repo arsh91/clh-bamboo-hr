@@ -54,7 +54,7 @@ class DocumentController extends Controller
         }
 
         $ListEmployeeFilesAndCategories = $this->listEmployeeFilesAndCategories($empId,$matchedDocsAccToRole);
-        //dump($ListEmployeeFilesAndCategories); dd('-----');
+        // dump($ListEmployeeFilesAndCategories); dd('-----');
         
         return view('documents.listEmplyeeDocuments', compact('empData', 'base64Image', 'ListEmployeeFilesAndCategories'));
     }
@@ -74,12 +74,12 @@ class DocumentController extends Controller
                 $employeFilesAccToRole[$key]['docId'] = $docsIds['docId'];
                 $employeFilesAccToRole[$key]['docName'] = $docsIds['docName'];
                 if (array_key_exists('files', $docsIds)) {
-                    //dump($docsIds['files']);
                     foreach($docsIds['files'] as $filekey => $fileId){
-                        //dump($empId);
-                        $employeFilesAccToRole[$key]['files'][] = "https://40d056dd98d048b1d50c46392c77bd2bbbf0431f:x@api.bamboohr.com/api/gateway.php/clhmentalhealth/v1/employees/$empId/files/".$fileId;
-                       // $employeFilesAccToRole =  $listEmployeeFiles = $bhr->downloadEmployeeFile($empId, $fileId);
-                      // $employeFilesAccToRole[$key]['files'][] = $fileLinks;
+                        $fileData = [
+                            'url' => "https://40d056dd98d048b1d50c46392c77bd2bbbf0431f:x@api.bamboohr.com/api/gateway.php/clhmentalhealth/v1/employees/$empId/files/".$fileId['id'],
+                            'name' => $fileId['name']
+                        ];
+                        $employeFilesAccToRole[$key]['files'][] = $fileData;
                     }                   
                     
                 }
@@ -126,7 +126,8 @@ class DocumentController extends Controller
      * THIS METHOD WILL GET THE DOCUMENT NAME AND ID FOR AN EMPLOYEE
      * AND IF THAT DOCUMENT HAS FURTHER ARRAY OF FILES THEN INJECTING files_id WITH THIS ARRAY TOO
      */
-    private function getDocumentIdAndName($arrayObj){       
+    private function getDocumentIdAndName($arrayObj){     
+        // dump($arrayObj);  
         $docIdAndName = [];
         $fileIds = [];
         if (is_array($arrayObj)) {
@@ -148,11 +149,19 @@ class DocumentController extends Controller
                     $fileArr = $val;
                     if(array_key_exists('@attributes', $val)){ // has single file
                         //dump($fileArr['@attributes']['id']);
-                        $docIdAndName['files'][] = $fileArr['@attributes']['id'];
+                        $fileInfo = [
+                            'id' => $fileArr['@attributes']['id'],
+                            'name' => $fileArr['name']
+                        ];
+                        $docIdAndName['files'][] = $fileInfo;
                     }else{
                        // dump($fileArr); // further arrays
                         foreach($fileArr as $files){
-                            $docIdAndName['files'][] = $files['@attributes']['id'];
+                            $fileInfo = [
+                                'id' => $files['@attributes']['id'],
+                                'name' => $files['name']
+                            ];
+                            $docIdAndName['files'][] = $fileInfo;
                         }
                     }
                 }
