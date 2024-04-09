@@ -21,23 +21,13 @@
 
           <div class="card">
             <div class="card-body pt-3">
-              <!-- Bordered Tabs -->
-              <ul class="nav nav-tabs nav-tabs-bordered" role="tablist">
-
-                <li class="nav-item" role="presentation">
-                  <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#profile-overview" aria-selected="true" role="tab">Overview</button>
-                </li>
-              </ul>
+              <!-- Bordered Tabs -->              
               <div class="tab-content pt-2">
 
                 <div class="tab-pane fade show active profile-overview" id="profile-overview" role="tabpanel">
 
                   <h5 class="card-title">Profile Details</h5>
-                  <div class="row">
-                    <div class="col-lg-3 col-md-4 label ">Full Name</div>
-                    <div class="col-lg-9 col-md-8">{{$empData['firstName']}} {{$empData['lastName']}}</div>
-                  </div>
-
+                  
                   <div class="row">
                     <div class="col-lg-3 col-md-4 label">Department</div>
                     <div class="col-lg-9 col-md-8">{{$empData['department']}}</div>
@@ -46,11 +36,6 @@
                   <div class="row">
                     <div class="col-lg-3 col-md-4 label">Job</div>
                     <div class="col-lg-9 col-md-8">{{$empData['jobTitle']}}</div>
-                  </div>
-
-                  <div class="row">
-                    <div class="col-lg-3 col-md-4 label">Location</div>
-                    <div class="col-lg-9 col-md-8">{{$empData['location']}}</div>
                   </div>
 
                   <div class="row">
@@ -102,7 +87,7 @@
             <div class="tab-content pt-2" id="myTabjustifiedContent">
                 <div class="tab-pane fade active show" id="home-justified" role="tabpanel" aria-labelledby="home-tab">
                   <div class="row">                     
-                    <h5 class="card-title">Document List</h5>
+                    <h5 class="card-title">Documents for <i>{{$empData['department']}}</i></h5>
                     <section class="section">
                       
                       <div class="iconslist">
