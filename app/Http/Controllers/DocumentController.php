@@ -16,7 +16,7 @@ class DocumentController extends Controller
     }
     public function listEmplyeeDocuments($empId)
     {
-
+        $matchedDocsAccToRole = '';
         $employeeDetails = $this->getEmployeeDetailByID($empId);
         $empData = $employeeDetails['empData'];
         $base64Image = $employeeDetails['base64Image'];
@@ -36,58 +36,125 @@ class DocumentController extends Controller
         $listEmployeeFiles = json_decode($listEmployeeFiles, true);
 
         $commonDocumentArray = array();
-        
+        //dump($listEmployeeFiles);
+        $employeeAllDocumentsArr = [];
         if(count($listEmployeeFiles) > 0){     
             if (isset($listEmployeeFiles['category'])) {
                 foreach($listEmployeeFiles['category'] as $key=> $documents){
-                        $documentID = $this->getDocumentIdAndName($documents);
-                        //dump($this->getDocumentIdAndName($documents));dd('-----');
+                       // $documentID = $this->getDocumentIdAndName($documents);
+                       $employeeAllDocumentsArr[]=$this->getDocumentIdAndName($documents); //coming from api
+                       //dump($this->getDocumentIdAndName($documents));
                 }
+
+                //now we will show the document acc to emp role and jobtitle
+                $employeeDocumentIdsAccToRole = $this->departmentWiseDocument($empId);
+                $matchedDocsAccToRole = $this->searchMatchDocKey($employeeAllDocumentsArr, $employeeDocumentIdsAccToRole);
+                //dump($matchedDocsAccToRole);
             }
         }
 
-        //CASE I: WE WILL SHOW EMPLOYEES DOCUMENTS ACC TO THEIR ROLE
-
-        //dump($listEmployeeFiles);
+        dump($this->downloadEmployeeFiles($empId,$matchedDocsAccToRole));
+        
         dd('---');
 
         return view('documents.listEmplyeeDocuments', compact('empData', 'base64Image'));
     }
 
+    private function downloadEmployeeFiles($empId, $matchedDocsAccToRole){
+        $bhr = new BambooAPI("clhmentalhealth");
+        $bhr->setSecretKey("40d056dd98d048b1d50c46392c77bd2bbbf0431f");
+        //dump($matchedDocsAccToRole);
+        $employeFilesAccToRole = [];
+        $fileLinks = [];
+        if(count($matchedDocsAccToRole) > 0){
+            foreach($matchedDocsAccToRole as $key => $docsIds){
+               // dump($docsIds);
+                $employeFilesAccToRole[$key]['docId'] = $docsIds['docId'];
+                $employeFilesAccToRole[$key]['docName'] = $docsIds['docName'];
+                if (array_key_exists('files', $docsIds)) {
+                    //dump($docsIds['files']);
+                    foreach($docsIds['files'] as $filekey => $fileId){
+                        //dump($empId);
+                        $employeFilesAccToRole[$key]['files'][] = "https://40d056dd98d048b1d50c46392c77bd2bbbf0431f:x@api.bamboohr.com/api/gateway.php/clhmentalhealth/v1/employees/$empId/files/".$fileId;
+                       // $employeFilesAccToRole =  $listEmployeeFiles = $bhr->downloadEmployeeFile($empId, $fileId);
+                      // $employeFilesAccToRole[$key]['files'][] = $fileLinks;
+                    }
+                   
+                    
+                }
+
+            }
+        }
+        dump($employeFilesAccToRole);
+       
+    }
+
+    private function searchMatchDocKey($targetArray, $documentIds) {
+        $filteredArray = array();
+    
+        foreach ($targetArray as $element) {
+            if (in_array($element['docId'], $documentIds)) {
+                $filteredArray[] = $element;
+            }
+        }
+    
+        return $filteredArray;
+    }
+    
+
     private function departmentWiseDocument($empId){
         $empData = $this->getEmployeeDetailByID($empId);
-        $empDivision = $empData['division'];
-        $empDepartment = $empData['department'];
-        $empJobInfo = $empData['jobTitle'];
+        //dump($empData); dd();
+        $empDivision = $empData['empData']['division'];
+        $empDepartment = $empData['empData']['department'];
+        $empJobInfo = $empData['empData']['jobTitle'];
 
         $documentIds = [];
         if($empDepartment == env('GROUP_HOME')){ //if department is `Residential Group Home` 
             if($empJobInfo == env('JOBINFO_GROUP_HOME_CHILD_YOUTH')){ //Group Home Residential Child Youth Care Practitioner
-                $documentIds = [54,42,43];
+                $documentIds = [54, 42, 43, 41, 24, 26, 164, 160, 31, 39, 28, 40, 139, 78, 50, 141, 35, 20, 37, 47, 55, 56, 48, 43, 25, 165, 141, 52, 38];
             }else if($empJobInfo == env('JOBINFO_GROUP_HOME_YOUTH')){ //Group Home Youth	
                 $documentIds = [];
             }
         }
+        return $documentIds;
     }
 
-    private function getDocumentIdAndName($arrayObj){
+    private function getDocumentIdAndName($arrayObj){       
         $docIdAndName = [];
+        $fileIds = [];
         if (is_array($arrayObj)) {
+             
             foreach($arrayObj as $key =>$val){
+                
                 if(is_array($val)){
-                    $docIdAndName['docId'] = $val['id'];
+                    if(array_key_exists('id', $val)){
+                        $docIdAndName['docId'] = $val['id'];        
+                    }
+                    
                 }else{
                     if($key == 'name'){
                         $docIdAndName['docName'] = $val;
                     }                    
+                }
+
+                if($key == 'file'){
+                    $fileArr = $val;
+                    if(array_key_exists('@attributes', $val)){ // has single file
+                        //dump($fileArr['@attributes']['id']);
+                        $docIdAndName['files'][] = $fileArr['@attributes']['id'];
+                    }else{
+                       // dump($fileArr); // further arrays
+                        foreach($fileArr as $files){
+                            $docIdAndName['files'][] = $files['@attributes']['id'];
+                        }
+                    }
                 }
             }
             //$docID = $arrayObj['id'];
         } 
         return $docIdAndName;
     }
-    
-
 
     private function getEmployeeDetailByID($empId)
     {
