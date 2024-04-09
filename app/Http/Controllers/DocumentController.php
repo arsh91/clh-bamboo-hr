@@ -53,14 +53,15 @@ class DocumentController extends Controller
             }
         }
 
-        dump($this->downloadEmployeeFiles($empId,$matchedDocsAccToRole));
+        $ListEmployeeFilesAndCategories = $this->listEmployeeFilesAndCategories($empId,$matchedDocsAccToRole);
         
-        dd('---');
-
-        return view('documents.listEmplyeeDocuments', compact('empData', 'base64Image'));
+        return view('documents.listEmplyeeDocuments', compact('empData', 'base64Image', 'ListEmployeeFilesAndCategories'));
     }
 
-    private function downloadEmployeeFiles($empId, $matchedDocsAccToRole){
+    /**WE WILL RUN THE BAMBOO HR API WHICH WILL ALLOW US TO DOWNLOAD THE FILES USING A FILE LINK
+     * BASICLLY WE ARE CREATING FILE LINK HERE
+     */
+    private function listEmployeeFilesAndCategories($empId, $matchedDocsAccToRole){
         $bhr = new BambooAPI("clhmentalhealth");
         $bhr->setSecretKey("40d056dd98d048b1d50c46392c77bd2bbbf0431f");
         //dump($matchedDocsAccToRole);
@@ -78,14 +79,14 @@ class DocumentController extends Controller
                         $employeFilesAccToRole[$key]['files'][] = "https://40d056dd98d048b1d50c46392c77bd2bbbf0431f:x@api.bamboohr.com/api/gateway.php/clhmentalhealth/v1/employees/$empId/files/".$fileId;
                        // $employeFilesAccToRole =  $listEmployeeFiles = $bhr->downloadEmployeeFile($empId, $fileId);
                       // $employeFilesAccToRole[$key]['files'][] = $fileLinks;
-                    }
-                   
+                    }                   
                     
                 }
 
             }
         }
-        dump($employeFilesAccToRole);
+        return $employeFilesAccToRole;
+        //dump($employeFilesAccToRole);
        
     }
 
@@ -120,6 +121,10 @@ class DocumentController extends Controller
         return $documentIds;
     }
 
+    /**
+     * THIS METHOD WILL GET THE DOCUMENT NAME AND ID FOR AN EMPLOYEE
+     * AND IF THAT DOCUMENT HAS FURTHER ARRAY OF FILES THEN INJECTING files_id WITH THIS ARRAY TOO
+     */
     private function getDocumentIdAndName($arrayObj){       
         $docIdAndName = [];
         $fileIds = [];
@@ -156,6 +161,9 @@ class DocumentController extends Controller
         return $docIdAndName;
     }
 
+    /**
+     * THIS SECTION IS COMMON TO GET THE BASIC EMPLOYEE DETAILS BY USING IT'S ID
+     */
     private function getEmployeeDetailByID($empId)
     {
         $empFieldsArray = array('firstName,lastName,jobTitle,workPhone,mobilePhone,workEmail,department,location,division,supervisor,employmentStatus');
@@ -197,6 +205,10 @@ class DocumentController extends Controller
         }
     }
 
+    /**
+     * THIS METHOD WILL CHECK THE STRUCTURE OF THE RETURN ARRAY RESULT FROM API
+     * WHICH IS FURTHER USED AS A INNER METHOD
+     */
     private function checkIfArray($arrayObj)
     {
         $finalVal = '';
