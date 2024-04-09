@@ -43,6 +43,7 @@
                                                 @endforeach
                                                 <th>Blank Fields</th>
                                                 <th>Expiration Dates Count</th>
+                                                <th>Documents</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -71,6 +72,15 @@
                                                             <span class="visually-hidden">Loading...</span>
                                                             </div></span>
                                                     </td>
+                                                    <td id="row-{{ $fields['ID'] }}">
+                                                      
+                                                      <!-- <span class="tracker-{{ $fields['ID'] }}"> <div class="spinner-border" role="status">
+                                                          <span class="visually-hidden">Loading...</span>
+                                                          </div></span> -->
+                                                          <a href="{{ route('employees.documents', ['id' => $fields['ID']]) }}" target="_blank">
+                                                            <i class="bi bi-folder-fill"></i>
+                                                        </a>
+                                                  </td>
                                                 </tr>
                                             @endforeach
                                             <?php
