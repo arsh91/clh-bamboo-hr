@@ -109,6 +109,7 @@
                               <div class="icon">
                                 <i class="bi bi-folder"></i>
                                 <div class="label">{{$filesAndCats['docName']}}</div>
+                                <span class="label">0 items</span>
                               </div><!--##empty file icon-->
                             @endif
                             @endforeach
