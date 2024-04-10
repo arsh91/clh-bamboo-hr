@@ -90,31 +90,33 @@
                     <h5 class="card-title">Documents for <i>{{$empData['department']}}</i></h5>
                     <section class="section">
                       
-                      <div class="iconslist">
-                        @if(!empty($ListEmployeeFilesAndCategories)) 
-                          @foreach($ListEmployeeFilesAndCategories as $filesAndCats)
-                            @if(isset($filesAndCats['files']))
-                              <div class="icon openModalBtn" data-toggle="modal" data-target="#commonModal" data-item-id="{{ $filesAndCats['docId'] }}" data-item-name="{{ $filesAndCats['docName'] }}">
-                                <i class="bi bi-folder-fill" style="cursor:pointer;"></i>
-                                <div class="label">{{$filesAndCats['docName']}} </div>
-                                <span class="label">{{count($filesAndCats['files'])}} 
-                                   @if (count($filesAndCats['files']) == 1)
-                                          item
-                                      @else
-                                          items
-                                  @endif </span>
-                                <input type="hidden" id="file_detail-{{ $filesAndCats['docId'] }}" value="{{ json_encode($filesAndCats['files']) }}">
-                              </div><!--##filled file icon-->
-                            @else
-                              <div class="icon">
-                                <i class="bi bi-folder"></i>
-                                <div class="label">{{$filesAndCats['docName']}}</div>
-                                <span class="label">0 items</span>
-                              </div><!--##empty file icon-->
-                            @endif
-                            @endforeach
-                        @endif
+                    @if(!empty($ListEmployeeFilesAndCategories)) 
+                      <div class="iconslist">                       
+                        @foreach($ListEmployeeFilesAndCategories as $filesAndCats)
+                          @if(isset($filesAndCats['files']))
+                            <div class="icon openModalBtn" data-toggle="modal" data-target="#commonModal" data-item-id="{{ $filesAndCats['docId'] }}" data-item-name="{{ $filesAndCats['docName'] }}">
+                              <i class="bi bi-folder-fill" style="cursor:pointer;"></i>
+                              <div class="label">{{$filesAndCats['docName']}} </div>
+                              <span class="label">{{count($filesAndCats['files'])}} 
+                                  @if (count($filesAndCats['files']) == 1)
+                                        item
+                                    @else
+                                        items
+                                @endif </span>
+                              <input type="hidden" id="file_detail-{{ $filesAndCats['docId'] }}" value="{{ json_encode($filesAndCats['files']) }}">
+                            </div><!--##filled file icon-->
+                          @else
+                            <div class="icon">
+                              <i class="bi bi-folder"></i>
+                              <div class="label">{{$filesAndCats['docName']}}</div>
+                              <span class="label">0 items</span>
+                            </div><!--##empty file icon-->
+                          @endif
+                          @endforeach                         
                       </div>
+                      @else
+                          <p class="text-left"><i>No Record Found.</i></p> 
+                        @endif
                     
                     </section><!--##section ends here-->
                   </div>
