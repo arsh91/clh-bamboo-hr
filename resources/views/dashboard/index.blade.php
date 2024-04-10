@@ -6,6 +6,11 @@
     background-color: yellow; /* Set the background color to yellow */
 }
 
+.documnenttdx {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
 </style>
 
 <section class="section dashboard">
@@ -44,7 +49,6 @@
                                                 <th>Blank Fields</th>
                                                 <th>Expiration Dates Count</th>
                                                 <th>Documents</th>
-                                                <th>Documents Count</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -74,14 +78,14 @@
                                                             </div></span>
                                                     </td>
                                                     <td id="row-{{ $fields['ID'] }}" class="text-center">
+                                                      <div class="documnenttdx">
                                                           <a href="{{ route('employees.documents', ['id' => $fields['ID']]) }}" target="_blank">
                                                             <i class="bi bi-folder-fill" style="font-size:30px"></i>
                                                         </a>
-                                                  </td>
-                                                  <td id="row-{{ $fields['ID'] }}">
-                                                  <span class="document-{{ $fields['ID'] }}"> <div class="spinner-border" role="status">
+                                                        <span class="document-{{ $fields['ID'] }}"> <div class="spinner-border" role="status">
                                                             <span class="visually-hidden">Loading...</span>
                                                             </div></span>
+                                                            </div>
                                                   </td>
                                                 </tr>
                                             @endforeach
