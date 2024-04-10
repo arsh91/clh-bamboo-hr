@@ -146,6 +146,11 @@ class EmployeeController extends Controller
                 $expDateTracker[] = $this->getDateTrackers($empId, 'Annual_EvaluationJC');
                 $expDateTracker[] = $this->getDateTrackers($empId, 'Annual_Evaluation');
                 $expDateTracker[] = $this->getDateTrackers($empId, 'Sexual_Abuse_Awareness');
+            }else if($empDivision == env('DIVISION_PRP_COORDINATOR_SPEC') && $empJobInfo == env('JOBINFO_PRP_MAYAA')){ 
+                $types = ['License', 'Insurance', 'Record', 'First_Aid', 'TB_Test', 'Professional_Liability', 'Annual_EvaluationJC', 'Annual_Evaluation', 'Sexual_Abuse_Awareness'];
+                foreach ($types as $type) {
+                    $expDateTracker[$type] = $this->getDateTrackers($empId, $type);
+                }
             }else if($empDivision == env('DIVISION_PRP_COORDINATOR_SPEC')){ //specialist
                 $expDateTracker[] = $this->getDateTrackers($empId, 'License');
                 $expDateTracker[] = $this->getDateTrackers($empId, 'Insurance');
@@ -224,39 +229,20 @@ class EmployeeController extends Controller
                 $expDateTracker[] = $this->getDateTrackers($empId, 'CDS_Registration');
                 $expDateTracker[] = $this->getDateTrackers($empId, 'DEA_Registration');
             }
+        }else if($empDepartment == env('DEPARTMENT_LATRILL_ERTHA')){ 
+            if($empJobInfo == env('JOBINFO_EXECUTIVE_DIRECTOR')){
+                $types = ['License', 'Insurance', 'Record', 'First_Aid', 'TB_Test', 'Professional_Liability', 'Professional_License', 'National_Practitioner_Data_Bank', 'Annual_EvaluationJC', 'Annual_Evaluation', 'Sexual_Abuse_Awareness', 'Medication_Technician_Certificate'];
+                foreach ($types as $type) {
+                    $expDateTracker[$type] = $this->getDateTrackers($empId, $type);
+                }
+            }else if($empJobInfo == env('JOBINFO_PRP_ERTHA')){
+                $types = ['License', 'Insurance', 'Record', 'First_Aid', 'TB_Test', 'Professional_Liability', 'Professional_License', 'Annual_EvaluationJC', 'Annual_Evaluation', 'Sexual_Abuse_Awareness'];
+                foreach ($types as $type) {
+                    $expDateTracker[$type] = $this->getDateTrackers($empId, $type);
+                }
+            }
         }
-
-       //get expiration tracker Dates
-       /*$expDateTracker[] = $this->getDateTrackers($empId, 'License');
-       $expDateTracker[] = $this->getDateTrackers($empId, 'Insurance');
-       $expDateTracker[] = $this->getDateTrackers($empId, 'Record');
-       $expDateTracker[] = $this->getDateTrackers($empId, 'Professional_License');
-       $expDateTracker[] = $this->getDateTrackers($empId, 'First_Aid');
-       $expDateTracker[] = $this->getDateTrackers($empId, 'Tact_II');
-       $expDateTracker[] = $this->getDateTrackers($empId, 'TB_Test');
-       $expDateTracker[] = $this->getDateTrackers($empId, 'Professional_Liability');
-       $expDateTracker[] = $this->getDateTrackers($empId, 'Other_Professional_License');
-       $expDateTracker[] = $this->getDateTrackers($empId, 'RCYCP_Certification');
-       $expDateTracker[] = $this->getDateTrackers($empId, 'DEA_Registration');
-       $expDateTracker[] = $this->getDateTrackers($empId, 'Psychiatric_Nurse_Practitioner_Certification');
-       $expDateTracker[] = $this->getDateTrackers($empId, 'CDS_Registration');
-       $expDateTracker[] = $this->getDateTrackers($empId, 'National_Practitioner_Data_Bank');
-        $expDateTracker[] = $this->getDateTrackers($empId, 'Annual_Evaluation');
-        $expDateTracker[] = $this->getDateTrackers($empId, 'Annual_EvaluationJC');
-       $expDateTracker[] = $this->getDateTrackers($empId, '72_Hour_Treatment_Plan');
-       $expDateTracker[] = $this->getDateTrackers($empId, '30_Day_Treatment_Plan');
-       $expDateTracker[] = $this->getDateTrackers($empId, '90_Day_Treatment_Plan');
-       $expDateTracker[] = $this->getDateTrackers($empId, 'Psych_Evaluation');
-       $expDateTracker[] = $this->getDateTrackers($empId, 'Safe_Environment_Plan');
-       $expDateTracker[] = $this->getDateTrackers($empId, 'Physical');
-       $expDateTracker[] = $this->getDateTrackers($empId, 'Dental');
-       $expDateTracker[] = $this->getDateTrackers($empId, 'Vision');
-       $expDateTracker[] = $this->getDateTrackers($empId, 'Sexual_Abuse_Awareness');
-       $expDateTracker[] = $this->getDateTrackers($empId, 'Medication_Technician_Certificate');*/
-       // dump($expDateTracker); dd('-------------');
-
         return view('dashboard.employee',compact('empData', 'base64Image', 'jobFields', 'emergencyContacts', 'emptyEmeregencyFields', 'blankPersonalFields', 'blankJobFields','expDateTracker'));
-        
     }
 
     /**
@@ -787,7 +773,6 @@ private function getDateTrackersCount($empId, $trackerType){
         break;
     }        
 
-    
     $bhr = new BambooAPI(env('YOUR_COMPANY_ID'));
     $bhr->setSecretKey(env('YOUR_API_KEY'));
     $getExpTabData = $bhr->getEmployee($empId, $expFieldsArray);
