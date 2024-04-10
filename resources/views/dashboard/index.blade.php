@@ -227,8 +227,8 @@ $(document).ready(function() {
                     var jobInfo = $(node).data('jobinfo');
                     var department = $(node).data('department');
 
-                    // fetchRowData(rowId);
-                    // fetchTimeTrackerRowData(rowId, division, department, jobInfo);
+                    fetchRowData(rowId);
+                    fetchTimeTrackerRowData(rowId, division, department, jobInfo);
                     fetchDoucumentCount(rowId, division, department, jobInfo);
 
                 });
