@@ -257,28 +257,20 @@ class DocumentController extends Controller
 
 
     public function getDoucumentCount($empId, Request $request){
-        $empId =  '758';
         $empDivision = $request->input('division');
         $empDepartment = $request->input('department');
         $empJobInfo = $request->input('jobInfo');
        $data = $this->getDoucumentData($empDepartment, $empJobInfo,$empDivision, $empId);
-       $html = 'vfdgffh';
-//        if($data['expire'] > 0 ||  $data['expire'] > 0){
-//        if($data['expire'] > 0){
-//            $html .= '<span class="badge bg-danger">Expire : '.$data['expire'].'</span>';
-//        }
-//        if($data['expire_soon'] > 0){
-//            $html .= '<span class="badge bg-warning text-dark">Going to Expire : '.$data['expire_soon'].'</span>';
-//        }
-//    }else{
-//        $html .= '<span class="badge bg-success">No Expire date </span>';
-//    }
+
+       $html = '';
+       if($data > 0 ){
+        $html .= '<span class="badge bg-danger">Empty Folder Count: '.$data.'</span>';
        return $html;
+    }
    }
 
 
    private function getDoucumentData($empDepartment,$empJobInfo, $empDivision,  $empId  ){
-       $matchedDocsAccToRole = '';
        $bhr = new BambooAPI(env('YOUR_COMPANY_ID'));
         $bhr->setSecretKey(env('YOUR_API_KEY'));
        $listEmployeeFiles = $bhr->listEmployeeFiles($empId);
@@ -289,48 +281,23 @@ class DocumentController extends Controller
        $listEmployeeFiles = $listEmployeeFiles->getContent();
        $listEmployeeFiles = json_encode($listEmployeeFiles);       
        $listEmployeeFiles = json_decode($listEmployeeFiles, true);
-
-       $commonDocumentArray = array();
-       //dump($listEmployeeFiles);
-       $employeeAllDocumentsArr = [];
        $totalFileCount = 0;
        if(count($listEmployeeFiles) > 0){     
            if (isset($listEmployeeFiles['category'])) {
             $employeeDocumentIdsAccToRole = $this->getDocumentIdsBasedOnEmployeeDetails($empDepartment, $empJobInfo, $empDivision);
-
                foreach($listEmployeeFiles['category'] as $key=> $documents){
-
-        
-                    //   $employeeAllDocumentsArr[]=$this->getFileCountForDocumentIds($documents, $employeeDocumentIdsAccToRole); 
                     $totalFileCount += $this->getFileCountForDocumentIds($documents, $employeeDocumentIdsAccToRole); 
                }
-            //    dd($listEmployeeFiles['category']);
-            dd($employeeDocumentIdsAccToRole);
-
-               dd($totalFileCount);
-
-
-
-            dd("djbgdf");
-
-            // dump($listEmployeeFiles['category']);
-
-            // dd($employeeAllDocumentsArr);
-
-
-               //now we will show the document acc to emp role and jobtitle
-            //    $matchedDocsAccToRole = $this->searchMatchDocKey($employeeAllDocumentsArr, $employeeDocumentIdsAccToRole);
-               //dump($matchedDocsAccToRole);
            }
        }
-}
+       return $totalFileCount;
+    }
 
 
 private function getDocumentIdsBasedOnEmployeeDetails($empDepartment, $empJobInfo, $empDivision) {
     $documentIds = [];
-        if($empDepartment == env('GROUP_HOME')){ //if department is `Residential Group Home` 
+        if($empDepartment == env('GROUP_HOME')){ //if department is `Residential Group Home`
             if($empJobInfo == env('JOBINFO_GROUP_HOME_CHILD_YOUTH')){ //Group Home Residential Child Youth Care Practitioner
-                dd("hsfgdhj");
                 $documentIds = [54, 42, 43, 41, 24, 26, 164, 160, 31, 39, 28, 40, 139, 78, 50, 141, 35, 20, 37, 47, 55, 56, 48, 43, 25, 165, 141, 52, 38, 16, 19, 155];
             }else if($empJobInfo == env('JOBINFO_GROUP_HOME_YOUTH')){ //Group Home Youth	
                 $documentIds = [100, 16, 19];
@@ -377,21 +344,11 @@ private function getFileCountForDocumentIds($arrayObj, $idsToCount) {
         $docId = $arrayObj['@attributes']['id'];
 
             if (in_array($docId, $idsToCount)) {
-                if(array_key_exists('file', $arrayObj)){  
-                $val = $arrayObj['file'];
-
-                if(array_key_exists('@attributes', $val)){ // has single file
-                    $fileCount++;
-                }else{
-                    foreach($val as $files){
-                        $fileCount++;
-                    }
-                }
-
+                if(!array_key_exists('file', $arrayObj)){ 
+                 $fileCount++;
                 }
             }
         }
-            //  dump($fileCount);
 
     return $fileCount;
 }

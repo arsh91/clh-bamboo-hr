@@ -44,7 +44,7 @@
                                                 <th>Blank Fields</th>
                                                 <th>Expiration Dates Count</th>
                                                 <th>Documents</th>
-                                                <!-- <th>Documents Count</th> -->
+                                                <th>Documents Count</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -78,11 +78,11 @@
                                                             <i class="bi bi-folder-fill" style="font-size:30px"></i>
                                                         </a>
                                                   </td>
-                                                  <!-- <td id="row-{{ $fields['ID'] }}">
+                                                  <td id="row-{{ $fields['ID'] }}">
                                                   <span class="document-{{ $fields['ID'] }}"> <div class="spinner-border" role="status">
                                                             <span class="visually-hidden">Loading...</span>
                                                             </div></span>
-                                                  </td> -->
+                                                  </td>
                                                 </tr>
                                             @endforeach
                                             <?php
@@ -229,7 +229,7 @@ $(document).ready(function() {
 
                     fetchRowData(rowId);
                     fetchTimeTrackerRowData(rowId, division, department, jobInfo);
-                    // fetchDoucumentCount(rowId, division, department, jobInfo);
+                    fetchDoucumentCount(rowId, division, department, jobInfo);
 
                 });
             }
