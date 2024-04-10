@@ -73,7 +73,7 @@
                                                             <span class="visually-hidden">Loading...</span>
                                                             </div></span>
                                                     </td>
-                                                    <td id="row-{{ $fields['ID'] }}">
+                                                    <td id="row-{{ $fields['ID'] }}" class="text-center">
                                                           <a href="{{ route('employees.documents', ['id' => $fields['ID']]) }}" target="_blank">
                                                             <i class="bi bi-folder-fill" style="font-size:30px"></i>
                                                         </a>
