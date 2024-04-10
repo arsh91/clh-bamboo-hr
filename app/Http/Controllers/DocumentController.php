@@ -41,9 +41,7 @@ class DocumentController extends Controller
         if(count($listEmployeeFiles) > 0){     
             if (isset($listEmployeeFiles['category'])) {
                 foreach($listEmployeeFiles['category'] as $key=> $documents){
-                       // $documentID = $this->getDocumentIdAndName($documents);
                        $employeeAllDocumentsArr[]=$this->getDocumentIdAndName($documents); //coming from api
-                       //dump($this->getDocumentIdAndName($documents));
                 }
 
                 //now we will show the document acc to emp role and jobtitle
@@ -106,7 +104,6 @@ class DocumentController extends Controller
 
     private function departmentWiseDocument($empId){
         $empData = $this->getEmployeeDetailByID($empId);
-        //dump($empData); dd();
         $empDivision = $empData['empData']['division'];
         $empDepartment = $empData['empData']['department'];
         $empJobInfo = $empData['empData']['jobTitle'];
@@ -114,9 +111,40 @@ class DocumentController extends Controller
         $documentIds = [];
         if($empDepartment == env('GROUP_HOME')){ //if department is `Residential Group Home` 
             if($empJobInfo == env('JOBINFO_GROUP_HOME_CHILD_YOUTH')){ //Group Home Residential Child Youth Care Practitioner
-                $documentIds = [54, 42, 43, 41, 24, 26, 164, 160, 31, 39, 28, 40, 139, 78, 50, 141, 35, 20, 37, 47, 55, 56, 48, 43, 25, 165, 141, 52, 38];
+                $documentIds = [54, 42, 43, 41, 24, 26, 164, 160, 31, 39, 28, 40, 139, 78, 50, 141, 35, 20, 37, 47, 55, 56, 48, 43, 25, 165, 141, 52, 38, 16, 19, 155];
             }else if($empJobInfo == env('JOBINFO_GROUP_HOME_YOUTH')){ //Group Home Youth	
-                $documentIds = [100];
+                $documentIds = [100, 16, 19];
+            }
+        }else if($empDepartment == env('DEPARTMENT_PRP')){ 
+            if($empDivision == env('DIVISION_PRP_FAMILY_COORD')){
+                $documentIds = [54, 42, 43, 41, 24, 26, 31, 44, 139, 39, 78, 40, 80, 28, 35, 141, 20, 37, 47, 55, 56, 48, 43, 25, 68, 165, 81, 16, 19, 155];
+            }else if($empDivision == env('DIVISION_PRP_COORDINATOR_SPEC') && $empJobInfo == env('JOBINFO_PRP_MAYAA')){ //specialist
+                $documentIds = [54, 42, 43, 41, 24, 26, 31, 44, 139, 39, 78, 40, 80, 28, 35, 141, 20, 37, 47, 55, 56, 48, 43, 25, 68, 165, 81, 16, 19, 155];
+            }
+            else if($empDivision == env('DIVISION_PRP_COORDINATOR_SPEC')){ //specialist
+                $documentIds = [54, 42, 43, 41, 24, 26, 31, 44, 139, 39, 78, 40, 80, 28, 35, 141, 20, 37, 47, 55, 56, 48, 43, 25, 68, 165, 81, 16, 19, 155];
+            }
+        }else if($empDepartment == env('DEPARTMENT_OMHC')){
+            if($empJobInfo == env('JOBINFO_COOCCURING_OMHC')){
+                $documentIds = [54, 42, 43, 41, 24, 26, 31, 44, 139, 39, 78, 40, 23, 28, 35, 20, 37, 47, 55, 56, 48, 43, 25, 68, 165, 81, 16, 19, 155];
+            }else if($empJobInfo == env('JOBINFO_Intern_OMHC')){ //when the department is `OMHC;Substance Use Disorder (SUD)` and jobtitle is `INTERN`
+                $documentIds = [54, 42, 43, 41, 24, 26, 31, 44, 139, 39, 78, 40, 23, 28, 35, 20, 37, 47, 55, 56, 48, 43, 25, 68, 165, 81, 16, 19, 155];
+            }else if($empJobInfo == env('JOBINFO_GROUP_SUBSTANCE_USE_DISORDER_COUNSELOR')){
+                $documentIds = [54, 42, 43, 41, 24, 26, 31, 44, 139, 39, 78, 40, 23, 28, 35, 20, 37, 47, 55, 56, 48, 43, 25, 68, 165, 81, 16, 19, 155];
+            }
+        }else if($empDepartment == env('DEPARTMENT_MENTAL_HEALTH_OMHC')){ //when department is OMHC and MENTAL HEALTH
+            if($empJobInfo == env('JOBINFO_MENTAL_HEALTH_OMHC')){
+                $documentIds = [54, 42, 43, 41, 24, 26, 31, 44, 139, 39, 78, 40, 23, 28, 35, 20, 37, 47, 55, 56, 48, 43, 25, 68, 165, 81, 16, 19, 155];
+            }else if($empJobInfo == env('JOBINFO_Clinical_OMHC')){ //when department is OMHC and jobtitle is `clinical director`
+                $documentIds = [54, 42, 43, 41, 24, 26, 31, 44, 139, 39, 78, 40, 23, 28, 35, 20, 37, 47, 55, 56, 48, 43, 25, 68, 165, 81, 16, 19, 155];
+            }else if($empJobInfo == env('JOBINFO_Nurse_Practitioner_OMHC')){  // jobtitle is `Psychiatric Nurse Practitioner`0
+                $documentIds = [54, 42, 43, 41, 24, 26, 31, 44, 139, 39, 78, 40, 23, 28, 35, 20, 37, 47, 55, 56, 48, 43, 25, 68, 165, 81, 16, 19, 155];
+            }
+        }else if($empDepartment == env('DEPARTMENT_LATRILL_ERTHA')){ 
+            if($empJobInfo == env('JOBINFO_EXECUTIVE_DIRECTOR')){
+                $documentIds = [54, 42, 43, 41, 24, 26, 31, 44, 139, 39, 78, 40, 23, 28, 35, 20, 37, 47, 55, 56, 48, 43, 25, 68, 165, 81, 16, 19, 155, 159, 23];
+            }else if($empJobInfo == env('JOBINFO_PRP_ERTHA')){
+                $documentIds = [54, 42, 43, 41, 24, 26, 31, 44, 139, 39, 78, 40, 23, 28, 35, 20, 37, 47, 55, 56, 48, 43, 25, 68, 165, 81, 16, 19, 155, 23];
             }
         }
         return $documentIds;
@@ -148,14 +176,12 @@ class DocumentController extends Controller
                 if($key == 'file'){
                     $fileArr = $val;
                     if(array_key_exists('@attributes', $val)){ // has single file
-                        //dump($fileArr['@attributes']['id']);
                         $fileInfo = [
                             'id' => $fileArr['@attributes']['id'],
                             'name' => $fileArr['name']
                         ];
                         $docIdAndName['files'][] = $fileInfo;
                     }else{
-                       // dump($fileArr); // further arrays
                         foreach($fileArr as $files){
                             $fileInfo = [
                                 'id' => $files['@attributes']['id'],
@@ -166,7 +192,6 @@ class DocumentController extends Controller
                     }
                 }
             }
-            //$docID = $arrayObj['id'];
         } 
         return $docIdAndName;
     }
@@ -229,4 +254,146 @@ class DocumentController extends Controller
         }
         return $finalVal;
     }
+
+
+    public function getDoucumentCount($empId, Request $request){
+        $empId =  '758';
+        $empDivision = $request->input('division');
+        $empDepartment = $request->input('department');
+        $empJobInfo = $request->input('jobInfo');
+       $data = $this->getDoucumentData($empDepartment, $empJobInfo,$empDivision, $empId);
+       $html = 'vfdgffh';
+//        if($data['expire'] > 0 ||  $data['expire'] > 0){
+//        if($data['expire'] > 0){
+//            $html .= '<span class="badge bg-danger">Expire : '.$data['expire'].'</span>';
+//        }
+//        if($data['expire_soon'] > 0){
+//            $html .= '<span class="badge bg-warning text-dark">Going to Expire : '.$data['expire_soon'].'</span>';
+//        }
+//    }else{
+//        $html .= '<span class="badge bg-success">No Expire date </span>';
+//    }
+       return $html;
+   }
+
+
+   private function getDoucumentData($empDepartment,$empJobInfo, $empDivision,  $empId  ){
+       $matchedDocsAccToRole = '';
+       $bhr = new BambooAPI(env('YOUR_COMPANY_ID'));
+        $bhr->setSecretKey(env('YOUR_API_KEY'));
+       $listEmployeeFiles = $bhr->listEmployeeFiles($empId);
+       if ($listEmployeeFiles->isError()) {
+           trigger_error("Error communicating with BambooHR: " . $listEmployeeFiles->getErrorMessage());
+       }
+
+       $listEmployeeFiles = $listEmployeeFiles->getContent();
+       $listEmployeeFiles = json_encode($listEmployeeFiles);       
+       $listEmployeeFiles = json_decode($listEmployeeFiles, true);
+
+       $commonDocumentArray = array();
+       //dump($listEmployeeFiles);
+       $employeeAllDocumentsArr = [];
+       $totalFileCount = 0;
+       if(count($listEmployeeFiles) > 0){     
+           if (isset($listEmployeeFiles['category'])) {
+            $employeeDocumentIdsAccToRole = $this->getDocumentIdsBasedOnEmployeeDetails($empDepartment, $empJobInfo, $empDivision);
+
+               foreach($listEmployeeFiles['category'] as $key=> $documents){
+
+        
+                    //   $employeeAllDocumentsArr[]=$this->getFileCountForDocumentIds($documents, $employeeDocumentIdsAccToRole); 
+                    $totalFileCount += $this->getFileCountForDocumentIds($documents, $employeeDocumentIdsAccToRole); 
+               }
+            //    dd($listEmployeeFiles['category']);
+            dd($employeeDocumentIdsAccToRole);
+
+               dd($totalFileCount);
+
+
+
+            dd("djbgdf");
+
+            // dump($listEmployeeFiles['category']);
+
+            // dd($employeeAllDocumentsArr);
+
+
+               //now we will show the document acc to emp role and jobtitle
+            //    $matchedDocsAccToRole = $this->searchMatchDocKey($employeeAllDocumentsArr, $employeeDocumentIdsAccToRole);
+               //dump($matchedDocsAccToRole);
+           }
+       }
+}
+
+
+private function getDocumentIdsBasedOnEmployeeDetails($empDepartment, $empJobInfo, $empDivision) {
+    $documentIds = [];
+        if($empDepartment == env('GROUP_HOME')){ //if department is `Residential Group Home` 
+            if($empJobInfo == env('JOBINFO_GROUP_HOME_CHILD_YOUTH')){ //Group Home Residential Child Youth Care Practitioner
+                dd("hsfgdhj");
+                $documentIds = [54, 42, 43, 41, 24, 26, 164, 160, 31, 39, 28, 40, 139, 78, 50, 141, 35, 20, 37, 47, 55, 56, 48, 43, 25, 165, 141, 52, 38, 16, 19, 155];
+            }else if($empJobInfo == env('JOBINFO_GROUP_HOME_YOUTH')){ //Group Home Youth	
+                $documentIds = [100, 16, 19];
+            }
+        }else if($empDepartment == env('DEPARTMENT_PRP')){ 
+            if($empDivision == env('DIVISION_PRP_FAMILY_COORD')){
+                $documentIds = [54, 42, 43, 41, 24, 26, 31, 44, 139, 39, 78, 40, 80, 28, 35, 141, 20, 37, 47, 55, 56, 48, 43, 25, 68, 165, 81, 16, 19, 155];
+            }else if($empDivision == env('DIVISION_PRP_COORDINATOR_SPEC') && $empJobInfo == env('JOBINFO_PRP_MAYAA')){ //specialist
+                $documentIds = [54, 42, 43, 41, 24, 26, 31, 44, 139, 39, 78, 40, 80, 28, 35, 141, 20, 37, 47, 55, 56, 48, 43, 25, 68, 165, 81, 16, 19, 155];
+            }
+            else if($empDivision == env('DIVISION_PRP_COORDINATOR_SPEC')){ //specialist
+                $documentIds = [54, 42, 43, 41, 24, 26, 31, 44, 139, 39, 78, 40, 80, 28, 35, 141, 20, 37, 47, 55, 56, 48, 43, 25, 68, 165, 81, 16, 19, 155];
+            }
+        }else if($empDepartment == env('DEPARTMENT_OMHC')){
+            if($empJobInfo == env('JOBINFO_COOCCURING_OMHC')){
+                $documentIds = [54, 42, 43, 41, 24, 26, 31, 44, 139, 39, 78, 40, 23, 28, 35, 20, 37, 47, 55, 56, 48, 43, 25, 68, 165, 81, 16, 19, 155];
+            }else if($empJobInfo == env('JOBINFO_Intern_OMHC')){ //when the department is `OMHC;Substance Use Disorder (SUD)` and jobtitle is `INTERN`
+                $documentIds = [54, 42, 43, 41, 24, 26, 31, 44, 139, 39, 78, 40, 23, 28, 35, 20, 37, 47, 55, 56, 48, 43, 25, 68, 165, 81, 16, 19, 155];
+            }else if($empJobInfo == env('JOBINFO_GROUP_SUBSTANCE_USE_DISORDER_COUNSELOR')){
+                $documentIds = [54, 42, 43, 41, 24, 26, 31, 44, 139, 39, 78, 40, 23, 28, 35, 20, 37, 47, 55, 56, 48, 43, 25, 68, 165, 81, 16, 19, 155];
+            }
+        }else if($empDepartment == env('DEPARTMENT_MENTAL_HEALTH_OMHC')){ //when department is OMHC and MENTAL HEALTH
+            if($empJobInfo == env('JOBINFO_MENTAL_HEALTH_OMHC')){
+                $documentIds = [54, 42, 43, 41, 24, 26, 31, 44, 139, 39, 78, 40, 23, 28, 35, 20, 37, 47, 55, 56, 48, 43, 25, 68, 165, 81, 16, 19, 155];
+            }else if($empJobInfo == env('JOBINFO_Clinical_OMHC')){ //when department is OMHC and jobtitle is `clinical director`
+                $documentIds = [54, 42, 43, 41, 24, 26, 31, 44, 139, 39, 78, 40, 23, 28, 35, 20, 37, 47, 55, 56, 48, 43, 25, 68, 165, 81, 16, 19, 155];
+            }else if($empJobInfo == env('JOBINFO_Nurse_Practitioner_OMHC')){  // jobtitle is `Psychiatric Nurse Practitioner`0
+                $documentIds = [54, 42, 43, 41, 24, 26, 31, 44, 139, 39, 78, 40, 23, 28, 35, 20, 37, 47, 55, 56, 48, 43, 25, 68, 165, 81, 16, 19, 155];
+            }
+        }else if($empDepartment == env('DEPARTMENT_LATRILL_ERTHA')){ 
+            if($empJobInfo == env('JOBINFO_EXECUTIVE_DIRECTOR')){
+                $documentIds = [54, 42, 43, 41, 24, 26, 31, 44, 139, 39, 78, 40, 23, 28, 35, 20, 37, 47, 55, 56, 48, 43, 25, 68, 165, 81, 16, 19, 155, 159, 23];
+            }else if($empJobInfo == env('JOBINFO_PRP_ERTHA')){
+                $documentIds = [54, 42, 43, 41, 24, 26, 31, 44, 139, 39, 78, 40, 23, 28, 35, 20, 37, 47, 55, 56, 48, 43, 25, 68, 165, 81, 16, 19, 155, 23];
+            }
+        }
+
+    return $documentIds;
+}
+
+private function getFileCountForDocumentIds($arrayObj, $idsToCount) {
+    $fileCount = 0;
+    if (is_array($arrayObj)) {
+        $docId = $arrayObj['@attributes']['id'];
+
+            if (in_array($docId, $idsToCount)) {
+                if(array_key_exists('file', $arrayObj)){  
+                $val = $arrayObj['file'];
+
+                if(array_key_exists('@attributes', $val)){ // has single file
+                    $fileCount++;
+                }else{
+                    foreach($val as $files){
+                        $fileCount++;
+                    }
+                }
+
+                }
+            }
+        }
+            //  dump($fileCount);
+
+    return $fileCount;
+}
+
 }

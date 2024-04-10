@@ -44,6 +44,7 @@
                                                 <th>Blank Fields</th>
                                                 <th>Expiration Dates Count</th>
                                                 <th>Documents</th>
+                                                <!-- <th>Documents Count</th> -->
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -73,14 +74,15 @@
                                                             </div></span>
                                                     </td>
                                                     <td id="row-{{ $fields['ID'] }}">
-                                                      
-                                                      <!-- <span class="tracker-{{ $fields['ID'] }}"> <div class="spinner-border" role="status">
-                                                          <span class="visually-hidden">Loading...</span>
-                                                          </div></span> -->
                                                           <a href="{{ route('employees.documents', ['id' => $fields['ID']]) }}" target="_blank">
                                                             <i class="bi bi-folder-fill" style="font-size:30px"></i>
                                                         </a>
                                                   </td>
+                                                  <!-- <td id="row-{{ $fields['ID'] }}">
+                                                  <span class="document-{{ $fields['ID'] }}"> <div class="spinner-border" role="status">
+                                                            <span class="visually-hidden">Loading...</span>
+                                                            </div></span>
+                                                  </td> -->
                                                 </tr>
                                             @endforeach
                                             <?php
@@ -195,15 +197,28 @@ $(document).ready(function() {
             });
         }
 
-        // Iterate over each row and fetch data
-        // $('.employee-row').each(function(){
-        //     var rowId = $(this).data('row-id'); 
-        //     var division = $(this).data('division'); 
-        //     var jobInfo = $(this).data('jobinfo'); 
-        //     var department = $(this).data('department'); 
-        //      fetchRowData(rowId);
-        //     fetchTimeTrackerRowData(rowId, division, department, jobInfo);
-        // });
+        function fetchDoucumentCount(rowId, division, department, jobInfo) {
+            $.ajax({
+                url: '/doucument/row/count/' + rowId, 
+                method: 'POST',
+        headers: {
+            'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+        },
+        data: {
+            division: division,
+            department: department,
+            jobInfo: jobInfo
+        },
+   
+                success: function(response){
+                    // Handle the response, e.g., append data to a table row
+                    $('.document-' + rowId).html(response); // Assuming there's a row with id "row-{rowId}" in your HTML
+                },
+                error: function(xhr, status, error){
+                    console.error(error);
+                }
+            });
+        }
 
         function fetchDataForVisibleRows() {
                 table.rows({page: 'current'}).nodes().each(function (node, index) {
@@ -214,6 +229,8 @@ $(document).ready(function() {
 
                     fetchRowData(rowId);
                     fetchTimeTrackerRowData(rowId, division, department, jobInfo);
+                    // fetchDoucumentCount(rowId, division, department, jobInfo);
+
                 });
             }
 
