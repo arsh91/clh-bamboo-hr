@@ -28,7 +28,9 @@ class DocumentController extends Controller
         $bhr->setSecretKey("40d056dd98d048b1d50c46392c77bd2bbbf0431f");
         $listEmployeeFiles = $bhr->listEmployeeFiles($empId);
         if ($listEmployeeFiles->isError()) {
-            trigger_error("Error communicating with BambooHR: " . $listEmployeeFiles->getErrorMessage());
+            $request->session()->flash('error','Some error occured while connecting with Bamboo HR.');
+            return redirect()->back();
+           // trigger_error("Error communicating with BambooHR: " . $listEmployeeFiles->getErrorMessage());
         }
 
         $listEmployeeFiles = $listEmployeeFiles->getContent();
