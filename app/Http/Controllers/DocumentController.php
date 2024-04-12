@@ -212,7 +212,9 @@ class DocumentController extends Controller
         //$response = $bhr->getDirectory();
         $getEmployee = $bhr->getEmployee($empId, $empFieldsArray);
         if ($getEmployee->isError()) {
-            trigger_error("Error communicating with BambooHR: " . $getEmployee->getErrorMessage());
+            session()->flash('error','Some error occured while connecting with Bamboo HR.');
+            return redirect()->back();
+            //trigger_error("Error communicating with BambooHR: " . $getEmployee->getErrorMessage());
         }
 
         $getEmployeeData = $getEmployee->getContent();
@@ -360,5 +362,26 @@ private function getFileCountForDocumentIds($arrayObj, $idsToCount) {
 
     return $fileCount;
 }
+
+/**
+ * get reports
+ */
+/*public function getReports(Request $request){
+    $bhr = new BambooAPI(env('YOUR_COMPANY_ID'));
+    $bhr->setSecretKey(env('YOUR_API_KEY'));
+    $getReports = $bhr->getReport('1', 'csv', true);
+    //$getReports = $bhr->getCustomReport('csv','fields', true, 'custom');
+    
+    if ($getReports->isError()) {
+
+        //trigger_error("Error communicating with BambooHR: " . $getReports->getErrorMessage());
+        $request->session()->flash('error','Some error occured while connecting with Bamboo HR.');
+        return redirect()->back();
+
+    }
+    
+
+    
+}*/
 
 }

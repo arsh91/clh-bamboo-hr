@@ -53,6 +53,8 @@ Route::group(['middleware' => ['auth']], function() {
             /**ROUTES FOR EMPLOYEE DOCUMENTS */ 
             Route::get('/employee/documents/{id}', [DocumentController::class, 'listEmplyeeDocuments'])->name('employees.documents');
             Route::post('/doucument/row/count/{id}', [DocumentController::class, 'getDoucumentCount'])->name('document.count');
+
+            Route::get('/document/report', [DocumentController::class, 'getReports'])->name('document.report');
        
         });
         //Ends Protected Routes For Admin
