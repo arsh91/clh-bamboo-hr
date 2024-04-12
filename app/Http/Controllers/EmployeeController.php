@@ -19,11 +19,11 @@ class EmployeeController extends Controller
     public function show($employeeId)
     {
         // Use the BambooHrService to get employee data
-        $employeeData = $this->bambooHrService->getEmployeeData($employeeId);
+       // $employeeData = $this->bambooHrService->getEmployeeData($employeeId);
         // dd('---');
 
         // Process the data or return it to the view
-        return view('employee.show', ['employeeData' => $employeeData]);
+       // return view('employee.show', ['employeeData' => $employeeData]);
     }
 
     public function employeDetail($empId)
