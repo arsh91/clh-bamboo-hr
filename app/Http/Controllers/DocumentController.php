@@ -114,6 +114,8 @@ class DocumentController extends Controller
                 $documentIds = [54, 42, 43, 41, 24, 26, 164, 160, 31, 39, 28, 40, 139, 78, 50, 141, 35, 20, 37, 47, 55, 56, 48, 43, 25, 165, 141, 52, 38, 16, 19, 155];
             }else if($empJobInfo == env('JOBINFO_GROUP_HOME_YOUTH')){ //Group Home Youth	
                 $documentIds = [100, 16, 19];
+            }else if($empJobInfo == env('JOBINFO_GROUP_HOME_REGISTERED_NURSE')){ //and JobTitle is `Registered Nurse`	
+                $documentIds = [54, 42, 43, 41, 24, 26, 31, 44, 39, 40, 139, 155, 23, 78, 28, 35, 20, 37, 47, 55, 56, 48, 43, 25, 68, 165, 81, 16, 19];
             }
         }else if($empDepartment == env('DEPARTMENT_PRP')){ 
             if($empDivision == env('DIVISION_PRP_FAMILY_COORD')){
@@ -123,6 +125,8 @@ class DocumentController extends Controller
             }
             else if($empDivision == env('DIVISION_PRP_COORDINATOR_SPEC')){ //specialist
                 $documentIds = [54, 42, 43, 41, 24, 26, 31, 44, 139, 39, 78, 40, 80, 28, 35, 141, 20, 37, 47, 55, 56, 48, 43, 25, 68, 165, 81, 16, 19, 155];
+            }else if($empJobInfo == env('JOBINFO_PRP_BILLING_SPECIALIST')){ //for billing specialist
+                $documentIds = [54, 42, 43, 41, 24, 26, 31, 39, 40, 139, 155, 78, 28, 35, 20, 37, 47, 55, 56, 48, 46, 25, 68, 165, 81, 16, 19];
             }
         }else if($empDepartment == env('DEPARTMENT_OMHC')){
             if($empJobInfo == env('JOBINFO_COOCCURING_OMHC')){
@@ -301,15 +305,19 @@ private function getDocumentIdsBasedOnEmployeeDetails($empDepartment, $empJobInf
                 $documentIds = [54, 42, 43, 41, 24, 26, 164, 160, 31, 39, 28, 40, 139, 78, 50, 141, 35, 20, 37, 47, 55, 56, 48, 43, 25, 165, 141, 52, 38, 16, 19, 155];
             }else if($empJobInfo == env('JOBINFO_GROUP_HOME_YOUTH')){ //Group Home Youth	
                 $documentIds = [100, 16, 19];
+            }else if($empJobInfo == env('JOBINFO_GROUP_HOME_REGISTERED_NURSE')){ //and JobTitle is `Registered Nurse`	
+                $documentIds = [54, 42, 43, 41, 24, 26, 31, 44, 39, 40, 139, 155, 23, 78, 28, 35, 20, 37, 47, 55, 56, 48, 43, 25, 68, 165, 81, 16, 19];
             }
-        }else if($empDepartment == env('DEPARTMENT_PRP')){ 
+        }else if($empDepartment == env('DEPARTMENT_PRP')){  //IF department is PRP
             if($empDivision == env('DIVISION_PRP_FAMILY_COORD')){
                 $documentIds = [54, 42, 43, 41, 24, 26, 31, 44, 139, 39, 78, 40, 80, 28, 35, 141, 20, 37, 47, 55, 56, 48, 43, 25, 68, 165, 81, 16, 19, 155];
-            }else if($empDivision == env('DIVISION_PRP_COORDINATOR_SPEC') && $empJobInfo == env('JOBINFO_PRP_MAYAA')){ //specialist
+            }else if($empDivision == env('DIVISION_PRP_COORDINATOR_SPEC') && $empJobInfo == env('JOBINFO_PRP_MAYAA')){ //specialist && for maya as well
                 $documentIds = [54, 42, 43, 41, 24, 26, 31, 44, 139, 39, 78, 40, 80, 28, 35, 141, 20, 37, 47, 55, 56, 48, 43, 25, 68, 165, 81, 16, 19, 155];
             }
             else if($empDivision == env('DIVISION_PRP_COORDINATOR_SPEC')){ //specialist
                 $documentIds = [54, 42, 43, 41, 24, 26, 31, 44, 139, 39, 78, 40, 80, 28, 35, 141, 20, 37, 47, 55, 56, 48, 43, 25, 68, 165, 81, 16, 19, 155];
+            }else if($empJobInfo == env('JOBINFO_PRP_BILLING_SPECIALIST')){ //for billing specialist
+                $documentIds = [54, 42, 43, 41, 24, 26, 31, 39, 40, 139, 155, 78, 28, 35, 20, 37, 47, 55, 56, 48, 46, 25, 68, 165, 81, 16, 19];
             }
         }else if($empDepartment == env('DEPARTMENT_OMHC')){
             if($empJobInfo == env('JOBINFO_COOCCURING_OMHC')){
