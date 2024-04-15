@@ -26,7 +26,7 @@ class EmployeeController extends Controller
        // return view('employee.show', ['employeeData' => $employeeData]);
     }
 
-    public function employeDetail($empId)
+    public function employeDetail($empId, Request $request)
     {
         $base64Image = '';
         $expDateTracker = [];
@@ -37,7 +37,8 @@ class EmployeeController extends Controller
         //$response = $bhr->getDirectory();
         $getEmployee = $bhr->getEmployee($empId, $empFieldsArray);
         if($getEmployee->isError()) {
-        trigger_error("Error communicating with BambooHR: " . $getEmployee->getErrorMessage());
+            $request->session()->flash('error','Some error occured while connecting with Bamboo HR.');
+            return redirect()->back();
         }
 
         $getEmployeeData = $getEmployee->getContent();
@@ -134,6 +135,21 @@ class EmployeeController extends Controller
                 $expDateTracker[] = $this->getDateTrackers($empId, 'Physical');
                 $expDateTracker[] = $this->getDateTrackers($empId, 'Dental');
                 $expDateTracker[] = $this->getDateTrackers($empId, 'Vision');
+            }else if($empJobInfo == env('JOBINFO_GROUP_HOME_REGISTERED_NURSE')){ //and JobTitle is `Registered Nurse`	
+                $types = ['License', 'Insurance', 'Record', 'First_Aid', 'TB_Test', 'RCYCP_Certification', 'Tact_II', 'Annual_EvaluationJC', 'Annual_Evaluation', 'Sexual_Abuse_Awareness'];
+                foreach ($types as $type) {
+                    $expDateTracker[$type] = $this->getDateTrackers($empId, $type);
+                }
+            }else if($empJobInfo == env('JOBINFO_UNIT_SUPERVISOR')){
+                $types = ['License', 'Insurance', 'Record', 'First_Aid', 'TB_Test', 'RCYCP_Certification', 'Tact_II', 'Annual_EvaluationJC', 'Annual_Evaluation', 'Sexual_Abuse_Awareness'];
+                foreach ($types as $type) {
+                    $expDateTracker[$type] = $this->getDateTrackers($empId, $type);
+                }
+            }else if($empJobInfo == env('JOBINFO_HOME_MANAGER')){
+                $types = ['License', 'Insurance', 'Record', 'First_Aid', 'TB_Test', 'RCYCP_Certification', 'Tact_II', 'Annual_EvaluationJC', 'Annual_Evaluation', 'Sexual_Abuse_Awareness'];
+                foreach ($types as $type) {
+                    $expDateTracker[$type] = $this->getDateTrackers($empId, $type);
+                }
             }
         }else if ($empDepartment == env('DEPARTMENT_PRP')){ //when the department is PRP and then division is `Family Care Coordinator`|| `Family Care Coordinator`
             if($empDivision == env('DIVISION_PRP_FAMILY_COORD')){
@@ -615,6 +631,12 @@ private function getTimeTrackerData($empDepartment,$empJobInfo, $empDivision,  $
             $types = ['License', 'Insurance', 'Record', 'First_Aid', 'TB_Test', 'RCYCP_Certification', 'Tact_II', 'Annual_EvaluationJC', 'Annual_Evaluation', 'Sexual_Abuse_Awareness'];
         }else if($empJobInfo == env('JOBINFO_GROUP_HOME_YOUTH')){	
             $types = ['72_Hour_Treatment_Plan', '30_Day_Treatment_Plan', '90_Day_Treatment_Plan', 'Psych_Evaluation', 'Safe_Environment_Plan', 'Physical', 'Dental', 'Vision'];
+        }else if($empJobInfo == env('JOBINFO_GROUP_HOME_REGISTERED_NURSE')){ //and JobTitle is `Registered Nurse`	
+            $types = ['License', 'Insurance', 'Record', 'First_Aid', 'TB_Test', 'RCYCP_Certification', 'Tact_II', 'Annual_EvaluationJC', 'Annual_Evaluation', 'Sexual_Abuse_Awareness'];
+        }else if($empJobInfo == env('JOBINFO_UNIT_SUPERVISOR')){
+            $types = ['License', 'Insurance', 'Record', 'First_Aid', 'TB_Test', 'RCYCP_Certification', 'Tact_II', 'Annual_EvaluationJC', 'Annual_Evaluation', 'Sexual_Abuse_Awareness'];
+        }else if($empJobInfo == env('JOBINFO_HOME_MANAGER')){
+            $types = ['License', 'Insurance', 'Record', 'First_Aid', 'TB_Test', 'RCYCP_Certification', 'Tact_II', 'Annual_EvaluationJC', 'Annual_Evaluation', 'Sexual_Abuse_Awareness'];
         }
     }else if ($empDepartment == env('DEPARTMENT_PRP')){ 
         if($empDivision == env('DIVISION_PRP_FAMILY_COORD')){

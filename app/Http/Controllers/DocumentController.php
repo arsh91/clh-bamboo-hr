@@ -14,7 +14,7 @@ class DocumentController extends Controller
     {
         $this->bambooHrService = $bambooHrService;
     }
-    public function listEmplyeeDocuments($empId)
+    public function listEmplyeeDocuments($empId, Request $request)
     {
         $matchedDocsAccToRole = '';
         $employeeDetails = $this->getEmployeeDetailByID($empId);
@@ -30,7 +30,6 @@ class DocumentController extends Controller
         if ($listEmployeeFiles->isError()) {
             $request->session()->flash('error','Some error occured while connecting with Bamboo HR.');
             return redirect()->back();
-           // trigger_error("Error communicating with BambooHR: " . $listEmployeeFiles->getErrorMessage());
         }
 
         $listEmployeeFiles = $listEmployeeFiles->getContent();
@@ -117,7 +116,11 @@ class DocumentController extends Controller
             }else if($empJobInfo == env('JOBINFO_GROUP_HOME_YOUTH')){ //Group Home Youth	
                 $documentIds = [100, 16, 19];
             }else if($empJobInfo == env('JOBINFO_GROUP_HOME_REGISTERED_NURSE')){ //and JobTitle is `Registered Nurse`	
-                $documentIds = [54, 42, 43, 41, 24, 26, 31, 44, 39, 40, 139, 155, 23, 78, 28, 35, 20, 37, 47, 55, 56, 48, 43, 25, 68, 165, 81, 16, 19];
+                    $documentIds = [54, 42, 43, 41, 24, 26, 31, 44, 39, 40, 139, 155, 23, 78, 28, 35, 20, 37, 47, 55, 56, 48, 43, 25, 68, 165, 81, 16, 19];
+            }else if($empJobInfo == env('JOBINFO_UNIT_SUPERVISOR')){
+                $documentIds = [54, 42, 43, 41, 24, 26, 164, 160, 31, 39, 28, 40, 139, 78, 50, 141, 35, 20, 37, 47, 55, 56, 48, 43, 25, 165, 141, 52, 38, 16, 19, 155];
+            }else if($empJobInfo == env('JOBINFO_HOME_MANAGER')){
+                $documentIds = [54, 42, 43, 41, 24, 26, 164, 160, 31, 39, 28, 40, 139, 78, 50, 141, 35, 20, 37, 47, 55, 56, 48, 43, 25, 165, 141, 52, 38, 16, 19, 155];
             }
         }else if($empDepartment == env('DEPARTMENT_PRP')){ 
             if($empDivision == env('DIVISION_PRP_FAMILY_COORD')){
@@ -279,7 +282,7 @@ class DocumentController extends Controller
 
 
    private function getDoucumentData($empDepartment,$empJobInfo, $empDivision,  $empId  ){
-       $bhr = new BambooAPI(env('YOUR_COMPANY_ID'));
+    $bhr = new BambooAPI(env('YOUR_COMPANY_ID'));
         $bhr->setSecretKey(env('YOUR_API_KEY'));
        $listEmployeeFiles = $bhr->listEmployeeFiles($empId);
        if ($listEmployeeFiles->isError()) {
@@ -311,6 +314,10 @@ private function getDocumentIdsBasedOnEmployeeDetails($empDepartment, $empJobInf
                 $documentIds = [100, 16, 19];
             }else if($empJobInfo == env('JOBINFO_GROUP_HOME_REGISTERED_NURSE')){ //and JobTitle is `Registered Nurse`	
                 $documentIds = [54, 42, 43, 41, 24, 26, 31, 44, 39, 40, 139, 155, 23, 78, 28, 35, 20, 37, 47, 55, 56, 48, 43, 25, 68, 165, 81, 16, 19];
+            }else if($empJobInfo == env('JOBINFO_UNIT_SUPERVISOR')){
+                $documentIds = [54, 42, 43, 41, 24, 26, 164, 160, 31, 39, 28, 40, 139, 78, 50, 141, 35, 20, 37, 47, 55, 56, 48, 43, 25, 165, 141, 52, 38, 16, 19, 155];
+            }else if($empJobInfo == env('JOBINFO_HOME_MANAGER')){
+                $documentIds = [54, 42, 43, 41, 24, 26, 164, 160, 31, 39, 28, 40, 139, 78, 50, 141, 35, 20, 37, 47, 55, 56, 48, 43, 25, 165, 141, 52, 38, 16, 19, 155];
             }
         }else if($empDepartment == env('DEPARTMENT_PRP')){  //IF department is PRP
             if($empDivision == env('DIVISION_PRP_FAMILY_COORD')){
