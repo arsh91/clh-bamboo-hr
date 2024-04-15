@@ -61,28 +61,28 @@ class UsersController extends Controller
              'created_at' => now(),
              'updated_at' => now(),
          ]);
-         if($user){
-            $messages = [
-                'subject' => 'Welcome to '. config('app.name'). '! Your Account Details Inside',
-                'greeting-text' => 'Dear ' .ucfirst($user->first_name). ',',
-                'url-title' => 'Click Here To Login',
-                'url' => '/login',
-                'lines_array' => [
-                    'body-text' => 'Your Account Is Created On '.config('app.name'). '. Below are your login credentials:',
-                    'special_Email' => $user->email,
-                    'special_Password' => $validatedData['password'],
-                ],
-                'thanks-message' => 'Once again, welcome aboard, and thank you for choosing MasterCatalog!',
-            ];
-                   // Send Credentails To User 
-                   $user->notify(new CommonEmailNotification($messages));
+        //  if($user){
+        //     $messages = [
+        //         'subject' => 'Welcome to '. config('app.name'). '! Your Account Details Inside',
+        //         'greeting-text' => 'Dear ' .ucfirst($user->first_name). ',',
+        //         'url-title' => 'Click Here To Login',
+        //         'url' => '/login',
+        //         'lines_array' => [
+        //             'body-text' => 'Your Account Is Created On '.config('app.name'). '. Below are your login credentials:',
+        //             'special_Email' => $user->email,
+        //             'special_Password' => $validatedData['password'],
+        //         ],
+        //         'thanks-message' => 'Once again, welcome aboard, and thank you for choosing MasterCatalog!',
+        //     ];
+        //            // Send Credentails To User 
+        //            $user->notify(new CommonEmailNotification($messages));
                   
-                   $request->session()->flash('message','User created successfully.');
+        //            $request->session()->flash('message','User created successfully.');
 
-                   return Response()->json(['status'=>200, 'users'=>$user]);
+        //            return Response()->json(['status'=>200, 'users'=>$user]);
             
-            // return response()->json(['success' => true, 'message' => 'User created successfully']);
-         }
+        //     // return response()->json(['success' => true, 'message' => 'User created successfully']);
+        //  }
     }
 
     /**

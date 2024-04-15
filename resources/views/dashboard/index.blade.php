@@ -18,7 +18,7 @@
         <!-- Left side columns -->
         <div class="col-lg-12">
             <div class="row">
-                @if(auth()->user()->role->name == 'SUPER_ADMIN')
+                @if(auth()->user()->role->name == 'SUPER_ADMIN' || auth()->user()->role->name == 'ADMIN')
                 <!-- Employee related tabs -->
                 <div class="container mt-5">
                     <!-- Bootstrap Tabs -->
@@ -132,7 +132,7 @@
 <script>
 $(document).ready(function() {
     var table = $('#employee_table').DataTable();
-
+    var spinnerHtml= '<div class="spinner-border" role="status"><span class="visually-hidden">Loading...</span></div></span></div>';
     // Event handler for the DataTables draw event
     table.on('draw.dt', function() {
         var searchValue = table.search(); // Get the current search term
@@ -173,6 +173,7 @@ $(document).ready(function() {
                     $('.job-' + rowId).html(response); // Assuming there's a row with id "row-{rowId}" in your HTML
                 },
                 error: function(xhr, status, error){
+                    $('.job-' + rowId).html('<i class="bi bi-exclamation-triangle me-1" style="font-size:30px" title="Unable to connect with bamboo hr"></i><a href="#" class="retry-job-ajax btn btn-success" data-row-id="' + rowId + '">Try Again</a>');
                     console.error(error);
                 }
             });
@@ -197,6 +198,7 @@ $(document).ready(function() {
                 },
                 error: function(xhr, status, error){
                     console.error(error);
+                    $('.tracker-' + rowId).html('<i class="bi bi-exclamation-triangle me-1" style="font-size:30px" title="Unable to connect with bamboo hr"></i><a href="#" class="retry-tracker-ajax btn btn-success" data-row-id="' + rowId + '">Try Again</a>');
                 }
             });
         }
@@ -205,20 +207,23 @@ $(document).ready(function() {
             $.ajax({
                 url: '/doucument/row/count/' + rowId, 
                 method: 'POST',
-        headers: {
-            'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
-        },
-        data: {
-            division: division,
-            department: department,
-            jobInfo: jobInfo
-        },
+            headers: {
+                'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+            },
+            data: {
+                division: division,
+                department: department,
+                jobInfo: jobInfo
+            },
    
                 success: function(response){
                     // Handle the response, e.g., append data to a table row
                     $('.document-' + rowId).html(response); // Assuming there's a row with id "row-{rowId}" in your HTML
                 },
                 error: function(xhr, status, error){
+                    $('.document-' + rowId).html('<i class="bi bi-exclamation-triangle me-1" style="font-size:30px" title="Unable to connect with bamboo hr"></i><a href="#" class="retry-ajax btn btn-success" data-row-id="' + rowId + '" data-department="' + department + '" data-division="' + division + '" data-job-info="' + jobInfo + '" target="_blank">Try Again</a>');
+
+                    // Log the error to the console
                     console.error(error);
                 }
             });
@@ -231,9 +236,9 @@ $(document).ready(function() {
                     var jobInfo = $(node).data('jobinfo');
                     var department = $(node).data('department');
 
-                    fetchRowData(rowId);
-                    fetchTimeTrackerRowData(rowId, division, department, jobInfo);
-                    fetchDoucumentCount(rowId, division, department, jobInfo);
+                     fetchRowData(rowId);
+                    // fetchTimeTrackerRowData(rowId, division, department, jobInfo);
+                    // fetchDoucumentCount(rowId, division, department, jobInfo);
 
                 });
             }
@@ -245,7 +250,38 @@ $(document).ready(function() {
 
             // Initial fetch for the visible rows on page load
             fetchDataForVisibleRows();
+
+
+    // Event listener for retrying AJAX request
+    $(document).on('click', '.retry-ajax', function(e) {
+        e.preventDefault();
+        var rowId = $(this).data('row-id');
+        $('.document-' + rowId).html(spinnerHtml); 
+        var division = $(this).data('division');
+        var department = $(this).data('department');
+        var jobInfo = $(this).data('job-info');
+        // Fetch document count again
+        fetchDoucumentCount(rowId, division, department, jobInfo);
+    });
+
+    $(document).on('click', '.retry-job-ajax', function(e) {
+        e.preventDefault();
+        var rowId = $(this).data('row-id');
+        $('.job-' + rowId).html(spinnerHtml); 
+        // Fetch document count again
+        fetchRowData(rowId);
+    });
+
+    $(document).on('click', '.retry-tracker-ajax', function(e) {
+        e.preventDefault();
+        var rowId = $(this).data('row-id');
+        $('.tracker-' + rowId).html(spinnerHtml); 
+        // Fetch document count again
+        fetchTimeTrackerRowData(rowId);
+    });
+    
 });
+
 
 
 </script>

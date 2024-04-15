@@ -12,6 +12,11 @@
 .GETTINGEXPIRE-class{
   background-color: yellow;
 }
+.link-div{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
 /* .ACTIVE-class{
   background-color: green;
 } */
@@ -26,7 +31,12 @@
                 <img src="<?php echo $base64Image; ?>" alt="API Image">
                 <h2>{{$empData['firstName']}} {{$empData['lastName']}}</h2>
                 <h3>{{$empData['jobTitle']}}</h3>
-                <a href="https://clhmentalhealth.bamboohr.com/employees/employee.php?id={{$empData['ID']}}" target="_blank" class="btn btn-success">Link To Bamboo Hr</a>
+                <div class="link-div">
+                  <a href="https://clhmentalhealth.bamboohr.com/employees/employee.php?id={{$empData['ID']}}" target="_blank" class="btn btn-success">Link To Bamboo Hr</a>
+                  <a href="http://127.0.0.1:8000/employee/documents/{{$empData['ID']}}" target="_blank">
+                    <i class="bi bi-folder-fill" style="font-size:30px"></i>
+                </a>
+                </div>
             </div>
         </div>
 
