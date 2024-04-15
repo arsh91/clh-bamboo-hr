@@ -14,7 +14,7 @@ class DocumentController extends Controller
     {
         $this->bambooHrService = $bambooHrService;
     }
-    public function listEmplyeeDocuments($empId)
+    public function listEmplyeeDocuments($empId, Request $request)
     {
         $matchedDocsAccToRole = '';
         $employeeDetails = $this->getEmployeeDetailByID($empId);
@@ -30,7 +30,6 @@ class DocumentController extends Controller
         if ($listEmployeeFiles->isError()) {
             $request->session()->flash('error','Some error occured while connecting with Bamboo HR.');
             return redirect()->back();
-           // trigger_error("Error communicating with BambooHR: " . $listEmployeeFiles->getErrorMessage());
         }
 
         $listEmployeeFiles = $listEmployeeFiles->getContent();

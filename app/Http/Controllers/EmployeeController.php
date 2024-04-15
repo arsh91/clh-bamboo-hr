@@ -26,7 +26,7 @@ class EmployeeController extends Controller
        // return view('employee.show', ['employeeData' => $employeeData]);
     }
 
-    public function employeDetail($empId)
+    public function employeDetail($empId, Request $request)
     {
         $base64Image = '';
         $expDateTracker = [];
@@ -37,7 +37,8 @@ class EmployeeController extends Controller
         //$response = $bhr->getDirectory();
         $getEmployee = $bhr->getEmployee($empId, $empFieldsArray);
         if($getEmployee->isError()) {
-        trigger_error("Error communicating with BambooHR: " . $getEmployee->getErrorMessage());
+            $request->session()->flash('error','Some error occured while connecting with Bamboo HR.');
+            return redirect()->back();
         }
 
         $getEmployeeData = $getEmployee->getContent();
