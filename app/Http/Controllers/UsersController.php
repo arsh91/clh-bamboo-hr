@@ -68,11 +68,11 @@ class UsersController extends Controller
                 'url-title' => 'Click Here To Login',
                 'url' => url('/login'),
                 'lines_array' => [
-                    'body-text' => 'Your Account Is Created On '.config('app.name'). '. Below are your login credentials:',
+                    'body-text' => 'Your account is created on '.config('app.name'). '. Below are your login credentials:',
                     'special_Email' => $user->email,
                     'special_Password' => $validatedData['password'],
                 ],
-                'thanks-message' => 'Once again, welcome aboard, and thank you for choosing MasterCatalog!',
+                // 'thanks-message' => 'Once again, welcome aboard, and thank you for choosing MasterCatalog!',
             ];
                    // Send Credentails To User 
                    $user->notify(new CommonEmailNotification($messages));
