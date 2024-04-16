@@ -33,7 +33,7 @@
                 <h3>{{$empData['jobTitle']}}</h3>
                 <div class="link-div">
                   <a href="https://clhmentalhealth.bamboohr.com/employees/employee.php?id={{$empData['ID']}}" target="_blank" class="btn btn-success">Link To Bamboo Hr</a>
-                  <a href="{{ route('employee.documents', ['id' => $empData['ID']]) }}" target="_blank">
+                  <a href="{{ route('employees.documents', ['id' => $empData['ID']]) }}" target="_blank">
                     <i class="bi bi-folder-fill" style="font-size:30px"></i>
                 </a>
                 </div>
