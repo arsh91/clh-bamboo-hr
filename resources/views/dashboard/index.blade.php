@@ -173,7 +173,7 @@ $(document).ready(function() {
                     $('.job-' + rowId).html(response); // Assuming there's a row with id "row-{rowId}" in your HTML
                 },
                 error: function(xhr, status, error){
-                    $('.job-' + rowId).html('<i class="bi bi-exclamation-triangle me-1" style="font-size:30px" title="Unable to connect with bamboo hr"></i><a href="#" class="retry-job-ajax btn btn-success" data-row-id="' + rowId + '">Try Again</a>');
+                    $('.job-' + rowId).html('<i class="bi bi-exclamation-triangle me-1" style="font-size:14px; color:red;" title="Unable to connect with bamboo hr"></i><a href="#" title="Unable to connect with bamboo hr. Please try again" style="color:red;" class="retry-job-ajax" data-row-id="' + rowId + '">Try Again</a>');
                     console.error(error);
                 }
             });
@@ -221,7 +221,7 @@ $(document).ready(function() {
                     $('.document-' + rowId).html(response); // Assuming there's a row with id "row-{rowId}" in your HTML
                 },
                 error: function(xhr, status, error){
-                    $('.document-' + rowId).html('<i class="bi bi-exclamation-triangle me-1" style="font-size:30px" title="Unable to connect with bamboo hr"></i><a href="#" class="retry-ajax btn btn-success" data-row-id="' + rowId + '" data-department="' + department + '" data-division="' + division + '" data-job-info="' + jobInfo + '" target="_blank">Try Again</a>');
+                    $('.document-' + rowId).html('<i class="bi bi-exclamation-triangle me-1" style="font-size:14px; color:red;" title="Unable to connect with bamboo hr"></i><a href="#" title="Unable to connect with bamboo hr. Please try again" style="color:red;" class="retry-ajax" data-row-id="' + rowId + '" data-department="' + department + '" data-division="' + division + '" data-job-info="' + jobInfo + '" target="_blank">Try Again</a>');
 
                     // Log the error to the console
                     console.error(error);
