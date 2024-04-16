@@ -198,7 +198,7 @@ $(document).ready(function() {
                 },
                 error: function(xhr, status, error){
                     console.error(error);
-                    $('.tracker-' + rowId).html('<i class="bi bi-exclamation-triangle me-1" style="font-size:30px" title="Unable to connect with bamboo hr"></i><a href="#" class="retry-tracker-ajax btn btn-success" data-row-id="' + rowId + '">Try Again</a>');
+                    $('.tracker-' + rowId).html('<i class="bi bi-exclamation-triangle me-1" style="font-size:14px; color:red;" title="Unable to connect with bamboo hr"></i><a href="#" title="Unable to connect with bamboo hr. Please try again" style="color:red;" class="retry-tracker-ajax btn btn-success" data-row-id="' + rowId + '">Try Again</a>');
                 }
             });
         }
