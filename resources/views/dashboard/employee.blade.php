@@ -31,7 +31,7 @@
                 <img src="<?php echo $base64Image; ?>" alt="API Image">
                 <h2 class="text-center mb-3">{{$empData['firstName']}} {{$empData['lastName']}}</h2>
                 <h3 class="text-center mb-3">{{$empData['jobTitle']}}</h3>
-                <div class="link-div mb-2">
+                <div class="link-div mb-3">
                   <a href="https://clhmentalhealth.bamboohr.com/employees/employee.php?id={{$empData['ID']}}" target="_blank" class="btn btn-success">Link To Bamboo Hr</a>
                 </div>
                 <div class="link-div">
