@@ -66,7 +66,7 @@ class UsersController extends Controller
                 'subject' => 'Welcome to '. config('app.name'). '! Your Account Details Inside',
                 'greeting-text' => 'Dear ' .ucfirst($user->first_name). ',',
                 'url-title' => 'Click Here To Login',
-                'url' => '/login',
+                'url' => url('/login'),
                 'lines_array' => [
                     'body-text' => 'Your Account Is Created On '.config('app.name'). '. Below are your login credentials:',
                     'special_Email' => $user->email,
