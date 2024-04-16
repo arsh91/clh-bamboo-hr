@@ -167,7 +167,7 @@
                                                 <input type="number" class="form-control" name="phone" id="edit_phone">
                                             </div>
                                         </div>   
-                                        <div class="row mb-3">
+                                        <!-- <div class="row mb-3">
                                             <label for="edit_role" class="col-sm-3 col-form-label required">Role</label>
                                             <div class="col-sm-9">
                                                 <select name="role" class="form-select" id="edit_role">
@@ -180,7 +180,7 @@
                                                 </select>
                                                 </select>
                                             </div>
-                                        </div> 
+                                        </div>  -->
                                         <!-- <div class="row mb-3">
                                             <label for="edit_password" class="col-sm-3 col-form-label required">Password</label>
                                             <div class="col-sm-9">
