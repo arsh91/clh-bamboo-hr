@@ -237,8 +237,8 @@ $(document).ready(function() {
                     var department = $(node).data('department');
 
                      fetchRowData(rowId);
-                    // fetchTimeTrackerRowData(rowId, division, department, jobInfo);
-                    // fetchDoucumentCount(rowId, division, department, jobInfo);
+                    fetchTimeTrackerRowData(rowId, division, department, jobInfo);
+                    fetchDoucumentCount(rowId, division, department, jobInfo);
 
                 });
             }
