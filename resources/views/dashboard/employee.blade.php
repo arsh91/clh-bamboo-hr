@@ -29,10 +29,13 @@
         <div class="card">
             <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
                 <img src="<?php echo $base64Image; ?>" alt="API Image">
-                <h2>{{$empData['firstName']}} {{$empData['lastName']}}</h2>
-                <h3>{{$empData['jobTitle']}}</h3>
-                <div class="link-div">
+                <h2 class="text-center mb-3">{{$empData['firstName']}} {{$empData['lastName']}}</h2>
+                <h3 class="text-center mb-3">{{$empData['jobTitle']}}</h3>
+                <div class="link-div mb-2">
                   <a href="https://clhmentalhealth.bamboohr.com/employees/employee.php?id={{$empData['ID']}}" target="_blank" class="btn btn-success">Link To Bamboo Hr</a>
+                </div>
+                <div class="link-div">
+                  <label for="document">Go To Documents : </label>
                   <a href="{{ route('employees.documents', ['id' => $empData['ID']]) }}" target="_blank">
                     <i class="bi bi-folder-fill" style="font-size:30px"></i>
                 </a>

@@ -55,7 +55,7 @@
                                             @foreach($empMainArr as $key => $fields)
                                                 <tr class="employee-row" data-row-id="{{ $fields['ID'] }}" data-department="{{ $fields['department'] }}" data-division="{{ $fields['division'] }}" data-jobinfo="{{ $fields['jobTitle'] }}">
                                                 
-                                                    <td><a href="{{ route('employees.detail', $fields['ID']) }}">{{$fields['ID']}}</a>      </td>
+                                                    <td><a href="{{ route('employees.detail', $fields['ID']) }}" target="_blank">{{$fields['ID']}}</a></td>
                                                     <td><?php print_r($fields['photo']); ?></td>
                                                     <td>{{$fields['firstname']}}</td>
                                                     <td>{{$fields['lastname']}}</td>
