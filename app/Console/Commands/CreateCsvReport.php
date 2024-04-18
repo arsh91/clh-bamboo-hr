@@ -103,9 +103,9 @@ class CreateCsvReport extends Command
     
                  try {
                     $html = '';
-                    $blankPersonalFields = $this->getPersonalBlankFields($empID);
-                    $blankJobFields = $this->getJobBlankFields($empID);
-                    $getEmergencyContacts = $this->getEmergencyFields($empID);
+                    $blankPersonalFields = $this->employeeController->getPersonalBlankFields($empID);
+                    $blankJobFields = $this->employeeController->getJobBlankFields($empID);
+                    $getEmergencyContacts = $this->employeeController->getEmergencyFields($empID);
                     $blankEmergencyFields =$getEmergencyContacts['empty'];
                     if( count($blankJobFields) > 0 ){
                         $html .= 'Job : '.count($blankJobFields);
