@@ -265,7 +265,7 @@ class EmployeeController extends Controller
      * Get blank fields from Personal Tab of an Employee
      * @param $empId
      */
-    private function getPersonalBlankFields($empId){
+    public function getPersonalBlankFields($empId){
         $empFieldsArray = array('employeeNumber,employmentStatus,firstName,lastName,dateOfBirth,gender,maritalStatus,customAllergies,customT-ShirtSize,address1,city,state,zipcode,country,mobilePhone,workEmail,homeEmail,customCollege,customDegree,customGPA,customEducationStartDate,customEducationEndDate');
 
         $bhr = new BambooAPI("clhmentalhealth");
@@ -298,7 +298,7 @@ class EmployeeController extends Controller
         return $emptyData;
     }
 
-    private function getJobBlankFields($empId){
+    public function getJobBlankFields($empId){
         $jobFieldsArray = array('hireDate,originalHireDate,ethnicity,eeo,customEmployeeNumber,customHourlyRate,customPersonalEmail,customHireDate');
         $bhr = new BambooAPI("clhmentalhealth");
         $bhr->setSecretKey("40d056dd98d048b1d50c46392c77bd2bbbf0431f");
@@ -330,7 +330,7 @@ class EmployeeController extends Controller
         
     }
 
-    private function getEmergencyFields($empId){
+    public function getEmergencyFields($empId){
         //GET EMERGENCY TAB 
         $emergencyContacts = $emptyEmeregencyFields = $finalArr = [];
         $bhr = new BambooAPI("clhmentalhealth");
@@ -614,13 +614,13 @@ class EmployeeController extends Controller
         if($data['expire_soon'] > 0){
             $html .= '<span class="badge bg-warning text-dark">Going to Expire : '.$data['expire_soon'].'</span>';
         }
-    }else{
-        $html .= '<span class="badge bg-success">No Expire date </span>';
-    }
+        }else{
+            $html .= '<span class="badge bg-success">No Expire date </span>';
+        }
         return $html;
     }
 
-private function getTimeTrackerData($empDepartment,$empJobInfo, $empDivision,  $empId  ){
+public function getTimeTrackerData($empDepartment,$empJobInfo, $empDivision,  $empId  ){
     $types = [];
     $counts = [
         'expire' => 0,

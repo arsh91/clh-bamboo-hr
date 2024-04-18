@@ -11,6 +11,16 @@
     flex-direction: column;
     gap: 10px;
 }
+.processingButton {
+        background-color: #007bff;
+        color: white;
+        padding: 10px;
+        border-radius: 5px;
+        text-align: center;
+        font-size: 16px;
+        display: inline-block;
+        width: 100%;
+    }
 </style>
 
 <section class="section dashboard">
@@ -40,6 +50,23 @@
                             <!-- Table with stripped rows -->
                             <div class="box-header with-border" id="filter-box">
                                 <div class="box-body table-responsive" style="margin-bottom: 5%">
+                                <div class="link-div mb-3">
+                                @if($latestReport && $latestReport['status']=== 'requested')
+                                <p class="processingButton">
+                                    Report generation is In Progress. We'll share the link to download the report in few mins.
+                                </p>
+                               
+
+                                @else
+                                    <a href="javascript:void(0);" id="exportCsvButton" class="btn btn-success">Generate Report</a>
+                                    @if($latestReport && $latestReport['status']=== 'created' && $latestReport['url']!= null)
+                                    <a href="javascript:void(0);" class="downloadLink"  onclick="downloadFile('{{ url($latestReport['url']) }}')">Download CSV File ({{$latestReport['report_created_at']}})</a>
+                                    @endif
+                                    <p class="processingButton d-none">
+                                    Report generation is In Progress. We'll share the link to download the report in few mins.
+                                    </p>
+                                @endif
+                                </div>
                                     <table class="datatable table table-striped my-2" id="employee_table">
                                         <thead>
                                             <tr>
@@ -77,7 +104,7 @@
                                                             <span class="visually-hidden">Loading...</span>
                                                             </div></span>
                                                     </td>
-                                                    <td id="row-{{ $fields['ID'] }}" class="text-center">
+                                                    <td id="row-{{ $fields['ID'] }}" class="text-center" data-document="simarn">
                                                       <div class="documnenttdx">
                                                           <a href="{{ route('employees.documents', ['id' => $fields['ID']]) }}" target="_blank">
                                                             <i class="bi bi-folder-fill" style="font-size:30px"></i>
@@ -130,7 +157,7 @@
 <!--begin::Page Custom Javascript(used by this page)-->
 
 <script>
-$(document).ready(function() {
+    $(document).ready(function() {
     var table = $('#employee_table').DataTable();
     var spinnerHtml= '<div class="spinner-border" role="status"><span class="visually-hidden">Loading...</span></div></span></div>';
     // Event handler for the DataTables draw event
@@ -217,8 +244,7 @@ $(document).ready(function() {
             },
    
                 success: function(response){
-                    // Handle the response, e.g., append data to a table row
-                    $('.document-' + rowId).html(response); // Assuming there's a row with id "row-{rowId}" in your HTML
+                    $('.document-' + rowId).html(response);
                 },
                 error: function(xhr, status, error){
                     $('.document-' + rowId).html('<i class="bi bi-exclamation-triangle me-1" style="font-size:14px; color:red;" title="Unable to connect with bamboo hr"></i><a href="#" title="Unable to connect with bamboo hr. Please try again" style="color:red;" class="retry-ajax" data-row-id="' + rowId + '" data-department="' + department + '" data-division="' + division + '" data-job-info="' + jobInfo + '" target="_blank">Try Again</a>');
@@ -279,10 +305,40 @@ $(document).ready(function() {
         // Fetch document count again
         fetchTimeTrackerRowData(rowId);
     });
+
+    $('#exportCsvButton').on('click', function() {
+        $(this).hide();
+        $('.downloadLink').hide();
+        $('.processingButton').removeClass('d-none').attr('disabled', true);
+        $.ajax({
+                url: '/start-report', 
+                method: 'POST',
+                headers: {
+                    'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+                },
+   
+                success: function(response){
+                 
+                },
+                error: function(xhr, status, error){
+                    console.error(error);
+                }
+        });
+    });
+
+
     
 });
 
-
+function downloadFile(url) {
+    var link = document.createElement('a');
+    link.href = url;
+    link.download = 'data.csv';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    var filename = this.getAttribute('data-filename');
+}
 
 </script>
 <!--end::Page Custom Javascript-->

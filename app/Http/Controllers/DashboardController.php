@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Route;
-
-
-
 use App\Models\User;
+use App\Models\Reports;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class DashboardController extends Controller
 {
@@ -93,9 +92,9 @@ class DashboardController extends Controller
             // }
             
         }  
-
+        $latestReport = Reports::latest()->first();
         $empIdsAr = json_encode($empIdsAr);     
-        return view('dashboard.index',compact('usersCount', 'empMainArr', 'employeeFieldsIndexes', 'empIdsAr'));
+        return view('dashboard.index',compact('usersCount', 'empMainArr', 'employeeFieldsIndexes', 'empIdsAr', 'latestReport'));
     }
 
     public function employeDetail($empId){
@@ -176,5 +175,12 @@ class DashboardController extends Controller
             $finalImage = 'N/A';
         }
         return $finalImage;
+    }
+
+    public function startCreatingReport(){
+        $report = Reports::create([
+            'status' => 'requested'
+        ]);
+        return response()->json(['status' => $report->status]);
     }
 }

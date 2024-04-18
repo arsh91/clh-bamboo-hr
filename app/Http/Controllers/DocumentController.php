@@ -281,7 +281,7 @@ class DocumentController extends Controller
    }
 
 
-   private function getDoucumentData($empDepartment,$empJobInfo, $empDivision,  $empId  ){
+   public function getDoucumentData($empDepartment,$empJobInfo, $empDivision,  $empId  ){
     $bhr = new BambooAPI(env('YOUR_COMPANY_ID'));
         $bhr->setSecretKey(env('YOUR_API_KEY'));
        $listEmployeeFiles = $bhr->listEmployeeFiles($empId);
