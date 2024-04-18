@@ -34,20 +34,14 @@ class CreateCsvReport extends Command
         $this->documentController = $documentController;
         $this->employeeController = $employeeController;
     }
-    // public function __construct(EmployeeController $documentController)
-    // {
-    //     parent::__construct();
-    //     $this->documentController = $documentController;
-    // }
-
+  
     /**
      * Execute the console command.
      */
     public function handle()
     {
         $requestedReport = Reports::where('status', 'requested')->first();
-        $requestedReportExists = Reports::where('status', 'inprocess')->exists();
-        if ($requestedReport && $requestedReportExists === false) {
+        if ($requestedReport) {
             $requestedReport->update([
                 'status' => 'inprocess',
             ]);
@@ -108,21 +102,21 @@ class CreateCsvReport extends Command
                     $getEmergencyContacts = $this->employeeController->getEmergencyFields($empID);
                     $blankEmergencyFields =$getEmergencyContacts['empty'];
                     if( count($blankJobFields) > 0 ){
-                        $html .= 'Job : '.count($blankJobFields);
+                        $html .= 'Job : '.count($blankJobFields).PHP_EOL ;
                     }else if ( count($blankJobFields) == 0) {
-                        $html .= 'Job : '.count($blankJobFields);
+                        $html .= 'Job : '.count($blankJobFields). PHP_EOL;
                     }
                   
                     if( count($blankPersonalFields) > 0 ){
-                        $html .= 'Personal : '.count($blankPersonalFields);
+                        $html .= 'Personal : '.count($blankPersonalFields).PHP_EOL;
                     }else if ( count($blankPersonalFields) == 0) {
-                        $html .= 'Personal : '.count($blankPersonalFields);
+                        $html .= 'Personal : '.count($blankPersonalFields).PHP_EOL;
                     }
             
                     if( count($blankEmergencyFields) > 0 ){
-                        $html .= 'Emergency : '.count($blankEmergencyFields);
+                        $html .= 'Emergency : '.count($blankEmergencyFields).PHP_EOL;
                     }else if ( count($blankEmergencyFields) == 0) {
-                        $html .= 'Emergency : '.count($blankEmergencyFields);
+                        $html .= 'Emergency : '.count($blankEmergencyFields).PHP_EOL;
                     }
                     $empMainArr[$i]['blankFeilds'] = $html;
                 } catch (\Exception $e) {
@@ -135,10 +129,10 @@ class CreateCsvReport extends Command
                     $html = '';
                     if($data['expire'] > 0 ||  $data['expire'] > 0){
                     if($data['expire'] > 0){
-                        $html .= 'Expire : '.$data['expire'];
+                        $html .= 'Expire : '.$data['expire'].PHP_EOL;
                     }
                     if($data['expire_soon'] > 0){
-                        $html .= 'Going to Expire : '.$data['expire_soon'];
+                        $html .= 'Going to Expire : '.$data['expire_soon'].PHP_EOL;
                     }
                     }else{
                         $html .= 'No Expire date';
