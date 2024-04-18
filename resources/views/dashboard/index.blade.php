@@ -325,19 +325,16 @@
                 }
         });
     });
-
-
-    
 });
 
 function downloadFile(url) {
+    const filenames = url.substring(url.lastIndexOf('/') + 1);
     var link = document.createElement('a');
     link.href = url;
-    link.download = 'data.csv';
+    link.download = filenames;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-    var filename = this.getAttribute('data-filename');
 }
 
 </script>

@@ -161,7 +161,7 @@ class CreateCsvReport extends Command
             }
             
             // Define CSV file path with timestamp
-            $filename = 'data_' . date('Y-m-d_H-i-s') . '.csv';
+            $filename = 'report_' . date('Y-m-d_H-i-s') . '.csv';
             $filePath = $directory . $filename;
             
             // Generate CSV content as a string
