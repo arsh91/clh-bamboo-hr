@@ -53,17 +53,17 @@
                                 <div class="link-div mb-3">
                                 @if($latestReport && ($latestReport['status']=== 'requested' || $latestReport['status']=== 'inprocess'))
                                 <p class="processingButton">
-                                    Report generation is In Progress. We'll share the link to download the report in few mins.
+                                    Report generation is In Progress. We'll share the link to download the report in 4-5 mins.
                                 </p>
                                
 
                                 @else
                                     <a href="javascript:void(0);" id="exportCsvButton" class="btn btn-success">Generate Report</a>
                                     @if($latestReport && $latestReport['status']=== 'created' && $latestReport['url']!= null)
-                                    <a href="javascript:void(0);" class="downloadLink"  onclick="downloadFile('{{ url($latestReport['url']) }}')">Download CSV File ({{$latestReport['report_created_at']}})</a>
+                                    <a href="javascript:void(0);" class="downloadLink"  onclick="downloadFile('{{ url($latestReport['url']) }}')">Download Report ({{$latestReport['report_created_at']}})</a>
                                     @endif
                                     <p class="processingButton d-none">
-                                    Report generation is In Progress. We'll share the link to download the report in few mins.
+                                    Report generation is In Progress. We'll share the link to download the report in 4-5 mins.
                                     </p>
                                 @endif
                                 </div>
