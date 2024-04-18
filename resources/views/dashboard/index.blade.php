@@ -51,7 +51,7 @@
                             <div class="box-header with-border" id="filter-box">
                                 <div class="box-body table-responsive" style="margin-bottom: 5%">
                                 <div class="link-div mb-3">
-                                @if($latestReport && $latestReport['status']=== 'requested')
+                                @if($latestReport && ($latestReport['status']=== 'requested' || $latestReport['status']=== 'inprocess'))
                                 <p class="processingButton">
                                     Report generation is In Progress. We'll share the link to download the report in few mins.
                                 </p>

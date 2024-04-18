@@ -124,6 +124,7 @@ class CreateCsvReport extends Command
                     }else if ( count($blankEmergencyFields) == 0) {
                         $html .= 'Emergency : '.count($blankEmergencyFields);
                     }
+                    $empMainArr[$i]['blankFeilds'] = $html;
                 } catch (\Exception $e) {
                     $empMainArr[$i]['blankFeilds'] = 'NA';
                 }
