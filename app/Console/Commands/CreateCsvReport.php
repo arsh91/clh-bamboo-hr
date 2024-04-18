@@ -46,7 +46,11 @@ class CreateCsvReport extends Command
     public function handle()
     {
         $requestedReport = Reports::where('status', 'requested')->first();
-        if ($requestedReport) {
+        $requestedReportExists = Reports::where('status', 'inprocess')->exists();
+        if ($requestedReport && $requestedReportExists === false) {
+            $requestedReport->update([
+                'status' => 'inprocess',
+            ]);
             $employeeFieldsIndexes = array(
                 'ID'=>17,
                 'firstname' => 1,
@@ -150,7 +154,7 @@ class CreateCsvReport extends Command
                 } catch (\Exception $e) {
                     $empMainArr[$i]['emptyDocumentCount'] = 'NA';
                 }
-                
+
                 $empIdsAr[] = $empID;
                 $i++;
     
