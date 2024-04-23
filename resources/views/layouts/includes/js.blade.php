@@ -14,3 +14,5 @@
 <script src="{{ asset('assets/js/datatables.js') }}"></script>
 <script src="{{ asset('assets/js/datatables.min.js') }}"></script>
 <script src="{{ asset('assets/js/main.js') }}"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+

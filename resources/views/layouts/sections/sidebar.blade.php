@@ -17,7 +17,12 @@
         </a>
       </li>
       @endif
-
+      <li class="nav-item">
+        <a class="nav-link {{ request()->is('folder') ? '' : 'collapsed' }} " href="{{ url('/folder') }}">
+          <i class="bi bi-person"></i>
+          <span>Folder</span>
+        </a>
+      </li>
     </ul>
 
   </aside>

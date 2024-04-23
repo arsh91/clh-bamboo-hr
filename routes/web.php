@@ -55,7 +55,11 @@ Route::group(['middleware' => ['auth']], function() {
             Route::post('/doucument/row/count/{id}', [DocumentController::class, 'getDoucumentCount'])->name('document.count');
 
             Route::get('/document/report', [DocumentController::class, 'getReports'])->name('document.report');
+            
             Route::post('/start-report', [DashboardController::class, 'startCreatingReport'])->name('start.report');
+            Route::post('/get-saved-folder', [DashboardController::class, 'getSavedFolder'])->name('get.savedfolder');
+            Route::post('/save-folder', [DashboardController::class, 'saveFolder'])->name('save.folder');
+            Route::get('/folder', [DashboardController::class, 'folder'])->name('show.folder');
         });
         //Ends Protected Routes For Admin
 

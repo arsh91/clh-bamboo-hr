@@ -1,12 +1,15 @@
 <?php
 
 namespace App\Http\Controllers;
-use Illuminate\Support\Facades\Route;
 use App\Models\User;
+use App\Models\DepartmentRole;
+use App\Models\Folder;
 use App\Models\Reports;
+use \BambooHR\API\BambooAPI;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
-
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Database\Eloquent\SoftDeletes;
 class DashboardController extends Controller
 {
     public function index()
@@ -173,6 +176,7 @@ class DashboardController extends Controller
             }
         }else{
             $finalImage = 'N/A';
+
         }
         return $finalImage;
     }
@@ -183,4 +187,147 @@ class DashboardController extends Controller
         ]);
         return response()->json(['status' => $report->status]);
     }
+
+    public function folder(Request $request){
+        $bhr = new BambooAPI(env('YOUR_COMPANY_ID'));
+        $bhr->setSecretKey(env('YOUR_API_KEY'));
+        $data = $bhr->getReport('168', 'csv', true );
+        if ($data->isError()) {
+            $request->session()->flash('error','Some error occured while connecting with Bamboo HR.');
+            return redirect()->back();
+        }
+        $rows = Str::of($data->content)->trim()->explode("\n")->map(function ($row) {
+            return str_getcsv($row);
+        })->toArray();
+        $rows = Str::of($data->content)
+        ->trim()
+        ->explode("\n")
+        ->skip(1) 
+        ->map(function ($row) {
+            return str_getcsv($row);
+        })
+        ->filter(function ($row) {
+            // Filter out rows where all three columns are empty
+            return (!empty($row[0]) || !empty($row[1]) || !empty($row[2])) && !empty($row[0]);
+        })
+        ->toArray();    
+        $departmentArray = [];
+        foreach ($rows as $row) {
+            $department = $row[0];
+            $job = $row[1] ?? null;
+            $division = $row[2] ?? null;
+        
+            if (isset($departmentArray[$department])) {
+                if (!in_array($job, $departmentArray[$department]['job'])) {
+                 $departmentArray[$department]['job'][] = $job;
+                $departmentArray[$department]['division'][] = $division;
+                }
+              
+            } else {
+                $departmentArray[$department] = [
+                    'job' => [$job],
+                    'division' => [$division],
+                ];
+            }
+        }
+        // dd($departmentArray);
+        $getAllEmpFolders = $bhr->listEmployeeFiles(env('LATRILL_EMP_ID') );
+        
+        $listEmployeeFiles = $getAllEmpFolders->getContent();
+        $listEmployeeFiles = json_encode($listEmployeeFiles);       
+        $listEmployeeFiles = json_decode($listEmployeeFiles, true);
+
+       $employeeAllDocumentsArr = [];
+       if(count($listEmployeeFiles) > 0){     
+            if (isset($listEmployeeFiles['category'])) {
+                foreach($listEmployeeFiles['category'] as $key=> $documents){
+                    $employeeAllDocumentsArr[]=$this->getDocumentIdAndName($documents); //coming from api
+                }
+                
+            }
+        }
+
+        // dd($employeeAllDocumentsArr);
+        return view('documents.addDocuments', compact('departmentArray', 'listEmployeeFiles', 'employeeAllDocumentsArr'));
+    }
+
+
+    /**
+     * get the name of employee folder and id from 'document tab'
+     */
+    private function getDocumentIdAndName($arrayObj)
+    {
+        $docIdAndName = [];
+        
+        if (is_array($arrayObj)) {
+             
+            foreach($arrayObj as $key =>$val){
+                
+                if(is_array($val)){
+                    if(array_key_exists('id', $val)){
+                        $docIdAndName['docId'] = $val['id'];        
+                    }
+                    
+                }else{
+                    if($key == 'name'){
+                        $docIdAndName['docName'] = $val;
+                    }                    
+                }
+            }
+        }
+        return $docIdAndName;
+    }
+    
+    public function getSavedFolder(Request $request)
+    {
+        $job = $request->input('job');
+        $department = $request->input('department');
+        
+            $departmentRole = DepartmentRole::where([
+                    'role' => $job,
+                    'department' => $department
+                ])
+                ->with('folder')
+                ->get();
+            return $departmentRole;
+    }
+
+    public function saveFolder(Request $request)
+    {
+        $job = $request->input('job');
+        $department = $request->input('department');
+        $folder = $request->input('folder');
+        if(count($folder) > 0){
+            $getDepartmentRole = DepartmentRole::where([
+                'role' => $job,
+                'department' => $department
+            ])
+            ->with('folder')
+            ->get();
+            if(count($getDepartmentRole) < 1){
+                $departmentRole = DepartmentRole::create([
+                    'role' => $job,
+                    'department' => $department,
+                ]);
+                //  dd($departmentRole);
+
+                $insertedId = $departmentRole->id;
+            }else{
+                $insertedId = $getDepartmentRole[0]->id;
+            }
+           
+            foreach ($folder as $folder_id) {
+                $departmentRole = Folder::firstOrCreate([
+                    'department_role' => $insertedId,
+                    'folder_id' => $folder_id
+                ]);
+            }
+        }
+
+        $request->session()->flash('success', 'Sucessfully Created.');
+
+    // Return a JSON response indicating success
+    return response()->json(['success' => true]);
+    }
+    
 }
