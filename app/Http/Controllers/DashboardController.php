@@ -8,8 +8,6 @@ use App\Models\Reports;
 use \BambooHR\API\BambooAPI;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Database\Eloquent\SoftDeletes;
 class DashboardController extends Controller
 {
     public function index()
@@ -297,6 +295,7 @@ class DashboardController extends Controller
         $job = $request->input('job');
         $department = $request->input('department');
         $folder = $request->input('folder');
+        // $folder = [54, 42, 43, 41, 24, 26, 31, 44, 139, 39, 78, 40, 23, 28, 35, 20, 37, 47, 55, 56, 48, 43, 25, 68, 165, 81, 16, 19, 155, 159, 23];
         if(count($folder) > 0){
             $getDepartmentRole = DepartmentRole::where([
                 'role' => $job,
@@ -304,30 +303,45 @@ class DashboardController extends Controller
             ])
             ->with('folder')
             ->get();
+
+            $folderValues = [];
             if(count($getDepartmentRole) < 1){
                 $departmentRole = DepartmentRole::create([
                     'role' => $job,
                     'department' => $department,
                 ]);
-                //  dd($departmentRole);
-
                 $insertedId = $departmentRole->id;
             }else{
+
                 $insertedId = $getDepartmentRole[0]->id;
+                foreach ($getDepartmentRole[0]->folder as $folderData) {
+                    $folderColumnValue = $folderData->folder_id;
+                    $folderValues[] = $folderColumnValue;
+                }
+
+                $deleteFolder = array_diff($folderValues, $folder);
+                // dd($deleteFolder);
+
+                if(count($deleteFolder) > 0){
+                    foreach ($deleteFolder as $delete_id) {
+                        Folder::where('folder_id', $delete_id)
+                        ->where('department_role', $insertedId)
+                        ->delete();
+                    }
+                }
             }
-           
-            foreach ($folder as $folder_id) {
-                $departmentRole = Folder::firstOrCreate([
-                    'department_role' => $insertedId,
-                    'folder_id' => $folder_id
-                ]);
+        
+            if(count($folder) > 0){
+                foreach ($folder as $folder_id) {
+                    $departmentRole = Folder::firstOrCreate([
+                        'department_role' => $insertedId,
+                        'folder_id' => $folder_id
+                    ]);
+                }
             }
         }
 
-        $request->session()->flash('success', 'Sucessfully Created.');
-
-    // Return a JSON response indicating success
-    return response()->json(['success' => true]);
+        $request->session()->flash('message', 'Sucessfully Saved.');
+        return response()->json(['success' => true]);
     }
-    
 }
