@@ -342,7 +342,7 @@ class DashboardController extends Controller
             }
         }
 
-        $request->session()->flash('message', 'Sucessfully Saved.');
+       // $request->session()->flash('message', 'Sucessfully Saved.');
         return response()->json(['success' => true]);
     }
 }

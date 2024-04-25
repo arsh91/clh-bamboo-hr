@@ -44,12 +44,38 @@ p {
   border: 1px solid orange;
   background-color: #fffffd;
 }
+#overlay {
+  position: fixed; /* Sit on top of the page content */
+  display: none; /* Hidden by default */
+  width: 100%; /* Full width (cover the whole page) */
+  height: 100%; /* Full height (cover the whole page) */
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0,0,0,0.5); /* Black background with opacity */
+  z-index: 2; /* Specify a stack order in case you're using a different order for other elements */
+  cursor: pointer; /* Add a pointer on hover */
+}
+#departSaveMsg{
+  position: absolute;
+  display: none; /* Hidden by default */
+  top: 50%;
+  left: 50%;
+  font-size: 20px;
+  color: white;
+  transform: translate(-50%,-50%);
+  -ms-transform: translate(-50%,-50%);
+}
   </style>
 
 <section class="section profile">
+<div id="overlay">
+  <div id="departSaveMsg">Documents saved successfully.</div>
+</div>
       <div class="row">
         <div class="col-lg-8">
-
+        
         <div class="card">
           <div class="alert alert-warning" role="alert" id="sortingMessage" style="display:none;">
             You need to select the Department and Job Title first!
@@ -110,7 +136,7 @@ p {
 
                   <!-- <label class="col-sm-2 col-form-label">Submit Button</label> -->
                   <div class="col-sm-10">
-                    <button type="button" class="btn btn-primary" id="btnGetArrays">Submit</button>
+                    <button type="button" class="btn btn-primary" id="btnGetArrays" disabled="disabled">Submit</button>
                   </div>
                 </div>
 
@@ -193,6 +219,7 @@ $("#allFacets, #userFacets" ).sortable({
       var job = $('.job').val();
       if (department != "" && job != "") {
           handleSortable(); 
+          $("#btnGetArrays").removeAttr("disabled");
       } else 
       {      
         if ($("#allFacets, #userFacets").sortable("instance")) {
@@ -250,7 +277,7 @@ $("#btnGetArrays").click(function() {
         var userFacetsArray = $("#userFacets li").map(function() {
           return $(this).data("value");
         }).get();
-
+        $('#overlay').fadeIn('slow');
         $.ajax({
           url: '/save-folder', 
           method: 'POST',
@@ -263,7 +290,10 @@ $("#btnGetArrays").click(function() {
             folder: userFacetsArray
         },
           success: function(response){
-            window.location.reload();
+            //window.location.reload();
+            
+            $('#departSaveMsg').fadeIn('slow');
+            $('#overlay').delay(2000).fadeOut('slow');
           },
           error: function(xhr, status, error){
               console.error(error);
