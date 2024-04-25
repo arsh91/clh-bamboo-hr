@@ -296,8 +296,7 @@ class DashboardController extends Controller
         $department = $request->input('department');
         $folder = $request->input('folder');
         //dump($request); dd('dump department and folders');
-        // $folder = [54, 42, 43, 41, 24, 26, 31, 44, 139, 39, 78, 40, 23, 28, 35, 20, 37, 47, 55, 56, 48, 43, 25, 68, 165, 81, 16, 19, 155, 159, 23];
-       // $folder = [54, 42, 43, 41, 24, 26, 164, 160, 31, 39, 28, 40, 139, 78, 50, 141, 35, 20, 37, 47, 55, 56, 48, 43, 25, 165, 141, 52, 38, 16, 19, 155];
+        
         if(count($folder) > 0){
             $getDepartmentRole = DepartmentRole::where([
                 'role' => $job,

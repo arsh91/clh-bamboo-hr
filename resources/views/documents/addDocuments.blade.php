@@ -82,7 +82,7 @@ p {
 
                 <div class="card">
                   <div class="card-body">
-                    <h5 class="card-title">Employee Documents</h5>
+                    <h5 class="card-title">All Documents</h5>
 
 
                     <ul class="list-group facet-list" id="allFacets">
@@ -99,9 +99,10 @@ p {
 
                 <div class="card">
                   <div class="card-body">
-                    <h5 class="card-title">Default List Group</h5>
-                    <ul class="list-group facet-list" id="userFacets">
-                      <li class="list-group-item facet">drop Here</li>
+                    <h5 class="card-title">Employee Documents</h5>
+                    <span><i>Drop Documents Here</i></span>
+                    <ul class="list-group facet-list" id="userFacets"  style="height:376px;">
+                      
                     </ul>
                   </div>
                 </div>
@@ -129,7 +130,7 @@ $(document).ready(function() {
   var userFacetsList = document.getElementById('userFacets');
   $('.department').change(function() {
     userFacetsList.innerHTML = '';
-    $("#userFacets").append('<li class="list-group-item facet">drop Here</li>');
+    //$("#userFacets").append('<li class="list-group-item facet">drop Here</li>');
     var selectedValue = $(this).val();
     var valueForKey2 = options[selectedValue];
     $('.job').empty();
@@ -216,7 +217,7 @@ $("#allFacets, #userFacets" ).sortable({
         },
         success: function(response){
           userFacetsList.innerHTML = '';
-          $("#userFacets").append('<li class="list-group-item facet">drop Here</li>');
+         // $("#userFacets").append('<li class="list-group-item facet">drop Here</li>');
           if(response.length > 0)
           {
             var folderData = response[0]['folder'];
