@@ -321,7 +321,6 @@ class DocumentController extends Controller
        return $totalFileCount;
     }
 
-
 private function getDocumentIdsBasedOnEmployeeDetails($empDepartment, $empJobInfo, $empDivision) {
     $documentIds = [];
         if($empDepartment == env('GROUP_HOME')){ //if department is `Residential Group Home`
