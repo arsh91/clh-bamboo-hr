@@ -48,9 +48,12 @@ p {
 
 <section class="section profile">
       <div class="row">
-        <div class="col-lg-6">
+        <div class="col-lg-8">
 
         <div class="card">
+          <div class="alert alert-warning" role="alert" id="sortingMessage" style="display:none;">
+            You need to select the Department and Job Title first!
+          </div>
             <div class="card-body ">
             <h5 class="card-title">Add/Edit Folder</h5>
         <form>
@@ -74,11 +77,12 @@ p {
                   </div>
                 </div>
                 <div class="row mb-3">
-                <div class="col-lg-6">
+                  
+                  <div class="col-lg-6">
 
                 <div class="card">
                   <div class="card-body">
-                    <h5 class="card-title">Default List Group</h5>
+                    <h5 class="card-title">Employee Documents</h5>
 
 
                     <ul class="list-group facet-list" id="allFacets">
@@ -148,57 +152,61 @@ $(document).ready(function() {
     // You can perform further actions with the selected value here
 });
 
-
-function enableSortable() {
-    var sortableOptions = {
-        connectWith: "ul",
-        placeholder: "placeholder",
-        delay: 150
-    };
-
-}
-    function handleSortable(){
-      $("#allFacets, #userFacets").sortable({
-        connectWith: "ul",
-        placeholder: "placeholder",
-        delay: 150
-      })
-      .disableSelection()
-      .dblclick( function(e){
-        var item = e.target;
-        if (e.currentTarget.id === 'allFacets') {
-          //move from all to user
-          $(item).fadeOut('fast', function() {
-            $(item).appendTo($('#userFacets')).fadeIn('slow');
-          });
-        } else {
-          //move from user to all
-          $(item).fadeOut('fast', function() {
-            $(item).appendTo($('#allFacets')).fadeIn('slow');
-          });
-        }
+function handleSortable()
+{
+  $("#allFacets, #userFacets").sortable({
+    connectWith: "ul",
+    placeholder: "placeholder",
+    delay: 150
+  })
+  .disableSelection()
+  .dblclick( function(e){
+    var item = e.target;
+    if (e.currentTarget.id === 'allFacets') {
+      //move from all to user
+      $(item).fadeOut('fast', function() {
+        $(item).appendTo($('#userFacets')).fadeIn('slow');
       });
-
+    } else {
+      //move from user to all
+      $(item).fadeOut('fast', function() {
+        $(item).appendTo($('#allFacets')).fadeIn('slow');
+      });
     }
-    enableSortable();
-    $(".sortingCheck").change(function () {
-        var department = $('.department').val();
-        var job = $('.job').val();
-        if (department != "" && job != "") {
-            handleSortable(); 
-        } else {
-            if ($("#allFacets, #userFacets").sortable("instance")) {
-            $("#allFacets, #userFacets").sortable("destroy");
-        }
-        }
-    });
+  });
+}
 
-      $('.job').change(function() {
-        var job = $(this).val();
+//we will ask the user to select the values from options first only then we will enable documents
+$("#allFacets, #userFacets" ).sortable({
+  start: function( event, ui ) {
+    $('#sortingMessage').show('1000');
+    $("#sortingMessage").delay(2000).fadeOut(300);
+  }
+});
+
+
+
+
+  $(".sortingCheck").change(function () {
       var department = $('.department').val();
-      $.ajax({
-                url: '/get-saved-folder', 
-                method: 'POST',
+      var job = $('.job').val();
+      if (department != "" && job != "") {
+          handleSortable(); 
+      } else 
+      {      
+        if ($("#allFacets, #userFacets").sortable("instance")) {
+        $("#allFacets, #userFacets").sortable("destroy");
+      }
+    }
+  }); //##WILL CHECK IF BOTH SELECT BOX HAS SOME VALUE THEN ENABLE THE SORTINF
+
+  $('.job').change(function() 
+  {
+    var job = $(this).val();
+    var department = $('.department').val();
+    $.ajax({
+        url: '/get-saved-folder', 
+        method: 'POST',
         headers: {
             'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
         },
@@ -206,31 +214,31 @@ function enableSortable() {
             job: job,
             department: department
         },
-
-            success: function(response){
-              userFacetsList.innerHTML = '';
-              $("#userFacets").append('<li class="list-group-item facet">drop Here</li>');
-              if(response.length > 0){
-                var folderData = response[0]['folder'];
+        success: function(response){
+          userFacetsList.innerHTML = '';
+          $("#userFacets").append('<li class="list-group-item facet">drop Here</li>');
+          if(response.length > 0)
+          {
+            var folderData = response[0]['folder'];
             folderData.forEach(function(itemText) {
-                var listItem = document.createElement('li');
-                listItem.classList.add('list-group-item', 'facet');
-                listItem.setAttribute('data-value', itemText.folder_id);
-                    $.each(employeeAllDocumentsArr, function(index, doc) {
-                    if (doc.docId === itemText['folder_id'].toString()) {
-                        listItem.textContent = doc.docName;
-                    }
-                });
-                userFacetsList.appendChild(listItem);
-                });
-              }
-            },
-            error: function(xhr, status, error){
-                console.error(error);
-            }
-        });
-  });
-});
+              var listItem = document.createElement('li');
+              listItem.classList.add('list-group-item', 'facet');
+              listItem.setAttribute('data-value', itemText.folder_id);
+              $.each(employeeAllDocumentsArr, function(index, doc) {
+                if (doc.docId === itemText['folder_id'].toString()) {
+                    listItem.textContent = doc.docName;
+                }
+              });
+              userFacetsList.appendChild(listItem);
+            });
+          }
+        },
+        error: function(xhr, status, error){
+            console.error(error);
+        }
+      });
+    });
+  }); //##ON CHANGE OF JOB THAT AJAX WILL RUN HERE
 
 $("#btnGetArrays").click(function() {
      var job = $('.job').val();
@@ -243,24 +251,24 @@ $("#btnGetArrays").click(function() {
         }).get();
 
         $.ajax({
-                url: '/save-folder', 
-                method: 'POST',
-        headers: {
-            'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
-        },
+          url: '/save-folder', 
+          method: 'POST',
+          headers: {
+              'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+          },
         data: {
             job: job,
             department: department,
             folder: userFacetsArray
         },
-
-            success: function(response){
-              window.location.reload();
-            },
-            error: function(xhr, status, error){
-                console.error(error);
-            }
+          success: function(response){
+            //window.location.reload();
+          },
+          error: function(xhr, status, error){
+              console.error(error);
+          }
         });
+        return false;
     });
 
  
