@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Employee Detail')
+@section('title', 'Employee Document Folders')
 @section('content')
 <style>
   .facet-container{
@@ -263,7 +263,7 @@ $("#btnGetArrays").click(function() {
             folder: userFacetsArray
         },
           success: function(response){
-            //window.location.reload();
+            window.location.reload();
           },
           error: function(xhr, status, error){
               console.error(error);
