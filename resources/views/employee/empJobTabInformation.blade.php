@@ -64,7 +64,7 @@
                                 </tr>
                                 @endforeach
                                 @else
-                                <tr><td colspan="7">No records found.</td></tr>
+                                <tr><td colspan="7">No compensation entries have been added.</td></tr>
                             @endif                                                    
                         </tbody>
                     </table>
@@ -98,7 +98,7 @@
                                 </tr>
                                 @endforeach
                                 @else
-                                <tr><td colspan="6">No records found.</td></tr>
+                                <tr><td colspan="6">No direct deposit information entries have been added.</td></tr>
                             @endif                                                    
                         </tbody>
                     </table>
@@ -130,7 +130,7 @@
                                 </tr>
                                 @endforeach
                             @else
-                                <tr><td colspan="5">No records found.</td></tr>
+                                <tr><td colspan="5">No federal income tax information entries have been added.</td></tr>
                             @endif                                                    
                         </tbody>
                     </table>
@@ -158,7 +158,7 @@
                                 </tr>
                                 @endforeach
                                 @else
-                                <tr><td colspan="3">No records found.</td></tr>
+                                <tr><td colspan="3">No state income tax filing information entries have been added.</td></tr>
                             @endif                                                    
                         </tbody>
                     </table>
@@ -241,7 +241,7 @@
                                 </tr>
                                 @endforeach
                                 @else
-                                <tr><td colspan="4">No records found in Reference List.</td></tr>
+                                <tr><td colspan="4">No list of references entries have been added.</td></tr>
                             @endif                                                    
                         </tbody>
                     </table>
