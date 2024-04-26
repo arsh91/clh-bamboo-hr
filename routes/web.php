@@ -45,6 +45,7 @@ Route::group(['middleware' => ['auth']], function() {
             /** THE ROUTES ARE FOR EMPLOYEE CONTROLLER */
            // Route::get('/employees/{id}', [EmployeeController::class, 'show'])->name('employees.show');
             Route::get('/employee/{id}', [EmployeeController::class, 'employeDetail'])->name('employees.detail');
+            Route::get('/employee/jobinformation/{id}', [EmployeeController::class, 'employeJobinformation'])->name('employees.jobinformation');
 
             Route::get('/employee/row/{id}', [EmployeeController::class, 'employeEmptyFieldsCount'])->name('employees.emptyFieldCount');
 

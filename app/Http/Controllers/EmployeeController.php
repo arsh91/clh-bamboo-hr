@@ -86,10 +86,9 @@ class EmployeeController extends Controller
                 }
             }
         } 
-      // dump($jobFields); dd('--');
         //GET EMERGENCY TAB DATA
         $getEmergencyContacts = $this->getEmergencyFields($empId);
-       //dump($getEmergencyContacts);dd();
+
         $emergencyContacts = $getEmergencyContacts['filled'];
         $emptyEmeregencyFields = $getEmergencyContacts['empty'];
 
@@ -280,7 +279,7 @@ class EmployeeController extends Controller
         $employeePersonalData = json_encode($getEmployeeData);       
         $empPersonalArray = json_decode($employeePersonalData, true);
         $params = substr($empFieldsArray[0], 6, -2);
-        //dump($params); dd('---');
+     
         $empKeyArr = explode(',', $params);
         $emptyData = [];
         if(count($empPersonalArray) > 0){     
@@ -582,25 +581,6 @@ class EmployeeController extends Controller
         return $html;
     }
 
-    private function checkIfArray($arrayObj)
-    {
-        $finalVal = '';
-        if(!is_array($arrayObj)){
-            $finalVal = $arrayObj;
-        }else{
-            $finalVal = 'N/A';
-        }
-        return $finalVal;
-    }
-
-    private function checkEmptyFields($arrayObj){
-        $emptyVal = '';
-        if(is_array($arrayObj)){
-            $emptyVal = $arrayObj['@attributes']['id'];
-        }
-        return $emptyVal;
-    }
-
     public function employeTimetracker($empId, Request $request){
          $empDivision = $request->input('division');
          $empDepartment = $request->input('department');
@@ -812,5 +792,80 @@ private function getDateTrackersCount($empId, $trackerType){
     }
 
     return $return;
+    }
+
+    /**
+     * THIS METHOD WILL FETCH THE DETAILS FROM JOB TAB OF AN EMPLOYEE
+     * WE USE EMP_ID
+     */
+
+    public function employeJobinformation($empId, Request $request){
+        //GET INFO OF JOB TABLE
+        $bhr = new BambooAPI("clhmentalhealth");
+        $bhr->setSecretKey("40d056dd98d048b1d50c46392c77bd2bbbf0431f");
+
+        $tablesArrayFromJobTab = ['Employment Status'=>'employmentStatus', 'Compensation'=>'compensation', 'Direct Deposit Information'=>'customDirectDepositInformation', 'Federal Income Tax Information  '=>'customFederalIncomeTaxInformation', 'State Income Tax Filing Information
+        '=> 'customStateIncomeTaxFilingInformation', 'Requisition'=>'customRequisition', 'List of References
+        '=>'customListofReferences'];
+
+       $allTableArray = [];
+       
+        foreach($tablesArrayFromJobTab as $tableKey =>$jobTabTable){
+            $jobFields = $singleJobCase = [];
+            $getJobInfo = $bhr->getTable($empId, $jobTabTable);
+            if($getJobInfo->isError()) {
+                trigger_error("Error communicating with BambooHR: " . $getJobInfo->getErrorMessage());
+            }
+            $getJobInfo = $getJobInfo->getContent();
+            $getJobInfo = json_encode($getJobInfo);       
+            $getJobInfo = json_decode($getJobInfo, true);
+              //dump($getJobInfo);
+            foreach ($getJobInfo as $job) {
+              
+                if (isset($job['field'])) {
+                    echo 'if case';
+                    foreach($job['field'] as $key=> $field){                    
+                    $singleJobCase[] = $this->checkIfArray($field);            
+                    }
+                    $jobFields[] =  $singleJobCase;
+                }else{
+                    echo 'else case';
+                    foreach($job as $kk=> $item){                    
+                        // Check if the item has the 'field' key
+                        if (isset($item['field'])) {
+                            foreach($item['field'] as $key=> $field){
+                                
+                            $jobFields[$kk][] = $this->checkIfArray($field);            
+                            }
+                        }
+                    }
+                }
+                
+            } //inner foreach
+        
+            $allTableArray[$jobTabTable] = $jobFields;
+        }
+
+        return view('employee.empJobTabInformation',compact('allTableArray', 'empId'));
+
+    }
+
+    private function checkIfArray($arrayObj)
+    {
+        $finalVal = '';
+        if(!is_array($arrayObj)){
+            $finalVal = $arrayObj;
+        }else{
+            $finalVal = 'N/A';
+        }
+        return $finalVal;
+    }
+
+    private function checkEmptyFields($arrayObj){
+        $emptyVal = '';
+        if(is_array($arrayObj)){
+            $emptyVal = $arrayObj['@attributes']['id'];
+        }
+        return $emptyVal;
     }
 }

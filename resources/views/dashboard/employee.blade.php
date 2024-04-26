@@ -153,12 +153,13 @@
                               </tr>
                             @endforeach
                             @else
-                              <tr><td colpan="4">No records found for the employee.</td></tr>
+                              <tr><td colspan="4">No records found for the employee.</td></tr>
                             @endif
                                                     
                         </tbody>
                       </table>
                       <!-- End Table with hoverable rows -->
+                      <p class="text-end"><a href="{{ route('employees.jobinformation', ['id' => $empData['ID']]) }}" target="_blank" class="link-primary link-offset-2">Click for more...</a></p>
                     </div>
                   </div>
                 </div><!--###end of second tab--->
@@ -320,7 +321,7 @@
                     </tr>
                     @endforeach
                     @else
-                      <tr><td colpan="4">No records found for the employee.</td></tr>
+                      <tr><td colspan="4">No records found for the employee.</td></tr>
                     @endif
                                             
                 </tbody>
