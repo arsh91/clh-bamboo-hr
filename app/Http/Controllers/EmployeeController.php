@@ -801,9 +801,13 @@ private function getDateTrackersCount($empId, $trackerType){
 
     public function employeJobinformation($empId, Request $request){
         //GET INFO OF JOB TABLE
+        $employeeDetails = $this->getEmployeeDetailByID($empId);
+        $empData = $employeeDetails['empData'];
+        $base64Image = $employeeDetails['base64Image'];
+        
         $bhr = new BambooAPI("clhmentalhealth");
         $bhr->setSecretKey("40d056dd98d048b1d50c46392c77bd2bbbf0431f");
-
+        
         $tablesArrayFromJobTab = ['Employment Status'=>'employmentStatus', 'Compensation'=>'compensation', 'Direct Deposit Information'=>'customDirectDepositInformation', 'Federal Income Tax Information  '=>'customFederalIncomeTaxInformation', 'State Income Tax Filing Information
         '=> 'customStateIncomeTaxFilingInformation', 'Requisition'=>'customRequisition', 'List of References
         '=>'customListofReferences'];
@@ -846,8 +850,51 @@ private function getDateTrackersCount($empId, $trackerType){
             $allTableArray[$jobTabTable] = $jobFields;
         }
 
-        return view('employee.empJobTabInformation',compact('allTableArray', 'empId'));
+        return view('employee.empJobTabInformation',compact('allTableArray', 'empId', 'empData', 'base64Image'));
 
+    }
+
+    private function getEmployeeDetailByID($empId)
+    {
+        $empFieldsArray = array('firstName,lastName,jobTitle,workPhone,mobilePhone,workEmail,department,location,division,supervisor,employmentStatus');
+
+        $bhr = new BambooAPI("clhmentalhealth");
+        $bhr->setSecretKey("40d056dd98d048b1d50c46392c77bd2bbbf0431f");
+        //$response = $bhr->getDirectory();
+        $getEmployee = $bhr->getEmployee($empId, $empFieldsArray);
+        if ($getEmployee->isError()) {
+            session()->flash('error','Some error occured while connecting with Bamboo HR.');
+            return redirect()->back();
+            //trigger_error("Error communicating with BambooHR: " . $getEmployee->getErrorMessage());
+        }
+
+        $getEmployeeData = $getEmployee->getContent();
+        $params = 'firstName,lastName,jobTitle,workPhone,mobilePhone,workEmail,department,location,division,supervisor,employmentStatus';
+
+        $employeeData = json_encode($getEmployeeData);
+        $dataArray = json_decode($employeeData, true);
+        $empKeyArr = explode(',', $params);
+
+        $empData = [];
+        foreach ($dataArray['field'] as $key => $field) {
+            $empData[$empKeyArr[$key]] = $this->checkIfArray($field);
+        }
+        $empData['ID'] = $empId;
+
+        //FOR EMPLOYEE IMAGE
+        $imgResponse = $bhr->downloadEmployeePhoto($empId, 'small', array(["width" => 100], ["height" => 100]));
+        $imgResponse = $imgResponse->getContent();
+
+        if ($imgResponse !== false &&  $imgResponse != '') {
+            // Get the MIME type of the image
+            $imageInfo = getimagesizefromstring($imgResponse);
+            $imageMimeType = $imageInfo['mime'];
+
+            // Generate a base64 encoded string of the image
+            $base64Image = 'data:' . $imageMimeType . ';base64,' . base64_encode($imgResponse);
+
+            return ['empData' => $empData, 'base64Image' => $base64Image];
+        }
     }
 
     private function checkIfArray($arrayObj)
