@@ -26,6 +26,11 @@ class EmployeeController extends Controller
        // return view('employee.show', ['employeeData' => $employeeData]);
     }
 
+    /**
+     * GET EMPLOYEE DETAIL BY EMPLOYEE ID
+     * @param $empId
+     * @return mixed
+     */
     public function employeDetail($empId, Request $request)
     {
         $base64Image = '';
@@ -257,7 +262,7 @@ class EmployeeController extends Controller
                 }
             }
         }
-        return view('dashboard.employee',compact('empData', 'base64Image', 'jobFields', 'emergencyContacts', 'emptyEmeregencyFields', 'blankPersonalFields', 'blankJobFields','expDateTracker'));
+        return view('employee.employeeDetail',compact('empData', 'base64Image', 'jobFields', 'emergencyContacts', 'emptyEmeregencyFields', 'blankPersonalFields', 'blankJobFields','expDateTracker'));
     }
 
     /**
@@ -265,7 +270,7 @@ class EmployeeController extends Controller
      * @param $empId
      */
     public function getPersonalBlankFields($empId){
-        $empFieldsArray = array('employeeNumber,employmentStatus,firstName,lastName,dateOfBirth,gender,maritalStatus,customAllergies,customT-ShirtSize,address1,city,state,zipcode,country,mobilePhone,workEmail,homeEmail,customCollege,customDegree,customGPA,customEducationStartDate,customEducationEndDate');
+        $empFieldsArray = array('employeeNumber,employmentStatus,firstName,lastName,dateOfBirth,gender,maritalStatus,customAllergies,customT-ShirtSize,address1,city,state,zipcode,country,mobilePhone,workEmail,homeEmail,customCollege,customDegree,customEducationStartDate,customEducationEndDate');
 
         $bhr = new BambooAPI("clhmentalhealth");
         $bhr->setSecretKey("40d056dd98d048b1d50c46392c77bd2bbbf0431f");
@@ -297,7 +302,12 @@ class EmployeeController extends Controller
         return $emptyData;
     }
 
-    public function getJobBlankFields($empId){
+    /**
+     * BLANK FIELDS FORM JOB TAB IS BEING LIST FROM HERE
+     * WILL CALCULATE THE BLANK TABLES AS WELL LISTED IN JOB TAB
+     */
+    public function getJobBlankFields($empId)
+    {
         $jobFieldsArray = array('hireDate,originalHireDate,ethnicity,eeo,customEmployeeNumber,customHourlyRate,customPersonalEmail,customHireDate');
         $bhr = new BambooAPI("clhmentalhealth");
         $bhr->setSecretKey("40d056dd98d048b1d50c46392c77bd2bbbf0431f");
@@ -322,11 +332,52 @@ class EmployeeController extends Controller
         $emptyData = array_filter($emptyData, function($value) {
             return $value !== "";
         });
-        //dump($emptyData);
-        ///dd('checking JOB tab data');
-        return $emptyData;
 
+        $empTab = array();
+        $emptyTablesData = $this->getJobTabBlankTables($empId);
+       
+
+        // we will check how manytables have empty value
+        foreach($emptyTablesData as $key => $emptyTables){
+            if(empty($emptyTables)){
+                $empTab[$key] = $key;
+
+            }
+            if(is_array($emptyTables)){
+                foreach($emptyTables as $kk => $emptyTable){
+                    if ($this->allValuesEmpty($emptyTable)) {
+                        $empTab[$key] = $key;
+                       // echo "All values in the array are empty";
+                    } else {
+                        //$empTab[$key][] = 1;
+                       // echo "Some values in the array are not empty";
+                    }
+                               
+                }
+            }            
+        }
+       
+        $mergedArray = array_merge($emptyData, $empTab);
+        foreach ($mergedArray as $key => $value) {
+            $mergedArray[$key] = str_replace('custom', '', $value);
+        }
         
+        return $mergedArray;
+        
+    }
+
+    private function removeCustomAndGiveSpace($key){
+
+    }
+
+    private function allValuesEmpty($array) {
+        // Remove empty values from the array
+        $nonEmptyValues = array_filter($array, function($value) {
+            return !empty($value);
+        });
+    
+        // If the resulting array is empty, all values were empty
+        return empty($nonEmptyValues);
     }
 
     public function getEmergencyFields($empId){
@@ -827,13 +878,13 @@ private function getDateTrackersCount($empId, $trackerType){
             foreach ($getJobInfo as $job) {
               
                 if (isset($job['field'])) {
-                    echo 'if case';
+                    //echo 'if case';
                     foreach($job['field'] as $key=> $field){                    
                     $singleJobCase[] = $this->checkIfArray($field);            
                     }
                     $jobFields[] =  $singleJobCase;
                 }else{
-                    echo 'else case';
+                   // echo 'else case';
                     foreach($job as $kk=> $item){                    
                         // Check if the item has the 'field' key
                         if (isset($item['field'])) {
@@ -897,6 +948,58 @@ private function getDateTrackersCount($empId, $trackerType){
         }
     }
 
+
+    private function getJobTabBlankTables($empId){
+        //GET INFO OF JOB TABLE
+        $employeeDetails = $this->getEmployeeDetailByID($empId);
+        $empData = $employeeDetails['empData'];
+        $base64Image = $employeeDetails['base64Image'];
+        
+        $bhr = new BambooAPI("clhmentalhealth");
+        $bhr->setSecretKey("40d056dd98d048b1d50c46392c77bd2bbbf0431f");
+        
+        $tablesArrayFromJobTab = [ 'Direct Deposit Information'=>'customDirectDepositInformation', 'Federal Income Tax Information  '=>'customFederalIncomeTaxInformation', 'State Income Tax Filing Information
+        '=> 'customStateIncomeTaxFilingInformation'];
+
+        $allTableArray = [];
+       
+        foreach($tablesArrayFromJobTab as $tableKey =>$jobTabTable){
+            $jobFields = $singleJobCase = [];
+            $getJobInfo = $bhr->getTable($empId, $jobTabTable);
+            if($getJobInfo->isError()) {
+                trigger_error("Error communicating with BambooHR: " . $getJobInfo->getErrorMessage());
+            }
+            $getJobInfo = $getJobInfo->getContent();
+            $getJobInfo = json_encode($getJobInfo);       
+            $getJobInfo = json_decode($getJobInfo, true);
+              //dump($getJobInfo);
+            foreach ($getJobInfo as $job) {
+              
+                if (isset($job['field'])) {
+                   // echo 'if case';
+                    foreach($job['field'] as $key=> $field){                    
+                    $singleJobCase[] = $this->checkIfArrayAndEmptyVal($field);            
+                    }
+                    $jobFields[] =  $singleJobCase;
+                }else{
+                    //echo 'else case';
+                    foreach($job as $kk=> $item){                    
+                        // Check if the item has the 'field' key
+                        if (isset($item['field'])) {
+                            foreach($item['field'] as $key=> $field){
+                                
+                            $jobFields[$kk][] = $this->checkIfArrayAndEmptyVal($field);            
+                            }
+                        }
+                    }
+                }
+                
+            } //inner foreach
+        
+            $allTableArray[$jobTabTable] = $jobFields;
+        }
+        return $allTableArray;
+    }
     private function checkIfArray($arrayObj)
     {
         $finalVal = '';
@@ -904,6 +1007,17 @@ private function getDateTrackersCount($empId, $trackerType){
             $finalVal = $arrayObj;
         }else{
             $finalVal = 'N/A';
+        }
+        return $finalVal;
+    }
+
+    private function checkIfArrayAndEmptyVal($arrayObj)
+    {
+        $finalVal = '';
+        if(!is_array($arrayObj)){
+            $finalVal = $arrayObj;
+        }else{
+            $finalVal = '';
         }
         return $finalVal;
     }
