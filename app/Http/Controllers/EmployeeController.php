@@ -262,7 +262,12 @@ class EmployeeController extends Controller
                 }
             }
         }
-        return view('employee.employeeDetail',compact('empData', 'base64Image', 'jobFields', 'emergencyContacts', 'emptyEmeregencyFields', 'blankPersonalFields', 'blankJobFields','expDateTracker'));
+
+        
+        //CREATE A TRACKER TYPE TITLE ARRAY 
+        $trackerTypeArr = ['License'=>"Driver's License", 'Insurance'=>"Driver's Insurance", 'Record'=>"Driving Record", 'Professional_License'=>"Professional License", 'First_Aid'=>"First Aid/CPR", 'Tact_II'=>"Tact II", 'TB_Test'=>"TB Test", 'Professional_Liability'=>"Professional Liability", 'Other_Professional_License'=>"Other Professional License", 'RCYCP_Certification'=>"RCYCP Certification", 'DEA_Registration'=>"DEA Registration", 'Psychiatric_Nurse_Practitioner_Certification'=>"Psychiatric Nurse Practitioner Certification", 'CDS_Registration'=>"CDS Registration", 'National_Practitioner_Data_Bank'=>"National Practitioner Data Bank", 'Annual_Evaluation'=>"Annual Evaluation Expiration Date", 'Annual_EvaluationJC'=>"JCAHO/Annual Trainings Expiration Date", 'JCAHO'=>"JCAHO/Annual Trainings Expiration Date", '72_Hour_Treatment_Plan'=>"72 Hour Treatment Plan", '30_Day_Treatment_Plan'=>"30 Day Treatment Plan", '90_Day_Treatment_Plan'=>"90 Day Treatment Plan", 'Psych_Evaluation'=>"Psych Evaluation", 'Safe_Environment_Plan'=>"Safe Environment Plan", 'Physical'=>"Physical", 'Dental'=>"Dental", 'Vision'=>"Vision", 'Sexual_Abuse_Awareness'=>"Sexual Abuse Awareness and Prevention Certification", 'Medication_Technician_Certificate'=>"Medication Technician Certificate"];
+
+        return view('employee.employeeDetail',compact('empData', 'base64Image', 'jobFields', 'emergencyContacts', 'emptyEmeregencyFields', 'blankPersonalFields', 'blankJobFields','expDateTracker', 'trackerTypeArr'));
     }
 
     /**
@@ -277,7 +282,9 @@ class EmployeeController extends Controller
         //$response = $bhr->getDirectory();
         $getEmployee = $bhr->getEmployee($empId, $empFieldsArray);
         if($getEmployee->isError()) {
-        trigger_error("Error communicating with BambooHR: " . $getEmployee->getErrorMessage());
+            session()->flash('error','Some error occured while connecting with Bamboo HR.');
+            return redirect()->back();
+            //trigger_error("Error communicating with BambooHR: " . $getEmployee->getErrorMessage());
         }
 
         $getEmployeeData = $getEmployee->getContent();

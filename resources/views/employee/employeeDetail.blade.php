@@ -314,8 +314,12 @@
                   
                   @if(!empty($expDateTracker))
                     @foreach($expDateTracker as $key=> $dateTracker)
-                    <tr class="{{ $dateTracker['status'] }}-class">
-                      <td>{{ $dateTracker['type'] }}</td>
+                    <tr class="{{ $dateTracker['status'] }}-class">                        
+                      <td>
+                        @if(array_key_exists($dateTracker['type'], $trackerTypeArr))
+                            {{$trackerTypeArr[$dateTracker['type']]}}
+                        @endif
+                      </td>
                       <td>{{ $dateTracker['issuance'] }}</td>
                       <td>{{ $dateTracker['expiration'] }}</td>
                     </tr>
