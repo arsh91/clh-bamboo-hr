@@ -41,6 +41,7 @@ class EmployeeData extends Command
     public function handle()
     {
 
+        dd("jdhgudfhgd");
         $employeeFieldsIndexes = array(
             'ID'=>17,
             'firstname' => 1,

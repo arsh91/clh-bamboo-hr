@@ -61,6 +61,7 @@ Route::group(['middleware' => ['auth']], function() {
             Route::post('/get-saved-folder', [DashboardController::class, 'getSavedFolder'])->name('get.savedfolder');
             Route::post('/save-folder', [DashboardController::class, 'saveFolder'])->name('save.folder');
             Route::get('/folder', [DashboardController::class, 'folder'])->name('show.folder');
+            Route::get('/runcron', [DashboardController::class, 'runCron'])->name('run.cron');
         });
         //Ends Protected Routes For Admin
 

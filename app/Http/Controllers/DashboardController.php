@@ -345,4 +345,12 @@ class DashboardController extends Controller
        // $request->session()->flash('message', 'Sucessfully Saved.');
         return response()->json(['success' => true]);
     }
+
+    public function runCron()
+    {
+        // Add your cron job logic here
+        \Artisan::call('app:create-employee-data');
+        
+        return 'Cron job executed.';
+    }
 }
