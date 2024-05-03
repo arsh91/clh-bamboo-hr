@@ -42,8 +42,6 @@ class EmployeeData extends Command
      */
     public function handle()
     {
-
-      
         // $employeeFieldsIndexes = array(
         //     'ID'=>17,
         //     'firstname' => 1,
@@ -76,7 +74,6 @@ class EmployeeData extends Command
         // $employeeFields = $employeeFields['field'];
         // $employees = $dataArray['employees'];
         // $employees = $employees['employee'];
-        // // dd($employees);
         // $empMainArr = array();
         // $i = 0;
   
@@ -126,14 +123,13 @@ class EmployeeData extends Command
         // }  
         
         //   EmployeesData::insert($empMainArr);
-            $main_employeeTableData = EmployeesData::select('emp_id','id')->limit(5)->get();
-            
+            $main_employeeTableData = EmployeesData::select()->limit(5)->get();
                foreach ($main_employeeTableData as $result) {
                      $result->emp_id;
                      
                 //         try {
                 //         $filteredData = [];
-                //           $allTypeDate =  $this->employeeController->insertEmployeeExpirationData($result->emp_id);
+                //           $allTypeDate =  $this->employeeController->insertEmployeeExpirationData($result->emp_id , $result->department, $result->job_title, $result->division);
                 //          foreach ($allTypeDate as &$eachDate) {
                 //              if ($eachDate['expiration'] != '0000-00-00') {
                 //              $eachDate['emp_id'] = $result->emp_id;
@@ -149,16 +145,55 @@ class EmployeeData extends Command
                     
                 // }
                 
+                //     try {
+                    
+                //     $allDocuments = $this->documentController->getDoucumentDataInsertToDb( $result->emp_id, $result->department, $result->job_title, $result->division);
+                //     $filteredDocData = [];
+                //          foreach ($allDocuments as &$eachDoc) {
+                //             if (!isset($eachDoc['files'])) {
+                //                  $eachDoc['emp_id'] = $result->emp_id;
+                //                  $eachDoc['emp_table_id'] = $result->id;
+                //                  $eachDoc['doc_id'] = $eachDoc['docId'];
+                //                  $eachDoc['doc_name'] = $eachDoc['docName'];
+                //                  unset($eachDoc['docName']);
+                //                  unset($eachDoc['docId']);
+                //                  unset($eachDoc['files']);
+                //                  $filteredDocData[] = $eachDoc;
+                //             }
+                //         }
+              
+                //      DocumentData::insert($filteredDocData);
+                             
+                // } catch (\Exception $e) {
+                // }
+                
+                  
                     try {
-                        $documentIds = [54, 42, 43, 41, 24, 26, 31, 44, 139, 39, 78, 40, 23, 28, 35, 20, 37, 47, 55, 56, 48, 43, 25, 68, 165, 81, 16, 19, 155, 159, 23];
-                    $datas = $this->documentController->getDoucumentDataInsertToDb( $result->emp_id);
-                    dd($datas);
+                     dd($result->emp_id);
+                    $allFieldsData = $this->employeeController->getEmptyFieldDataInsertToDb( $result->emp_id);
+                   
+                    // $filteredDocData = [];
+                    //      foreach ($allDocuments as &$eachDoc) {
+                    //         if (!isset($eachDoc['files'])) {
+                    //              $eachDoc['emp_id'] = $result->emp_id;
+                    //              $eachDoc['emp_table_id'] = $result->id;
+                    //              $eachDoc['doc_id'] = $eachDoc['docId'];
+                    //              $eachDoc['doc_name'] = $eachDoc['docName'];
+                    //              unset($eachDoc['docName']);
+                    //              unset($eachDoc['docId']);
+                    //              unset($eachDoc['files']);
+                    //              $filteredDocData[] = $eachDoc;
+                    //         }
+                    //     }
+              
+                    //  DocumentData::insert($filteredDocData);
+                             
                 } catch (\Exception $e) {
                 }
             
                 }
             
-            
+              dd($main_employeeTableData);
        dd($main_employeeTableData, "djkfgdjk");
         
     }

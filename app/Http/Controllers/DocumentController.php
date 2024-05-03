@@ -423,7 +423,8 @@ private function getSavedDocumentIds($empDepartment, $empJobInfo) {
     return $folderValues;
     }
 
-    public function getDoucumentDataInsertToDb( $empId  ){
+    public function getDoucumentDataInsertToDb( $empId, $empDepartment, $empJobInfo, $empDivision  ){
+        // dd($empDepartment,$empJobInfo );
         $bhr = new BambooAPI(env('YOUR_COMPANY_ID'));
             $bhr->setSecretKey(env('YOUR_API_KEY'));
            $listEmployeeFiles = $bhr->listEmployeeFiles($empId);
@@ -438,7 +439,8 @@ private function getSavedDocumentIds($empDepartment, $empJobInfo) {
            $totalFileCount = 0;
            if(count($listEmployeeFiles) > 0){     
                if (isset($listEmployeeFiles['category'])) {
-                $employeeDocumentIdsAccToRole = [54, 42, 43, 41, 24, 26, 31, 44, 139, 39, 78, 40, 23, 28, 35, 20, 37, 47, 55, 56, 48, 43, 25, 68, 165, 81, 16, 19, 155];
+                $employeeDocumentIdsAccToRole = $this->getDocumentIdsBasedOnEmployeeDetails($empDepartment, $empJobInfo, $empDivision);
+                // $employeeDocumentIdsAccToRole = [54, 42, 43, 41, 24, 26, 31, 44, 139, 39, 78, 40, 23, 28, 35, 20, 37, 47, 55, 56, 48, 43, 25, 68, 165, 81, 16, 19, 155];
                    foreach($listEmployeeFiles['category'] as $key=> $documents){
                         $employeeAllDocumentsArr[]=$this->getDocumentIdAndName($documents);
                    }

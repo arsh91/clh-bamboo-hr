@@ -1037,24 +1037,59 @@ private function getDateTrackersCount($empId, $trackerType){
         return $emptyVal;
     }
 
-    public function insertEmployeeExpirationData($empId){
+  public function insertEmployeeExpirationData($empId, $empDepartment,$empJobInfo, $empDivision ){
         $expDateTracker = [];
-        $expDateTracker[] = $this->getDateTrackers($empId, 'License');
-        $expDateTracker[] = $this->getDateTrackers($empId, 'Insurance');
-        $expDateTracker[] = $this->getDateTrackers($empId, 'Record');
-        $expDateTracker[] = $this->getDateTrackers($empId, 'First_Aid');
-        $expDateTracker[] = $this->getDateTrackers($empId, 'TB_Test');
-        $expDateTracker[] = $this->getDateTrackers($empId, 'RCYCP_Certification');
-        $expDateTracker[] = $this->getDateTrackers($empId, 'Tact_II');
-        $expDateTracker[] = $this->getDateTrackers($empId, 'Annual_Evaluation');
-        $expDateTracker[] = $this->getDateTrackers($empId, 'Annual_EvaluationJC');
-        $expDateTracker[] = $this->getDateTrackers($empId, 'Sexual_Abuse_Awareness');
-        $expDateTracker[] = $this->getDateTrackers($empId, 'Professional_License');
-        $expDateTracker[] = $this->getDateTrackers($empId, 'Professional_Liability');
-        $expDateTracker[] = $this->getDateTrackers($empId, 'National_Practitioner_Data_Bank');
-        $expDateTracker[] = $this->getDateTrackers($empId, 'Psychiatric_Nurse_Practitioner_Certification');
-        $expDateTracker[] = $this->getDateTrackers($empId, 'CDS_Registration');
-        $expDateTracker[] = $this->getDateTrackers($empId, 'DEA_Registration');
+        if($empDepartment == env('GROUP_HOME')){  
+            if($empJobInfo == env('JOBINFO_GROUP_HOME_CHILD_YOUTH')){ 
+                $types = ['License', 'Insurance', 'Record', 'First_Aid', 'TB_Test', 'RCYCP_Certification', 'Tact_II', 'Annual_EvaluationJC', 'Annual_Evaluation', 'Sexual_Abuse_Awareness'];
+            }else if($empJobInfo == env('JOBINFO_GROUP_HOME_YOUTH')){	
+                $types = ['72_Hour_Treatment_Plan', '30_Day_Treatment_Plan', '90_Day_Treatment_Plan', 'Psych_Evaluation', 'Safe_Environment_Plan', 'Physical', 'Dental', 'Vision'];
+            }else if($empJobInfo == env('JOBINFO_GROUP_HOME_REGISTERED_NURSE')){ //and JobTitle is `Registered Nurse`	
+                $types = ['License', 'Insurance', 'Record', 'First_Aid', 'TB_Test', 'RCYCP_Certification', 'Tact_II', 'Annual_EvaluationJC', 'Annual_Evaluation', 'Sexual_Abuse_Awareness'];
+            }else if($empJobInfo == env('JOBINFO_UNIT_SUPERVISOR')){
+                $types = ['License', 'Insurance', 'Record', 'First_Aid', 'TB_Test', 'RCYCP_Certification', 'Tact_II', 'Annual_EvaluationJC', 'Annual_Evaluation', 'Sexual_Abuse_Awareness'];
+            }else if($empJobInfo == env('JOBINFO_HOME_MANAGER')){
+                $types = ['License', 'Insurance', 'Record', 'First_Aid', 'TB_Test', 'RCYCP_Certification', 'Tact_II', 'Annual_EvaluationJC', 'Annual_Evaluation', 'Sexual_Abuse_Awareness'];
+            }
+        }else if ($empDepartment == env('DEPARTMENT_PRP')){ 
+            if($empDivision == env('DIVISION_PRP_FAMILY_COORD')){
+                $types = ['License', 'Insurance', 'Record', 'First_Aid', 'TB_Test', 'Professional_Liability', 'Annual_EvaluationJC', 'Annual_Evaluation', 'Sexual_Abuse_Awareness'];
+            }else if($empDivision == env('DIVISION_PRP_COORDINATOR_SPEC')){ 
+                $types = ['License', 'Insurance', 'Record', 'First_Aid', 'TB_Test', 'Professional_Liability', 'Annual_EvaluationJC', 'Annual_Evaluation', 'Sexual_Abuse_Awareness'];
+            }
+        }else if($empDepartment == env('DEPARTMENT_OMHC')){
+            if($empJobInfo == env('JOBINFO_COOCCURING_OMHC')){
+                $types = ['License', 'Insurance', 'Record', 'First_Aid', 'TB_Test', 'Professional_Liability', 'Annual_EvaluationJC', 'Annual_Evaluation', 'Sexual_Abuse_Awareness', 'Professional_License', 'National_Practitioner_Data_Bank'];
+            }else if($empJobInfo == env('JOBINFO_Intern_OMHC')){ 
+                $types = ['License', 'Insurance', 'Record', 'First_Aid', 'TB_Test', 'Professional_Liability'];
+            }else if($empJobInfo == env('JOBINFO_GROUP_SUBSTANCE_USE_DISORDER_COUNSELOR')){
+                $types = ['License', 'Insurance', 'Record', 'First_Aid', 'TB_Test', 'Professional_Liability', 'Professional_License', 'National_Practitioner_Data_Bank', 'Annual_EvaluationJC', 'Annual_Evaluation', 'Sexual_Abuse_Awareness'];
+            }
+        }else if($empDepartment == env('DEPARTMENT_MENTAL_HEALTH_OMHC')){ 
+            if($empJobInfo == env('JOBINFO_MENTAL_HEALTH_OMHC')){
+                $types = ['License', 'Insurance', 'Record', 'First_Aid', 'TB_Test', 'Professional_Liability', 'Professional_License', 'National_Practitioner_Data_Bank', 'Annual_EvaluationJC', 'Annual_Evaluation', 'Sexual_Abuse_Awareness'];
+            }else if($empJobInfo == env('JOBINFO_Clinical_OMHC')){ 
+                $types = ['License', 'Insurance', 'Record', 'First_Aid', 'TB_Test', 'Professional_Liability', 'Professional_License', 'National_Practitioner_Data_Bank', 'Annual_EvaluationJC', 'Annual_Evaluation', 'Sexual_Abuse_Awareness'];
+            }else if($empJobInfo == env('JOBINFO_Nurse_Practitioner_OMHC')){  
+                $types = ['License', 'Insurance', 'Record', 'First_Aid', 'TB_Test', 'Professional_Liability', 'Professional_License', 'National_Practitioner_Data_Bank', 'Annual_EvaluationJC', 'Annual_Evaluation', 'Sexual_Abuse_Awareness', 'Psychiatric_Nurse_Practitioner_Certification', 'CDS_Registration', 'DEA_Registration'];
+            }
+        }
+
+        if (is_array($types) && !empty($types)) {
+            foreach ($types as $type) {
+                $expDateTracker[] = $this->getDateTrackers($empId, $type);
+            }
+        }
         return $expDateTracker;
+    }
+    
+      public function getEmptyFieldDataInsertToDb($empId ){
+        $allData = [];
+        $allData['personal'] = $this->getPersonalBlankFields($empId);
+        $allData['job'] = $this->getJobBlankFields($empId);
+       $getEmergencyContacts = $this->getEmergencyFields($empId);
+       $allData['emergency'] = $getEmergencyContacts['empty'];
+dd($allData);
+       return $allData;
     }
 }
