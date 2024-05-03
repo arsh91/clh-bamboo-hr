@@ -1089,7 +1089,7 @@ private function getDateTrackersCount($empId, $trackerType){
         $allData['job'] = $this->getJobBlankFields($empId);
        $getEmergencyContacts = $this->getEmergencyFields($empId);
        $allData['emergency'] = $getEmergencyContacts['empty'];
-dd($allData);
+// dd($allData);
        return $allData;
     }
 }
