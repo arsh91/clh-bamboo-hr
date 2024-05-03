@@ -1036,4 +1036,25 @@ private function getDateTrackersCount($empId, $trackerType){
         }
         return $emptyVal;
     }
+
+    public function insertEmployeeExpirationData($empId){
+        $expDateTracker = [];
+        $expDateTracker[] = $this->getDateTrackers($empId, 'License');
+        $expDateTracker[] = $this->getDateTrackers($empId, 'Insurance');
+        $expDateTracker[] = $this->getDateTrackers($empId, 'Record');
+        $expDateTracker[] = $this->getDateTrackers($empId, 'First_Aid');
+        $expDateTracker[] = $this->getDateTrackers($empId, 'TB_Test');
+        $expDateTracker[] = $this->getDateTrackers($empId, 'RCYCP_Certification');
+        $expDateTracker[] = $this->getDateTrackers($empId, 'Tact_II');
+        $expDateTracker[] = $this->getDateTrackers($empId, 'Annual_Evaluation');
+        $expDateTracker[] = $this->getDateTrackers($empId, 'Annual_EvaluationJC');
+        $expDateTracker[] = $this->getDateTrackers($empId, 'Sexual_Abuse_Awareness');
+        $expDateTracker[] = $this->getDateTrackers($empId, 'Professional_License');
+        $expDateTracker[] = $this->getDateTrackers($empId, 'Professional_Liability');
+        $expDateTracker[] = $this->getDateTrackers($empId, 'National_Practitioner_Data_Bank');
+        $expDateTracker[] = $this->getDateTrackers($empId, 'Psychiatric_Nurse_Practitioner_Certification');
+        $expDateTracker[] = $this->getDateTrackers($empId, 'CDS_Registration');
+        $expDateTracker[] = $this->getDateTrackers($empId, 'DEA_Registration');
+        return $expDateTracker;
+    }
 }

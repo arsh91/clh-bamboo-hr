@@ -422,4 +422,32 @@ private function getSavedDocumentIds($empDepartment, $empJobInfo) {
     }
     return $folderValues;
     }
+
+    public function getDoucumentDataInsertToDb( $empId  ){
+        $bhr = new BambooAPI(env('YOUR_COMPANY_ID'));
+            $bhr->setSecretKey(env('YOUR_API_KEY'));
+           $listEmployeeFiles = $bhr->listEmployeeFiles($empId);
+           if ($listEmployeeFiles->isError()) {
+               trigger_error("Error communicating with BambooHR: " . $listEmployeeFiles->getErrorMessage());
+           }
+            $employeeAllDocumentsArr = [];
+            $matchedDocsAccToRole = [];
+           $listEmployeeFiles = $listEmployeeFiles->getContent();
+           $listEmployeeFiles = json_encode($listEmployeeFiles);       
+           $listEmployeeFiles = json_decode($listEmployeeFiles, true);
+           $totalFileCount = 0;
+           if(count($listEmployeeFiles) > 0){     
+               if (isset($listEmployeeFiles['category'])) {
+                $employeeDocumentIdsAccToRole = [54, 42, 43, 41, 24, 26, 31, 44, 139, 39, 78, 40, 23, 28, 35, 20, 37, 47, 55, 56, 48, 43, 25, 68, 165, 81, 16, 19, 155];
+                   foreach($listEmployeeFiles['category'] as $key=> $documents){
+                        $employeeAllDocumentsArr[]=$this->getDocumentIdAndName($documents);
+                   }
+                   
+                    $matchedDocsAccToRole = $this->searchMatchDocKey($employeeAllDocumentsArr, $employeeDocumentIdsAccToRole);
+               }
+           }
+           
+        //   dd($matchedDocsAccToRole);
+           return $matchedDocsAccToRole;
+        }
 }

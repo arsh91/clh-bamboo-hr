@@ -8,7 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
-class TimeTrackerData extends Authenticatable
+class DocumentData extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
@@ -17,11 +17,11 @@ class TimeTrackerData extends Authenticatable
      *
      * @var array<int, string>
      */
-    protected $table = 'time_tracker';
+    protected $table = 'document_data';
     protected $fillable = [
         'emp_id',
         'emp_table_id',
-        'expiration',
-        'type'
+        'doc_id',
+        'doc_name'
     ];
 }

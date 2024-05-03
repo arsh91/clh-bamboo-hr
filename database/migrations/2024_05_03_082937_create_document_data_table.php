@@ -11,12 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('time_tracker', function (Blueprint $table) {
+        Schema::create('document_data', function (Blueprint $table) {
             $table->id();
             $table->integer('emp_table_id')->nullable();
             $table->integer('emp_id')->nullable();
-            $table->string('type')->nullable();
-            $table->date('expiration')->nullable();
+            $table->integer('doc_id')->nullable();
+            $table->string('doc_name')->nullable();
             $table->timestamps();
         });
     }
@@ -26,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('time_tracker');
+        Schema::dropIfExists('document_data');
     }
 };
