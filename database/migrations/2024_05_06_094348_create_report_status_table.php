@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('report_status', function (Blueprint $table) {
             $table->id();
             $table->string('status')->nullable();
-            $table->date('date')->nullable();
+            $table->dateTime('date')->nullable();
             $table->timestamps();
         });
     }

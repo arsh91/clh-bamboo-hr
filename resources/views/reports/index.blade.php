@@ -28,17 +28,19 @@
     <div class="link-div mb-3">
           @if($report_status && ($report_status['status']=== 'requested' || $report_status['status']=== 'inprocess'))
           <p class="processingButton">
-              Report generation is In Progress. We'll share the link to download the report in 4-5 mins.
+              Report Generation is IN-PROGRESS.
           </p>
           
 
           @else
               <a href="javascript:void(0);" id="generateData" class="btn btn-success">Generate Data</a>
               @if($report_status && $report_status['status']=== 'created')
-              {{$report_status['date']}}
+              <p id="dateValue">
+              Report data generated on: {{$report_status['date']}}
+              </p>
               @endif
               <p class="processingButton d-none">
-              Report generation is In Progress. We'll share the link to download the report in 4-5 mins.
+              Report Generation is IN-PROGRESS.
               </p>
           @endif
           </div>
@@ -185,23 +187,26 @@
     $(document).ready(function() {
       var table = $('#employee_detail_table').DataTable();
       $('#generateData').on('click', function() {
-        $(this).hide();
-        $('.downloadLink').hide();
-        $('.processingButton').removeClass('d-none').attr('disabled', true);
-        $.ajax({
-                url: '/generate-data', 
-                method: 'POST',
-                headers: {
-                    'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
-                },
-   
-                success: function(response){
-                 
-                },
-                error: function(xhr, status, error){  
-                    console.error(error);
-                }
-        });
+        var confirmed = confirm("Generating report will clear the old data and regenerate the report in 5-10 mins. Are you sure?");
+        if(confirmed){
+          $(this).hide();
+          $('#dateValue').hide();
+          $('.processingButton').removeClass('d-none').attr('disabled', true);
+          $.ajax({
+                  url: '/generate-data', 
+                  method: 'POST',
+                  headers: {
+                      'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+                  },
+    
+                  success: function(response){
+                  
+                  },
+                  error: function(xhr, status, error){  
+                      console.error(error);
+                  }
+          });
+        }
     });
 });
 function openusersModal(tab) {

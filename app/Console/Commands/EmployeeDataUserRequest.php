@@ -86,7 +86,7 @@ class EmployeeDataUserRequest extends Command
   
         foreach($employees as $empKeys=> $emp){
             EmployeesData::truncate();
-            TimeTrackerData::truncate();
+            EmptyFieldsData::truncate();
             TimeTrackerData::truncate();
             DocumentData::truncate();
             $empID = $emp['@attributes']['id'];
