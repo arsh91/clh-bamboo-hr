@@ -226,9 +226,43 @@ function openusersModal(tab) {
                   $('#employee_detail_table').DataTable().destroy();
                   $('#employee_detail_table tbody').empty();
                 
-                // Append new data to the table
+                  var arrayDocName = {
+                    'License': "Driver's License",
+                    'Insurance': "Driver's Insurance",
+                    'Record': "Driving Record",
+                    'Professional_License': "Professional License",
+                    'First_Aid': "First Aid/CPR",
+                    'Tact_II': "Tact II",
+                    'TB_Test': "TB Test",
+                    'Professional_Liability': "Professional Liability",
+                    'Other_Professional_License': "Other Professional License",
+                    'RCYCP_Certification': "RCYCP Certification",
+                    'DEA_Registration': "DEA Registration",
+                    'Psychiatric_Nurse_Practitioner_Certification': "Psychiatric Nurse Practitioner Certification",
+                    'CDS_Registration': "CDS Registration",
+                    'National_Practitioner_Data_Bank': "National Practitioner Data Bank",
+                    'Annual_Evaluation': "Annual Evaluation Expiration Date",
+                    'Annual_EvaluationJC': "JCAHO/Annual Trainings Expiration Date",
+                    'JCAHO': "JCAHO/Annual Trainings Expiration Date",
+                    '72_Hour_Treatment_Plan': "72 Hour Treatment Plan",
+                    '30_Day_Treatment_Plan': "30 Day Treatment Plan",
+                    '90_Day_Treatment_Plan': "90 Day Treatment Plan",
+                    'Psych_Evaluation': "Psych Evaluation",
+                    'Safe_Environment_Plan': "Safe Environment Plan",
+                    'Physical': "Physical",
+                    'Dental': "Dental",
+                    'Vision': "Vision",
+                    'Sexual_Abuse_Awareness': "Sexual Abuse Awareness and Prevention Certification",
+                    'Medication_Technician_Certificate': "Medication Technician Certificate"
+                };
                 $.each(response, function(index, item) {
-                    $('#employee_detail_table tbody').append('<tr><td>' + item.name + '</td><td>' + item.count + '</td></tr>');
+                  if(tab === 'document'){
+                    var displayName = arrayDocName.hasOwnProperty(item.name) ? arrayDocName[item.name] : item.name;
+                  }else{
+                    var displayName = item.name
+                  }
+                  
+                    $('#employee_detail_table tbody').append('<tr><td>' + displayName + '</td><td>' + item.count + '</td></tr>');
                 });
                 $('#employee_detail_table').DataTable();
                 },
