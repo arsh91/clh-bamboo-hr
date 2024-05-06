@@ -23,6 +23,12 @@
           <span>Folder</span>
         </a>
       </li>
+      <li class="nav-item">
+        <a class="nav-link {{ request()->is('reports') ? '' : 'collapsed' }} " href="{{ url('/reports') }}">
+          <i class="bi bi-folder2-open"></i>
+          <span>Reports</span>
+        </a>
+      </li>
     </ul>
 
   </aside>

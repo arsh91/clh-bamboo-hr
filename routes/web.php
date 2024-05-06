@@ -5,7 +5,9 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\DocumentController;
+use App\Http\Controllers\ReportsController;
 use Illuminate\Support\Facades\Route;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -61,6 +63,8 @@ Route::group(['middleware' => ['auth']], function() {
             Route::post('/get-saved-folder', [DashboardController::class, 'getSavedFolder'])->name('get.savedfolder');
             Route::post('/save-folder', [DashboardController::class, 'saveFolder'])->name('save.folder');
             Route::get('/folder', [DashboardController::class, 'folder'])->name('show.folder');
+            Route::get('/reports', [ReportsController::class, 'index'])->name('show.reports');
+            Route::post('/empty-field-detail', [ReportsController::class, 'getEmptyFiledsDetails'])->name('show.emptyFieldDetail');
             Route::get('/runcron', [DashboardController::class, 'runCron'])->name('run.cron');
         });
         //Ends Protected Routes For Admin
