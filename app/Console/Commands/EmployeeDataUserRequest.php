@@ -212,11 +212,10 @@ class EmployeeDataUserRequest extends Command
                                     $emergencyData['emp_id'] = $result->emp_id;
                                      $emergencyData['emp_table_id'] = $result->id;
                                      $emergencyData['tab'] = 'emergency';
-                                     $emergencyData['field_name'] = $emergencyData;
+                                     $emergencyData['field_name'] = $emergency;
+                                     $filteredFieldData[] = $emergencyData;
                                   }
                                   }
-                          
-                        // dd($filteredFieldData);
               
                      EmptyFieldsData::insert($filteredFieldData);
                              

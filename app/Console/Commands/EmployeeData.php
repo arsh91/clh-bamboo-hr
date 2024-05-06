@@ -222,10 +222,10 @@ class EmployeeData extends Command
                              
                 } catch (\Exception $e) {
                 }
+                }
                 $latestRow = ReportStatus::latest()->first();
                 $latestRow->status = 'created';
                 $latestRow->save();
-                }
             }
     }
 
