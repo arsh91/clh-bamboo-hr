@@ -65,7 +65,9 @@ Route::group(['middleware' => ['auth']], function() {
             Route::get('/folder', [DashboardController::class, 'folder'])->name('show.folder');
             Route::get('/reports', [ReportsController::class, 'index'])->name('show.reports');
             Route::post('/empty-field-detail', [ReportsController::class, 'getEmptyFiledsDetails'])->name('show.emptyFieldDetail');
+            Route::post('/generate-data', [ReportsController::class, 'generateData'])->name('generate.data');
             Route::get('/runcron', [DashboardController::class, 'runCron'])->name('run.cron');
+            
         });
         //Ends Protected Routes For Admin
 

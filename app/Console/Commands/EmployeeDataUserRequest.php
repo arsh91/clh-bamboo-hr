@@ -8,17 +8,16 @@ use App\Http\Controllers\EmployeeController;
 use App\Models\EmployeesData;
 use App\Models\TimeTrackerData;
 use App\Models\EmptyFieldsData;
-use App\Models\DocumentData;
 use App\Models\ReportStatus;
-use Carbon\Carbon;
-class EmployeeData extends Command
+use App\Models\DocumentData;
+class EmployeeDataUserRequest extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'app:create-employee-data';
+    protected $signature = 'app:create-employee-data-user';
 
     /**
      * The console command description.
@@ -43,12 +42,13 @@ class EmployeeData extends Command
      */
     public function handle()
     {
+
         $latestRow = ReportStatus::latest()->first();
-        if($latestRow->status === 'created' ){
-        $newRecord = new ReportStatus();
-        $newRecord->date = Carbon::now();
-        $newRecord->status = 'inprocess';
-        $newRecord->save();
+       
+        if($latestRow->status === 'requested' ){
+        $latestRow->update([
+            'status' => 'inprocess',
+        ]);
         $employeeFieldsIndexes = array(
             'ID'=>17,
             'firstname' => 1,
@@ -222,10 +222,10 @@ class EmployeeData extends Command
                              
                 } catch (\Exception $e) {
                 }
-                $latestRow = ReportStatus::latest()->first();
-                $latestRow->status = 'created';
-                $latestRow->save();
                 }
+                $latestRow->update([
+                    'status' => 'created',
+                ]);
             }
     }
 

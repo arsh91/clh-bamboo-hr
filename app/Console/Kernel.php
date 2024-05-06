@@ -14,6 +14,7 @@ class Kernel extends ConsoleKernel
     {
         $schedule->command('app:create-csv-report')->everyMinute();
         $schedule->command('app:create-employee-data')->daily();
+        $schedule->command('app:create-employee-data-user')->everyMinute();
     }
 
     /**
