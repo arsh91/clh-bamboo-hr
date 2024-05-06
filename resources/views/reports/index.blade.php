@@ -150,7 +150,7 @@
             <div class="modal-dialog">
                 <div class="modal-content" style="width:505px;">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="role">Detail</h5>
+                        <h5 class="modal-title" id="detail-heading">Detail</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
               
@@ -205,8 +205,10 @@
     });
 });
 function openusersModal(tab) {
-    $('#addUsers').modal('show');
 
+    $('#addUsers').modal('show');
+    var heading = tab.replace(/_/g, " ");
+                  $('#detail-heading').text(heading.charAt(0).toUpperCase() + heading.substring(1) + ' detail');
     $.ajax({
                 url: '/empty-field-detail', 
                 method: 'POST',
