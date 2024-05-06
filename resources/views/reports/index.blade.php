@@ -210,8 +210,6 @@
     });
 });
 function openusersModal(tab) {
-
-    $('#addUsers').modal('show');
     var heading = tab.replace(/_/g, " ");
                   $('#detail-heading').text(heading.charAt(0).toUpperCase() + heading.substring(1) + ' detail');
     $.ajax({
@@ -239,7 +237,7 @@ function openusersModal(tab) {
                 }
             });
 
-
+            $('#addUsers').modal('show');
     
   }
 
