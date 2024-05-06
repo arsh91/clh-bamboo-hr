@@ -87,7 +87,8 @@ class EmployeeDataUserRequest extends Command
         foreach($employees as $empKeys=> $emp){
             EmployeesData::truncate();
             TimeTrackerData::truncate();
-            EmptyFieldsData::truncate();
+            TimeTrackerData::truncate();
+            DocumentData::truncate();
             $empID = $emp['@attributes']['id'];
             $empMainArr[$i]['emp_id'] = $empID;
             $empMainArr[$i]['first_name'] = $this->checkIfArray($emp['field'][$employeeFieldsIndexes['firstname']]);
