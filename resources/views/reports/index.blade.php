@@ -256,7 +256,7 @@ function openusersModal(tab) {
                     'Medication_Technician_Certificate': "Medication Technician Certificate"
                 };
                 $.each(response, function(index, item) {
-                  if(tab === 'document'){
+                  if(tab === 'document' || tab === 'expired'|| tab === 'going_to_expire'){
                     var displayName = arrayDocName.hasOwnProperty(item.name) ? arrayDocName[item.name] : item.name;
                   }else{
                     var displayName = item.name
