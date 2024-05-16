@@ -145,7 +145,7 @@
             <div class="col-xxl-4 col-md-6">
               <div class="card info-card sales-card">
                 <div class="card-body">
-                  <h5 class="card-title">Empty Doucument <span>| Empty Doucument Count</span></h5>
+                  <h5 class="card-title">Empty Document <span>| Empty Document Count</span></h5>
 
                   <div class="d-flex align-items-center">
                     <div class="ps-3">
