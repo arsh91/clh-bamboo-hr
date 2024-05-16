@@ -21,6 +21,15 @@
         display: inline-block;
         width: 100%;
     }
+.chart-container canvas#donutChart{
+  width: 400px !important;
+    height: 400px !important;
+ }
+ .chart-container {
+    display: flex;
+    justify-content: center;
+    margin: 25px auto;
+}
 </style>
 
 <section class="section dashboard">
@@ -44,6 +53,11 @@
               </p>
           @endif
           </div>
+             <!-- Chart -->
+        <div class="chart-container">
+            <canvas id="donutChart"></canvas>
+        </div>
+            <!-- Chart end -->
         <!-- Left side columns -->
         <div class="col-lg-12">
             <div class="row">
@@ -274,8 +288,31 @@ function openusersModal(tab) {
             $('#addUsers').modal('show');
     
   }
+  
+  var expired =  @json($expired);
+  var going_to_expire =  @json($going_to_expire);
+  var total =  @json($total);
+  var not_expired = total - (expired + going_to_expire);
+// Data for the chart
+var data = {
+            labels: ['Expired', 'Going to expired', 'Not Expired'],
+            datasets: [{
+                data: [expired, going_to_expire, not_expired],
+                backgroundColor: [
+               
+                    '#DC3545',
+                    '#FFC107',
+                    '#198754'
+                ],
+                hoverOffset: 4
+            }]
+        };
 
-
+        // Create a donut chart
+        var donutChart = new Chart(document.getElementById('donutChart'), {
+            type: 'doughnut',
+            data: data,
+        });
 
 </script>
 <!--end::Page Custom Javascript-->

@@ -31,8 +31,9 @@ class ReportsController extends Controller
         $going_to_expire = TimeTrackerData::whereDate('expiration', '>', $today)
         ->whereDate('expiration', '<=', $date30DaysFromNow)
         ->whereDate('expiration', '>', $date15DaysFromNow)->count();
-        $expired = TimeTrackerData::whereDate('expiration', '>', $today)->count();
-        return view('reports.index' , compact('empty_job_field', 'empty_personal_field', 'empty_emergency_field', 'empty_doucument_field', 'going_to_expire', 'expired', 'report_status'));
+        $total = TimeTrackerData::count();
+        $expired = TimeTrackerData::whereDate('expiration', '<', $today)->count();
+        return view('reports.index' , compact('empty_job_field', 'empty_personal_field', 'empty_emergency_field', 'empty_doucument_field', 'going_to_expire', 'expired', 'report_status', 'total'));
     }
 
     public function getEmptyFiledsDetails(Request $request)
