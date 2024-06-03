@@ -33,69 +33,140 @@ class DashboardController extends Controller
         $apiKey = '40d056dd98d048b1d50c46392c77bd2bbbf0431f';
         $endpoint = 'https://api.bamboohr.com/api/gateway.php/clhmentalhealth/v1/employees/directory';
     
-        $response = file_get_contents($endpoint, false, stream_context_create([
+        // $response = file_get_contents($endpoint, false, stream_context_create([
+        //     'http' => [
+        //         'header' => "Authorization: Basic " . base64_encode($apiKey . ':x')
+        //     ]
+        // ]));
+        $options = [
             'http' => [
                 'header' => "Authorization: Basic " . base64_encode($apiKey . ':x')
             ]
-        ]));
-    
-        $xml = simplexml_load_string($response);
+        ];
+        $context = stream_context_create($options);
+        $response = @file_get_contents($endpoint, false, $context);
+        //  dd($response);
+        if ($response !== false){
+            $xml = simplexml_load_string($response);
 
-        // Convert the XML object to an associative array
-        $employees = json_encode($xml);  
+            // Convert the XML object to an associative array
+            $employees = json_encode($xml);  
+            
+        
+            $dataArray = json_decode($employees, true);
+            
+            $empMainArr = [];
+            $employeeFields = $dataArray['fieldset'];
+        
+            $employeeFields = $employeeFields['field'];
+            //dump($dataArray); dd();
+            $employees = $dataArray['employees'];
+            $employees = $employees['employee'];
+            
+            $empMainArr = array();
+            $empIdsArr = array();
+            $i = 0;
+            foreach($employees as $empKeys=> $emp){
+                $empID = $emp['@attributes']['id'];
+                $empMainArr[$i]['ID'] = $empID;
+                $empMainArr[$i]['photo'] = $this->checkIfImageExists($emp['field'][$employeeFieldsIndexes['photo']]);
+                $empMainArr[$i]['firstname'] = $this->checkIfArray($emp['field'][$employeeFieldsIndexes['firstname']]);
+                $empMainArr[$i]['lastname'] = $this->checkIfArray($emp['field'][$employeeFieldsIndexes['lastname']]);
+                $empMainArr[$i]['designation'] = $this->checkIfArray($emp['field'][$employeeFieldsIndexes['designation']]);
+                $empMainArr[$i]['email'] = $this->checkIfArray($emp['field'][$employeeFieldsIndexes['email']]);
+                $empMainArr[$i]['department'] = $this->checkIfArray($emp['field'][$employeeFieldsIndexes['department']]);
+                $empMainArr[$i]['manager'] = $this->checkIfArray($emp['field'][$employeeFieldsIndexes['manager']]);
+                $empMainArr[$i]['jobTitle'] = $this->checkIfArray($emp['field'][$employeeFieldsIndexes['jobTitle']]);
+                $empMainArr[$i]['division'] = $this->checkIfArray($emp['field'][$employeeFieldsIndexes['division']]);
+                //$empMainArr[$i]['profile'] = 'https://clhmentalhealth.bamboohr.com/employees/employee.php?id='.$empID;
+                $empIdsAr[] = $empID;
+                $i++;
+
+                
+                // foreach($employeeFields as $key=>$fieldName){
+                    
+                //     //CASE: in some fields it's further a blank array if anything is not provided against these keys
+                //     if(!is_array($emp['field'][$key])){
+                //         $empMainArr[$empKeys][$key] = $emp['field'][$key];
+                //         //CASE: We will check if any array key contains some value of image
+                //         if (strpos($emp['field'][$key], "https://images") === 0 || strpos($emp['field'][$key], "https://resources") === 0) {                        
+                //            // echo $emp['field'][$key];
+                //            $empMainArr[$empKeys][$key] = '<img src="'.$emp['field'][$key].'" alt="Photo URL">';
+                //         }
+                        
+                //     }else{
+                //         $empMainArr[$empKeys][$key] = 'N/A';
+                //     }
+                    
+                // }
+                
+            } 
+            $latestReport = Reports::latest()->first();
+            $empIdsAr = json_encode($empIdsAr);     
+            return view('dashboard.index',compact('usersCount', 'empMainArr', 'employeeFieldsIndexes', 'empIdsAr', 'latestReport'));
+            }
+            else{
+                session()->flash('error','Some error occured while connecting with Bamboo HR.');
+                return redirect()->back();
+            }
+    
+        // $xml = simplexml_load_string($response);
+
+        // // Convert the XML object to an associative array
+        // $employees = json_encode($xml);  
         
       
-        $dataArray = json_decode($employees, true);
+        // $dataArray = json_decode($employees, true);
          
-        $empMainArr = [];
-        $employeeFields = $dataArray['fieldset'];
+        // $empMainArr = [];
+        // $employeeFields = $dataArray['fieldset'];
        
-        $employeeFields = $employeeFields['field'];
-        //dump($dataArray); dd();
-        $employees = $dataArray['employees'];
-        $employees = $employees['employee'];
+        // $employeeFields = $employeeFields['field'];
+        // //dump($dataArray); dd();
+        // $employees = $dataArray['employees'];
+        // $employees = $employees['employee'];
         
-        $empMainArr = array();
-        $empIdsArr = array();
-        $i = 0;
-        foreach($employees as $empKeys=> $emp){
-            $empID = $emp['@attributes']['id'];
-            $empMainArr[$i]['ID'] = $empID;
-            $empMainArr[$i]['photo'] = $this->checkIfImageExists($emp['field'][$employeeFieldsIndexes['photo']]);
-            $empMainArr[$i]['firstname'] = $this->checkIfArray($emp['field'][$employeeFieldsIndexes['firstname']]);
-            $empMainArr[$i]['lastname'] = $this->checkIfArray($emp['field'][$employeeFieldsIndexes['lastname']]);
-            $empMainArr[$i]['designation'] = $this->checkIfArray($emp['field'][$employeeFieldsIndexes['designation']]);
-            $empMainArr[$i]['email'] = $this->checkIfArray($emp['field'][$employeeFieldsIndexes['email']]);
-            $empMainArr[$i]['department'] = $this->checkIfArray($emp['field'][$employeeFieldsIndexes['department']]);
-            $empMainArr[$i]['manager'] = $this->checkIfArray($emp['field'][$employeeFieldsIndexes['manager']]);
-            $empMainArr[$i]['jobTitle'] = $this->checkIfArray($emp['field'][$employeeFieldsIndexes['jobTitle']]);
-            $empMainArr[$i]['division'] = $this->checkIfArray($emp['field'][$employeeFieldsIndexes['division']]);
-            //$empMainArr[$i]['profile'] = 'https://clhmentalhealth.bamboohr.com/employees/employee.php?id='.$empID;
-            $empIdsAr[] = $empID;
-            $i++;
+        // $empMainArr = array();
+        // $empIdsArr = array();
+        // $i = 0;
+        // foreach($employees as $empKeys=> $emp){
+        //     $empID = $emp['@attributes']['id'];
+        //     $empMainArr[$i]['ID'] = $empID;
+        //     $empMainArr[$i]['photo'] = $this->checkIfImageExists($emp['field'][$employeeFieldsIndexes['photo']]);
+        //     $empMainArr[$i]['firstname'] = $this->checkIfArray($emp['field'][$employeeFieldsIndexes['firstname']]);
+        //     $empMainArr[$i]['lastname'] = $this->checkIfArray($emp['field'][$employeeFieldsIndexes['lastname']]);
+        //     $empMainArr[$i]['designation'] = $this->checkIfArray($emp['field'][$employeeFieldsIndexes['designation']]);
+        //     $empMainArr[$i]['email'] = $this->checkIfArray($emp['field'][$employeeFieldsIndexes['email']]);
+        //     $empMainArr[$i]['department'] = $this->checkIfArray($emp['field'][$employeeFieldsIndexes['department']]);
+        //     $empMainArr[$i]['manager'] = $this->checkIfArray($emp['field'][$employeeFieldsIndexes['manager']]);
+        //     $empMainArr[$i]['jobTitle'] = $this->checkIfArray($emp['field'][$employeeFieldsIndexes['jobTitle']]);
+        //     $empMainArr[$i]['division'] = $this->checkIfArray($emp['field'][$employeeFieldsIndexes['division']]);
+        //     //$empMainArr[$i]['profile'] = 'https://clhmentalhealth.bamboohr.com/employees/employee.php?id='.$empID;
+        //     $empIdsAr[] = $empID;
+        //     $i++;
 
             
-            // foreach($employeeFields as $key=>$fieldName){
+        //     // foreach($employeeFields as $key=>$fieldName){
                 
-            //     //CASE: in some fields it's further a blank array if anything is not provided against these keys
-            //     if(!is_array($emp['field'][$key])){
-            //         $empMainArr[$empKeys][$key] = $emp['field'][$key];
-            //         //CASE: We will check if any array key contains some value of image
-            //         if (strpos($emp['field'][$key], "https://images") === 0 || strpos($emp['field'][$key], "https://resources") === 0) {                        
-            //            // echo $emp['field'][$key];
-            //            $empMainArr[$empKeys][$key] = '<img src="'.$emp['field'][$key].'" alt="Photo URL">';
-            //         }
+        //     //     //CASE: in some fields it's further a blank array if anything is not provided against these keys
+        //     //     if(!is_array($emp['field'][$key])){
+        //     //         $empMainArr[$empKeys][$key] = $emp['field'][$key];
+        //     //         //CASE: We will check if any array key contains some value of image
+        //     //         if (strpos($emp['field'][$key], "https://images") === 0 || strpos($emp['field'][$key], "https://resources") === 0) {                        
+        //     //            // echo $emp['field'][$key];
+        //     //            $empMainArr[$empKeys][$key] = '<img src="'.$emp['field'][$key].'" alt="Photo URL">';
+        //     //         }
                     
-            //     }else{
-            //         $empMainArr[$empKeys][$key] = 'N/A';
-            //     }
+        //     //     }else{
+        //     //         $empMainArr[$empKeys][$key] = 'N/A';
+        //     //     }
                 
-            // }
+        //     // }
             
-        }  
-        $latestReport = Reports::latest()->first();
-        $empIdsAr = json_encode($empIdsAr);     
-        return view('dashboard.index',compact('usersCount', 'empMainArr', 'employeeFieldsIndexes', 'empIdsAr', 'latestReport'));
+        // }  
+        // $latestReport = Reports::latest()->first();
+        // $empIdsAr = json_encode($empIdsAr);     
+        // return view('dashboard.index',compact('usersCount', 'empMainArr', 'employeeFieldsIndexes', 'empIdsAr', 'latestReport'));
     }
 
     public function employeDetail($empId){
