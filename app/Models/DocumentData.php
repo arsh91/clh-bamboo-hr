@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class DocumentData extends Authenticatable
 {
@@ -24,4 +25,9 @@ class DocumentData extends Authenticatable
         'doc_id',
         'doc_name'
     ];
+
+    public function EmployeesDocs()
+    {
+        return $this->belongsTo(EmployeesData::class, 'emp_id', 'emp_id');
+    }
 }
