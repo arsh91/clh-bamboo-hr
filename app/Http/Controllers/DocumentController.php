@@ -128,12 +128,12 @@ class DocumentController extends Controller
                 // $documentIds = [54, 42, 43, 41, 24, 26, 164, 160, 31, 39, 28, 40, 139, 78, 50, 141, 35, 20, 37, 47, 55, 56, 48, 43, 25, 165, 141, 52, 38, 16, 19, 155];
                 $documentIds = $this->getSavedDocumentIds($empDepartment, $empJobInfo);
             }
-        }else if($empDepartment == env('ALL_LOCATIONS')){ 
-            if($empDivision == env('JOBINFO_CHIEF_OPERATING')){
-                $documentIds = $this->getSavedDocumentIds($empDepartment, $empJobInfo);
-            }else if($empJobInfo == env('JOBINFO_OUTPATIENT')){
-                $documentIds = $this->getSavedDocumentIds($empDepartment, $empJobInfo);
-            }
+        // }else if($empDepartment == env('ALL_LOCATIONS')){ 
+        //     if($empDivision == env('JOBINFO_CHIEF_OPERATING')){
+        //         $documentIds = $this->getSavedDocumentIds($empDepartment, $empJobInfo);
+        //     }else if($empJobInfo == env('JOBINFO_OUTPATIENT')){
+        //         $documentIds = $this->getSavedDocumentIds($empDepartment, $empJobInfo);
+        //     }
         }else if($empDepartment == env('DEPARTMENT_PRP')){ 
             if($empDivision == env('DIVISION_PRP_FAMILY_COORD')){
                 // $documentIds = [54, 42, 43, 41, 24, 26, 31, 44, 139, 39, 78, 40, 80, 28, 35, 141, 20, 37, 47, 55, 56, 48, 43, 25, 68, 165, 81, 16, 19, 155];
@@ -153,7 +153,12 @@ class DocumentController extends Controller
                 $documentIds = $this->getSavedDocumentIds($empDepartment, $empJobInfo);
             }
         }else if($empDepartment == env('DEPARTMENT_OMHC')){
-            if($empJobInfo == env('JOBINFO_COOCCURING_OMHC')){
+            if($empDivision == env('JOBINFO_CHIEF_OPERATING')){
+                $documentIds = $this->getSavedDocumentIds($empDepartment, $empJobInfo);
+            }else if($empJobInfo == env('JOBINFO_OUTPATIENT')){
+                $documentIds = $this->getSavedDocumentIds($empDepartment, $empJobInfo);
+            
+            }else if($empJobInfo == env('JOBINFO_COOCCURING_OMHC')){
                 // $documentIds = [54, 42, 43, 41, 24, 26, 31, 44, 139, 39, 78, 40, 23, 28, 35, 20, 37, 47, 55, 56, 48, 43, 25, 68, 165, 81, 16, 19, 155];
                 $documentIds = $this->getSavedDocumentIds($empDepartment, $empJobInfo);
             }else if($empJobInfo == env('JOBINFO_Intern_OMHC')){ //when the department is `OMHC;Substance Use Disorder (SUD)` and jobtitle is `INTERN`
@@ -349,12 +354,12 @@ private function getDocumentIdsBasedOnEmployeeDetails($empDepartment, $empJobInf
                 // $documentIds = [54, 42, 43, 41, 24, 26, 164, 160, 31, 39, 28, 40, 139, 78, 50, 141, 35, 20, 37, 47, 55, 56, 48, 43, 25, 165, 141, 52, 38, 16, 19, 155];
                 $documentIds = $this->getSavedDocumentIds($empDepartment, $empJobInfo);
             }
-        }else if($empDepartment == env('ALL_LOCATIONS')){ 
-            if($empDivision == env('JOBINFO_CHIEF_OPERATING')){
-                $documentIds = $this->getSavedDocumentIds($empDepartment, $empJobInfo);
-            }else if($empJobInfo == env('JOBINFO_OUTPATIENT')){
-                $documentIds = $this->getSavedDocumentIds($empDepartment, $empJobInfo);
-            }
+        // }else if($empDepartment == env('ALL_LOCATIONS')){ 
+        //     if($empDivision == env('JOBINFO_CHIEF_OPERATING')){
+        //         $documentIds = $this->getSavedDocumentIds($empDepartment, $empJobInfo);
+        //     }else if($empJobInfo == env('JOBINFO_OUTPATIENT')){
+        //         $documentIds = $this->getSavedDocumentIds($empDepartment, $empJobInfo);
+        //     }
         }else if($empDepartment == env('DEPARTMENT_PRP')){  //IF department is PRP
             if($empDivision == env('DIVISION_PRP_FAMILY_COORD')){
                 // $documentIds = [54, 42, 43, 41, 24, 26, 31, 44, 139, 39, 78, 40, 80, 28, 35, 141, 20, 37, 47, 55, 56, 48, 43, 25, 68, 165, 81, 16, 19, 155];
@@ -374,7 +379,12 @@ private function getDocumentIdsBasedOnEmployeeDetails($empDepartment, $empJobInf
                 $documentIds = $this->getSavedDocumentIds($empDepartment, $empJobInfo);
             }
         }else if($empDepartment == env('DEPARTMENT_OMHC')){
-            if($empJobInfo == env('JOBINFO_COOCCURING_OMHC')){
+            if($empDivision == env('JOBINFO_CHIEF_OPERATING')){
+                $documentIds = $this->getSavedDocumentIds($empDepartment, $empJobInfo);
+            }else if($empJobInfo == env('JOBINFO_OUTPATIENT')){
+                $documentIds = $this->getSavedDocumentIds($empDepartment, $empJobInfo);
+            
+            }else if($empJobInfo == env('JOBINFO_COOCCURING_OMHC')){
                 // $documentIds = [54, 42, 43, 41, 24, 26, 31, 44, 139, 39, 78, 40, 23, 28, 35, 20, 37, 47, 55, 56, 48, 43, 25, 68, 165, 81, 16, 19, 155];
                 $documentIds = $this->getSavedDocumentIds($empDepartment, $empJobInfo);
             }else if($empJobInfo == env('JOBINFO_Intern_OMHC')){ //when the department is `OMHC;Substance Use Disorder (SUD)` and jobtitle is `INTERN`
@@ -384,6 +394,7 @@ private function getDocumentIdsBasedOnEmployeeDetails($empDepartment, $empJobInf
                 // $documentIds = [54, 42, 43, 41, 24, 26, 31, 44, 139, 39, 78, 40, 23, 28, 35, 20, 37, 47, 55, 56, 48, 43, 25, 68, 165, 81, 16, 19, 155];
                 $documentIds = $this->getSavedDocumentIds($empDepartment, $empJobInfo);
             }
+            
         }else if($empDepartment == env('DEPARTMENT_MENTAL_HEALTH_OMHC')){ //when department is OMHC and MENTAL HEALTH
             if($empJobInfo == env('JOBINFO_MENTAL_HEALTH_OMHC')){
                 // $documentIds = [54, 42, 43, 41, 24, 26, 31, 44, 139, 39, 78, 40, 23, 28, 35, 20, 37, 47, 55, 56, 48, 43, 25, 68, 165, 81, 16, 19, 155];

@@ -155,18 +155,18 @@ class EmployeeController extends Controller
                     $expDateTracker[$type] = $this->getDateTrackers($empId, $type);
                 }
             }
-        }else if ($empDepartment == env('ALL_LOCATIONS')){ 
-            if( $empJobInfo == env('JOBINFO_CHIEF_OPERATING')){ 
-                $types = ['License', 'Insurance', 'Record', 'First_Aid', 'TB_Test', 'RCYCP_Certification', 'Tact_II', 'Annual_EvaluationJC', 'Annual_Evaluation', 'Sexual_Abuse_Awareness'];
-                foreach ($types as $type) {
-                    $expDateTracker[$type] = $this->getDateTrackers($empId, $type);
-                }
-            }else if($empJobInfo == env('JOBINFO_OUTPATIENT')){
-                $types = ['License', 'Insurance', 'Record', 'First_Aid', 'TB_Test', 'RCYCP_Certification', 'Tact_II', 'Annual_EvaluationJC', 'Annual_Evaluation', 'Sexual_Abuse_Awareness'];
-                foreach ($types as $type) {
-                    $expDateTracker[$type] = $this->getDateTrackers($empId, $type);
-                }
-            }
+        // }else if ($empDepartment == env('ALL_LOCATIONS')){ 
+        //     if( $empJobInfo == env('JOBINFO_CHIEF_OPERATING')){ 
+        //         $types = ['License', 'Insurance', 'Record', 'First_Aid', 'TB_Test', 'RCYCP_Certification', 'Tact_II', 'Annual_EvaluationJC', 'Annual_Evaluation', 'Sexual_Abuse_Awareness'];
+        //         foreach ($types as $type) {
+        //             $expDateTracker[$type] = $this->getDateTrackers($empId, $type);
+        //         }
+        //     }else if($empJobInfo == env('JOBINFO_OUTPATIENT')){
+        //         $types = ['License', 'Insurance', 'Record', 'First_Aid', 'TB_Test', 'RCYCP_Certification', 'Tact_II', 'Annual_EvaluationJC', 'Annual_Evaluation', 'Sexual_Abuse_Awareness'];
+        //         foreach ($types as $type) {
+        //             $expDateTracker[$type] = $this->getDateTrackers($empId, $type);
+        //         }
+        //     }
         
         }else if ($empDepartment == env('DEPARTMENT_PRP')){ //when the department is PRP and then division is `Family Care Coordinator`|| `Family Care Coordinator`
             if($empDivision == env('DIVISION_PRP_FAMILY_COORD')){
@@ -222,6 +222,17 @@ class EmployeeController extends Controller
                 $expDateTracker[] = $this->getDateTrackers($empId, 'Professional_Liability');
             }else if($empJobInfo == env('JOBINFO_GROUP_SUBSTANCE_USE_DISORDER_COUNSELOR')){
                 $types = ['License', 'Insurance', 'Record', 'First_Aid', 'TB_Test', 'Professional_Liability', 'Professional_License', 'National_Practitioner_Data_Bank', 'Annual_EvaluationJC', 'Annual_Evaluation', 'Sexual_Abuse_Awareness'];
+                foreach ($types as $type) {
+                    $expDateTracker[$type] = $this->getDateTrackers($empId, $type);
+                }
+            }
+            else if( $empJobInfo == env('JOBINFO_CHIEF_OPERATING')){ 
+                $types = ['License', 'Insurance', 'Record', 'First_Aid', 'TB_Test', 'RCYCP_Certification', 'Tact_II', 'Annual_EvaluationJC', 'Annual_Evaluation', 'Sexual_Abuse_Awareness'];
+                foreach ($types as $type) {
+                    $expDateTracker[$type] = $this->getDateTrackers($empId, $type);
+                }
+            }else if($empJobInfo == env('JOBINFO_OUTPATIENT')){
+                $types = ['License', 'Insurance', 'Record', 'First_Aid', 'TB_Test', 'RCYCP_Certification', 'Tact_II', 'Annual_EvaluationJC', 'Annual_Evaluation', 'Sexual_Abuse_Awareness'];
                 foreach ($types as $type) {
                     $expDateTracker[$type] = $this->getDateTrackers($empId, $type);
                 }
@@ -694,13 +705,13 @@ public function getTimeTrackerData($empDepartment,$empJobInfo, $empDivision,  $e
         }else if($empJobInfo == env('JOBINFO_HOME_MANAGER')){
             $types = ['License', 'Insurance', 'Record', 'First_Aid', 'TB_Test', 'RCYCP_Certification', 'Tact_II', 'Annual_EvaluationJC', 'Annual_Evaluation', 'Sexual_Abuse_Awareness'];
         }
-    }else if ($empDepartment == env('ALL_LOCATIONS')){ 
+    // }else if ($empDepartment == env('ALL_LOCATIONS')){ 
 
-        if( $empJobInfo == env('JOBINFO_CHIEF_OPERATING')){ 
-            $types = ['License', 'Insurance', 'Record', 'First_Aid', 'TB_Test', 'RCYCP_Certification', 'Tact_II', 'Annual_EvaluationJC', 'Annual_Evaluation', 'Sexual_Abuse_Awareness'];     
-           }else if($empJobInfo == env('JOBINFO_OUTPATIENT')){
-            $types = ['License', 'Insurance', 'Record', 'First_Aid', 'TB_Test', 'RCYCP_Certification', 'Tact_II', 'Annual_EvaluationJC', 'Annual_Evaluation', 'Sexual_Abuse_Awareness'];
-        }
+    //     if( $empJobInfo == env('JOBINFO_CHIEF_OPERATING')){ 
+    //         $types = ['License', 'Insurance', 'Record', 'First_Aid', 'TB_Test', 'RCYCP_Certification', 'Tact_II', 'Annual_EvaluationJC', 'Annual_Evaluation', 'Sexual_Abuse_Awareness'];     
+    //        }else if($empJobInfo == env('JOBINFO_OUTPATIENT')){
+    //         $types = ['License', 'Insurance', 'Record', 'First_Aid', 'TB_Test', 'RCYCP_Certification', 'Tact_II', 'Annual_EvaluationJC', 'Annual_Evaluation', 'Sexual_Abuse_Awareness'];
+    //     }
 
     }else if ($empDepartment == env('DEPARTMENT_PRP')){ 
         if($empDivision == env('DIVISION_PRP_FAMILY_COORD')){
@@ -711,7 +722,12 @@ public function getTimeTrackerData($empDepartment,$empJobInfo, $empDivision,  $e
             $types = ['License', 'Insurance', 'Record', 'First_Aid', 'TB_Test', 'Professional_Liability', 'Annual_EvaluationJC', 'Annual_Evaluation', 'Sexual_Abuse_Awareness'];
         }
     }else if($empDepartment == env('DEPARTMENT_OMHC')){
-        if($empJobInfo == env('JOBINFO_COOCCURING_OMHC')){
+        if( $empJobInfo == env('JOBINFO_CHIEF_OPERATING')){ 
+            $types = ['License', 'Insurance', 'Record', 'First_Aid', 'TB_Test', 'RCYCP_Certification', 'Tact_II', 'Annual_EvaluationJC', 'Annual_Evaluation', 'Sexual_Abuse_Awareness'];     
+           }else if($empJobInfo == env('JOBINFO_OUTPATIENT')){
+            $types = ['License', 'Insurance', 'Record', 'First_Aid', 'TB_Test', 'RCYCP_Certification', 'Tact_II', 'Annual_EvaluationJC', 'Annual_Evaluation', 'Sexual_Abuse_Awareness'];
+        }
+        else if($empJobInfo == env('JOBINFO_COOCCURING_OMHC')){
             $types = ['License', 'Insurance', 'Record', 'First_Aid', 'TB_Test', 'Professional_Liability', 'Annual_EvaluationJC', 'Annual_Evaluation', 'Sexual_Abuse_Awareness', 'Professional_License', 'National_Practitioner_Data_Bank'];
         }else if($empJobInfo == env('JOBINFO_Intern_OMHC')){ 
             $types = ['License', 'Insurance', 'Record', 'First_Aid', 'TB_Test', 'Professional_Liability'];
@@ -1088,7 +1104,11 @@ private function getDateTrackersCount($empId, $trackerType){
                 $types = ['License', 'Insurance', 'Record', 'First_Aid', 'TB_Test', 'Professional_Liability', 'Annual_EvaluationJC', 'Annual_Evaluation', 'Sexual_Abuse_Awareness'];
             }
         }else if($empDepartment == env('DEPARTMENT_OMHC')){
-            if($empJobInfo == env('JOBINFO_COOCCURING_OMHC')){
+            if( $empJobInfo == env('JOBINFO_CHIEF_OPERATING')){ 
+                $types = ['License', 'Insurance', 'Record', 'First_Aid', 'TB_Test', 'RCYCP_Certification', 'Tact_II', 'Annual_EvaluationJC', 'Annual_Evaluation', 'Sexual_Abuse_Awareness'];     
+               }else if($empJobInfo == env('JOBINFO_OUTPATIENT')){
+                $types = ['License', 'Insurance', 'Record', 'First_Aid', 'TB_Test', 'RCYCP_Certification', 'Tact_II', 'Annual_EvaluationJC', 'Annual_Evaluation', 'Sexual_Abuse_Awareness'];
+            }else if($empJobInfo == env('JOBINFO_COOCCURING_OMHC')){
                 $types = ['License', 'Insurance', 'Record', 'First_Aid', 'TB_Test', 'Professional_Liability', 'Annual_EvaluationJC', 'Annual_Evaluation', 'Sexual_Abuse_Awareness', 'Professional_License', 'National_Practitioner_Data_Bank'];
             }else if($empJobInfo == env('JOBINFO_Intern_OMHC')){ 
                 $types = ['License', 'Insurance', 'Record', 'First_Aid', 'TB_Test', 'Professional_Liability'];
