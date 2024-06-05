@@ -213,6 +213,7 @@ class EmployeeData extends Command
                                      $emergencyData['emp_table_id'] = $result->id;
                                      $emergencyData['tab'] = 'emergency';
                                      $emergencyData['field_name'] = $emergencyData;
+                                     $filteredFieldData[] = $emergencyData;
                                   }
                                   }
                           

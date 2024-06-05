@@ -155,6 +155,19 @@ class EmployeeController extends Controller
                     $expDateTracker[$type] = $this->getDateTrackers($empId, $type);
                 }
             }
+        }else if ($empDepartment == env('ALL_LOCATIONS')){ 
+            if( $empJobInfo == env('JOBINFO_CHIEF_OPERATING')){ 
+                $types = ['License', 'Insurance', 'Record', 'First_Aid', 'TB_Test', 'RCYCP_Certification', 'Tact_II', 'Annual_EvaluationJC', 'Annual_Evaluation', 'Sexual_Abuse_Awareness'];
+                foreach ($types as $type) {
+                    $expDateTracker[$type] = $this->getDateTrackers($empId, $type);
+                }
+            }else if($empJobInfo == env('JOBINFO_OUTPATIENT')){
+                $types = ['License', 'Insurance', 'Record', 'First_Aid', 'TB_Test', 'RCYCP_Certification', 'Tact_II', 'Annual_EvaluationJC', 'Annual_Evaluation', 'Sexual_Abuse_Awareness'];
+                foreach ($types as $type) {
+                    $expDateTracker[$type] = $this->getDateTrackers($empId, $type);
+                }
+            }
+        
         }else if ($empDepartment == env('DEPARTMENT_PRP')){ //when the department is PRP and then division is `Family Care Coordinator`|| `Family Care Coordinator`
             if($empDivision == env('DIVISION_PRP_FAMILY_COORD')){
                 $expDateTracker[] = $this->getDateTrackers($empId, 'License');
@@ -166,6 +179,11 @@ class EmployeeController extends Controller
                 $expDateTracker[] = $this->getDateTrackers($empId, 'Annual_EvaluationJC');
                 $expDateTracker[] = $this->getDateTrackers($empId, 'Annual_Evaluation');
                 $expDateTracker[] = $this->getDateTrackers($empId, 'Sexual_Abuse_Awareness');
+            }else if( $empJobInfo == env('JOB_PRP_FAMILY_COORD')){ 
+                $types = ['License', 'Insurance', 'Record', 'First_Aid', 'TB_Test', 'Professional_Liability', 'Annual_EvaluationJC', 'Annual_Evaluation', 'Sexual_Abuse_Awareness'];
+                foreach ($types as $type) {
+                    $expDateTracker[$type] = $this->getDateTrackers($empId, $type);
+                }
             }else if($empDivision == env('DIVISION_PRP_COORDINATOR_SPEC') && $empJobInfo == env('JOBINFO_PRP_MAYAA')){ 
                 $types = ['License', 'Insurance', 'Record', 'First_Aid', 'TB_Test', 'Professional_Liability', 'Annual_EvaluationJC', 'Annual_Evaluation', 'Sexual_Abuse_Awareness'];
                 foreach ($types as $type) {
@@ -676,8 +694,18 @@ public function getTimeTrackerData($empDepartment,$empJobInfo, $empDivision,  $e
         }else if($empJobInfo == env('JOBINFO_HOME_MANAGER')){
             $types = ['License', 'Insurance', 'Record', 'First_Aid', 'TB_Test', 'RCYCP_Certification', 'Tact_II', 'Annual_EvaluationJC', 'Annual_Evaluation', 'Sexual_Abuse_Awareness'];
         }
+    }else if ($empDepartment == env('ALL_LOCATIONS')){ 
+
+        if( $empJobInfo == env('JOBINFO_CHIEF_OPERATING')){ 
+            $types = ['License', 'Insurance', 'Record', 'First_Aid', 'TB_Test', 'RCYCP_Certification', 'Tact_II', 'Annual_EvaluationJC', 'Annual_Evaluation', 'Sexual_Abuse_Awareness'];     
+           }else if($empJobInfo == env('JOBINFO_OUTPATIENT')){
+            $types = ['License', 'Insurance', 'Record', 'First_Aid', 'TB_Test', 'RCYCP_Certification', 'Tact_II', 'Annual_EvaluationJC', 'Annual_Evaluation', 'Sexual_Abuse_Awareness'];
+        }
+
     }else if ($empDepartment == env('DEPARTMENT_PRP')){ 
         if($empDivision == env('DIVISION_PRP_FAMILY_COORD')){
+            $types = ['License', 'Insurance', 'Record', 'First_Aid', 'TB_Test', 'Professional_Liability', 'Annual_EvaluationJC', 'Annual_Evaluation', 'Sexual_Abuse_Awareness'];
+        }else if( $empJobInfo == env('JOB_PRP_FAMILY_COORD')){ 
             $types = ['License', 'Insurance', 'Record', 'First_Aid', 'TB_Test', 'Professional_Liability', 'Annual_EvaluationJC', 'Annual_Evaluation', 'Sexual_Abuse_Awareness'];
         }else if($empDivision == env('DIVISION_PRP_COORDINATOR_SPEC')){ 
             $types = ['License', 'Insurance', 'Record', 'First_Aid', 'TB_Test', 'Professional_Liability', 'Annual_EvaluationJC', 'Annual_Evaluation', 'Sexual_Abuse_Awareness'];
@@ -1053,6 +1081,8 @@ private function getDateTrackersCount($empId, $trackerType){
             }
         }else if ($empDepartment == env('DEPARTMENT_PRP')){ 
             if($empDivision == env('DIVISION_PRP_FAMILY_COORD')){
+                $types = ['License', 'Insurance', 'Record', 'First_Aid', 'TB_Test', 'Professional_Liability', 'Annual_EvaluationJC', 'Annual_Evaluation', 'Sexual_Abuse_Awareness'];
+            }else if( $empJobInfo == env('JOB_PRP_FAMILY_COORD')){ 
                 $types = ['License', 'Insurance', 'Record', 'First_Aid', 'TB_Test', 'Professional_Liability', 'Annual_EvaluationJC', 'Annual_Evaluation', 'Sexual_Abuse_Awareness'];
             }else if($empDivision == env('DIVISION_PRP_COORDINATOR_SPEC')){ 
                 $types = ['License', 'Insurance', 'Record', 'First_Aid', 'TB_Test', 'Professional_Liability', 'Annual_EvaluationJC', 'Annual_Evaluation', 'Sexual_Abuse_Awareness'];
