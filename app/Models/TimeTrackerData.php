@@ -24,4 +24,9 @@ class TimeTrackerData extends Authenticatable
         'expiration',
         'type'
     ];
+
+    public function timetracker()
+    {
+        return $this->belongsTo(EmployeesData::class, 'emp_id', 'emp_id');
+    }
 }

@@ -163,19 +163,21 @@
 
         <!--start: Add users Modal -->
         <div class="modal fade" id="addUsers" tabindex="-1" aria-labelledby="role" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content" style="width:505px;">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="detail-heading">Detail</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
               
                         <div class=" modal-body" id="detail">
-                        <table class="datatable table table-striped my-2" id="employee_detail_table">
+                        <table class="table table-striped my-2" id="employee_detail_table">
                                         <thead>
                                             <tr>
                                                 <th>Name</th>
                                                 <th>Employee Count</th>
+                                                <th>Employee Names</th>
+
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -271,12 +273,28 @@ function openusersModal(tab) {
                 };
                 $.each(response, function(index, item) {
                   if(tab === 'document' || tab === 'expired'|| tab === 'going_to_expire'){
-                    var displayName = arrayDocName.hasOwnProperty(item.name) ? arrayDocName[item.name] : item.name;
+                    var displayName = arrayDocName.hasOwnProperty(index) ? arrayDocName[index] : index;
                   }else{
-                    var displayName = item.name
+                    var displayName = index
                   }
-                  
-                    $('#employee_detail_table tbody').append('<tr><td>' + displayName + '</td><td>' + item.count + '</td></tr>');
+
+                //To display the name of employee's
+                  const empNames = [];
+                  var empNamesStr = '';
+                  if(item.length > 0) {
+                    $.each(item, function(key, singularItem) {
+                      var data={
+                        fname: singularItem.first_name,
+                        lname: singularItem.last_name
+                      }
+                      empNamesStr += singularItem.first_name + ' ' + singularItem.last_name + ' | ';
+                      empNames.push(data);
+                    });
+                  }
+                  var empNamesJSON = JSON.stringify(empNames);
+                  var htmlToAppend = '<tr data-emps="' + empNamesJSON + '">';
+                  htmlToAppend +='<td>' + displayName + '</td><td>' + item.length + '</td><td>'+ empNamesStr+'</td> </tr>';                
+                    $('#employee_detail_table tbody').append(htmlToAppend);
                 });
                 $('#employee_detail_table').DataTable();
                 },

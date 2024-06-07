@@ -30,4 +30,9 @@ class EmployeesData extends Authenticatable
         'empty_personal_field',
         'empty_emergency_field'
     ];
+
+    public function EmployeesData()
+    {
+        return $this->hasMany(EmptyFieldsData::class, 'emp_id', 'emp_id');
+    }
 }

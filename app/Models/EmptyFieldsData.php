@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class EmptyFieldsData extends Authenticatable
 {
@@ -24,4 +25,9 @@ class EmptyFieldsData extends Authenticatable
         'field_name',
         'tab'
     ];
+
+    public function EmployeesData()
+    {
+        return $this->belongsTo(EmployeesData::class, 'emp_id', 'emp_id');
+    }
 }
